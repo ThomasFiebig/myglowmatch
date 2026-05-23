@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="myglowmatch">
+  <circle cx="16" cy="16" r="16" fill="#E0B1A8"/>
+  <text x="16" y="16" text-anchor="middle" dominant-baseline="central"
+        font-family="'Fraunces', 'Cormorant Garamond', Georgia, serif"
+        font-weight="500" font-size="22" fill="#322E2D">m</text>
+</svg>

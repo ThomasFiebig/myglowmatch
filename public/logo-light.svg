@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 120" role="img" aria-label="myglowmatch">
+  <style>
+    .wordmark {
+      font-family: 'Fraunces', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+      font-weight: 400;
+      font-size: 80px;
+    }
+  </style>
+  <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" class="wordmark" fill="#FBF5EE">myglowmatch</text>
+</svg>

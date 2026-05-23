@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   myglowmatch – Design-Tokens
+   Premium-Beauty-Look: Rosé / Champagne / Soft Pink + Anthrazit
+--------------------------------------------------------------- */
+
+@theme {
+  /* Hintergründe – hell & warm */
+  --color-champagne: #fbf6f0;
+  --color-blush: #f6e6e1;
+
+  /* Akzente – Rosé */
+  --color-rosegold: #e0b1a8; /* Buttons */
+  --color-rosegold-dark: #c98f84; /* Hover-Zustand */
+
+  /* Text – Anthrazit */
+  --color-ink: #322e2d;
+  --color-ink-soft: #6f6663;
+
+  /* Antwort-Karten (Feinschliff) */
+  --color-card-tint: #fefbf8; /* heller Verlaufston unausgewählter Karten */
+  --color-card-line: #efe5dc; /* Rand unausgewählter Karten */
+  --color-rose-line: #d4a593; /* Rand & Akzent ausgewählter Karten */
+  --color-card-muted: #f5f1ed; /* Hintergrund gesperrter Karten */
+
+  /* Schriften: Sans für UI/Text, Serif (Fraunces) für Headlines */
+  --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-fraunces);
+}
+
+/* Grundeinstellungen.
+   Der sanfte Hintergrund-Verlauf wird NICHT hier am body gesetzt,
+   sondern als fixiertes Layer im Root-Layout (siehe layout.tsx).
+   So bleibt der Verlauf bei langen Seiten ruhig und ohne Stretch-
+   Artefakte – Inhalt scrollt darüber. */
+body {
+  color: var(--color-ink);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
