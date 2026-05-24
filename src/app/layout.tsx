@@ -15,13 +15,40 @@ const fraunces = Fraunces({
   subsets: ["latin"],
 });
 
-// Titel & Beschreibung – erscheinen im Browser-Tab und bei Google
+// Titel & Beschreibung – erscheinen im Browser-Tab und bei Google.
+// openGraph + twitter sorgen für hübsche Vorschau-Karten, wenn der Link
+// auf Instagram, WhatsApp, Facebook, X, LinkedIn etc. geteilt wird.
 export const metadata: Metadata = {
+  metadataBase: new URL("https://myglowmatch.de"),
   title: "myglowmatch – Deine persönliche Haaranalyse",
   description:
     "Beantworte ein paar kurze Fragen und erhalte deine persönliche Haarpflege-Empfehlung – abgestimmt auf dein Haar und deine Kopfhaut.",
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+  },
+  openGraph: {
+    type: "website",
+    locale: "de_DE",
+    url: "https://myglowmatch.de",
+    siteName: "myglowmatch",
+    title: "myglowmatch – Deine persönliche Haaranalyse",
+    description:
+      "Beantworte ein paar kurze Fragen und erhalte deine persönliche Haarpflege-Empfehlung.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "myglowmatch – Deine persönliche Haaranalyse",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "myglowmatch – Deine persönliche Haaranalyse",
+    description:
+      "Beantworte ein paar kurze Fragen und erhalte deine persönliche Haarpflege-Empfehlung.",
+    images: ["/og-image.jpg"],
   },
 };
 
