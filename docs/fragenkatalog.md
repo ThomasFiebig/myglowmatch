@@ -69,7 +69,6 @@ Das Formular sendet beim Absenden folgendes JSON an n8n:
 | schuppig | `schuppig` |
 | fettig | `fettig` |
 | trocken | `trocken` |
-| normal, aber Ansatz fettet schnell nach | `schnell_nachfettender_ansatz` |
 | normal | `normal` |
 
 ---

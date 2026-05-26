@@ -47,10 +47,6 @@ export const formSteps: Step[] = [
       { value: "schuppig", label: "schuppig" },
       { value: "fettig", label: "fettig" },
       { value: "trocken", label: "trocken" },
-      {
-        value: "schnell_nachfettender_ansatz",
-        label: "normal, aber Ansatz fettet schnell nach",
-      },
       { value: "normal", label: "normal", exclusiveOption: true },
     ],
   },
