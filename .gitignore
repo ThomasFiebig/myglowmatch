@@ -36,6 +36,15 @@ yarn-error.log*
 # vercel
 .vercel
 
+# n8n test-suite run artifacts
+test_results_*.json
+
+# n8n pre-PUT workflow backups
+workflow_backup_*.json
+
+# local claude settings
+.claude/settings.local.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

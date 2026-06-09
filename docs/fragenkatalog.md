@@ -1,14 +1,19 @@
 # myglowmatch.de – Vollständiger Fragenkatalog
 ## Technische Implementierungsreferenz für HTML-Fragebogen
 
+> **Stand:** 2026-05-30 — Doku abgeglichen mit `src/data/questions.ts` und Workflow Node 02.
+
 ---
 
 ## Übersicht
 
-- **16 Fragen** (11 Pflicht + 5 Conditional)
-- **Webhook-Ziel:** n8n Production URL (wird separat mitgeteilt)
-- **Partner-ID:** wird als URL-Parameter übergeben: `myglowmatch.de/martina` → `partner_id=martina`
-- **Submit:** JSON per POST an n8n Webhook
+- **Strukturell:** 1 Intro-Bildschirm + 11 Pflicht-Fragen + 3 Conditional-Fragen + 1 Kontakt-Screen + 1 DSGVO-Konsent-Screen = 17 Schritte gesamt (davon 16 mit Eingaben)
+- **Frontend:** Next.js-App auf `myglowmatch.de`, Source unter `src/data/questions.ts`
+- **Webhook-Ziel:** `https://veradex.app.n8n.cloud/webhook/glowmatch-haaranalyse` (n8n Production, Workflow `pwSWA5NatKiLhueB`)
+- **Partner-ID:** wird als URL-Pfad übergeben: `myglowmatch.de/desiree` → `partner_id="desiree"` (Default: `DEFAULT`)
+- **Submit:** JSON per POST an n8n Webhook (Header `x-tally-signature` aus Legacy-Tally-Zeit ist nicht mehr nötig, aber wird vom Frontend weiterhin gesendet)
+- **Response:** sofort (`onReceived`-Mode), Frontend zeigt Thank-You-Screen
+- **Output an die Kundin:** persönliche E-Mail mit Routine + E-Mail an die Markenpartnerin als Lead-Notification
 
 ---
 
@@ -21,6 +26,7 @@ Das Formular sendet beim Absenden folgendes JSON an n8n:
   "partner_id": "martina",
   "first_name": "Desiree",
   "email": "desiree@example.de",
+  "phone": "01511234567",
   "consent_recommendation": true,
   "consent_marketing": false,
   "scalp_status": ["normal"],
@@ -40,6 +46,8 @@ Das Formular sendet beim Absenden folgendes JSON an n8n:
 }
 ```
 
+**Hinweis:** `phone` ist optional und kann fehlen oder leer sein. Alle anderen Felder werden vom Frontend-Validator verlangt (außer den 3 conditional fields, die je nach Vorantworten erscheinen).
+
 **Wichtig:** Alle Werte müssen exakt so gesendet werden wie in den Antwortoptionen angegeben (technische Werte, keine Anzeigetexte).
 
 ---
@@ -51,8 +59,15 @@ Das Formular sendet beim Absenden folgendes JSON an n8n:
 ### Seite 1 – Intro
 **Kein Feld** – nur Willkommenstext und Start-Button.
 
-> „Beantworte ein paar kurze Fragen und erhalte deine persönliche Produktempfehlung, abgestimmt auf dein Haar und deine Kopfhaut."
-> Dauer: ca. 2–3 Minuten
+- **Headline:** „Deine persönliche Haaranalyse"
+- **Sub-Headline:** „In 2 Minuten zur Pflege, die zu dir passt."
+- **Bullet-Points:**
+  - Schnell beantwortet
+  - Persönliche Empfehlung
+  - Per E-Mail direkt zu dir
+- **CTA-Button:** „Jetzt starten"
+- **Datenschutz-Hinweis (unter Button):** „Deine Daten werden DSGVO-konform verarbeitet."
+- **Hero-Bild:** `/hero.jpg` (Frau mit gepflegtem, glänzendem Haar)
 
 ---
 
@@ -63,13 +78,13 @@ Das Formular sendet beim Absenden folgendes JSON an n8n:
 
 **Anzeigetext:** „Wie würdest du deine Kopfhaut aktuell beschreiben? (max. 2 auswählen)"
 
-| Anzeigetext | Technischer Wert |
-|---|---|
-| juckend / empfindlich | `juckend_empfindlich` |
-| schuppig | `schuppig` |
-| fettig | `fettig` |
-| trocken | `trocken` |
-| normal | `normal` |
+| Anzeigetext | Technischer Wert | Hinweis |
+|---|---|---|
+| juckend / empfindlich | `juckend_empfindlich` | |
+| schuppig | `schuppig` | |
+| fettig | `fettig` | |
+| trocken | `trocken` | |
+| normal | `normal` | **Exclusive:** wenn gewählt, werden andere automatisch abgewählt |
 
 ---
 
@@ -130,17 +145,17 @@ Das Formular sendet beim Absenden folgendes JSON an n8n:
 
 **Anzeigetext:** „Welche Punkte treffen aktuell auf dein Haar zu? (max. 3 auswählen – wenn nichts zutrifft: ‚keine besonderen Probleme' wählen)"
 
-| Anzeigetext | Technischer Wert |
-|---|---|
-| stark geschädigt | `stark_geschaedigt` |
-| Haarbruch | `haarbruch` |
-| Spliss | `spliss` |
-| trocken | `trocken` |
-| Frizz | `frizz` |
-| glanzlos | `glanzlos` |
-| kraftlos / wenig Volumen | `kraftlos` |
-| dünner werdendes Haar | `duenn` |
-| keine besonderen Probleme | `keine_probleme` |
+| Anzeigetext | Technischer Wert | Hinweis |
+|---|---|---|
+| stark geschädigt | `stark_geschaedigt` | |
+| Haarbruch | `haarbruch` | |
+| Spliss | `spliss` | |
+| trocken | `trocken` | |
+| Frizz | `frizz` | |
+| glanzlos | `glanzlos` | |
+| kraftlos / wenig Volumen | `kraftlos` | |
+| dünner werdendes Haar | `duenn` | |
+| keine besonderen Probleme | `keine_probleme` | **Exclusive:** wenn gewählt, werden andere automatisch abgewählt |
 
 **Conditional Logic:**
 - Wenn `trocken` ODER `frizz` gewählt → Frage 4b (ends_condition) anzeigen
@@ -296,12 +311,20 @@ Das Formular sendet beim Absenden folgendes JSON an n8n:
 ---
 
 ### Frage 12 – Kontaktdaten
-**Field Name:** `first_name` + `email`
-**Typ:** Texteingabe + E-Mail-Eingabe
-**Pflicht:** Ja
+**Field Names:** `first_name` + `email` + `phone`
+**Typ:** Kombi-Screen mit Text- + E-Mail- + Telefon-Eingabe
+**Pflicht:** Vorname + E-Mail Pflicht; Telefon **optional**
+
+**Screen-Titel:** „Fast geschafft!"
 
 **Anzeigetext Vorname:** „Wie ist dein Vorname?"
+
 **Anzeigetext E-Mail:** „An welche E-Mail-Adresse darf ich deine persönliche Produktempfehlung senden?"
+
+**Anzeigetext Telefon (optional):**
+- Label: „Telefonnummer"
+- Beschreibung: „Optional – damit dich deine Beraterin auch per WhatsApp kontaktieren kann."
+- Placeholder: „z. B. 0151 12345678"
 
 ---
 
@@ -331,12 +354,15 @@ const partnerId = urlParams.get('partner_id') ||
 ```
 
 ### Validierungsregeln
-- `scalp_status`: min. 1, max. 2 Auswahlen
-- `hair_condition`: min. 1, max. 3 Auswahlen
+- `scalp_status`: min. 1, max. 2 Auswahlen — wenn `normal` gewählt, andere automatisch deselektiert
+- `hair_condition`: min. 1, max. 3 Auswahlen — wenn `keine_probleme` gewählt, andere automatisch deselektiert
 - `care_goals`: min. 1, max. 2 Auswahlen
-- `heat_tools`: min. 1 Auswahl (nur wenn angezeigt)
+- `heat_tools`: min. 1, max. 3 Auswahlen (nur wenn angezeigt)
+- `first_name`: nicht-leer
 - `email`: muss gültiges E-Mail-Format haben
+- `phone`: optional (kann leer oder fehlend sein)
 - `consent_recommendation`: muss angehakt sein (Pflicht)
+- `consent_marketing`: optional
 
 ### Conditional Logic Zusammenfassung
 | Frage | Bedingung | Aktion |
@@ -358,12 +384,13 @@ Node 02 muss nach dem Umstieg angepasst werden damit er das neue JSON-Format lie
 
 ```javascript
 // NODE 02: Felder aus eigenem Fragebogen lesen
-const body = $input.item.json.body || $input.item.json;
+const body = $input.item.json.body;
 
 const raw = {
   partner_id:             body.partner_id || 'DEFAULT',
   first_name:             body.first_name || '',
   email:                  body.email || '',
+  phone:                  body.phone || '',
   scalp_status:           Array.isArray(body.scalp_status) ? body.scalp_status : [body.scalp_status].filter(Boolean),
   hair_structure:         body.hair_structure || '',
   hair_thickness:         body.hair_thickness || '',
@@ -385,4 +412,6 @@ const raw = {
 return [{ json: { raw_input: raw, partner_id: raw.partner_id } }];
 ```
 
-**Wichtig:** Node 03 bleibt unverändert – die technischen Werte kommen jetzt bereits normiert aus dem Fragebogen, aber Node 03 schadet nicht als zusätzliche Sicherheitsschicht.
+**Aktueller Stand 2026-05-30:** Node 02 enthält genau diesen Code (aus dem aktiven Workflow `pwSWA5NatKiLhueB` verifiziert).
+
+**Wichtig:** Node 03 normiert die Werte zusätzlich (lowercase, substring-Match gegen Mapping-Tabellen) — das ist eine Sicherheitsschicht, falls Roh-Eingaben in einer leicht abweichenden Schreibweise ankommen (z. B. „Föhn" statt `fohn`, „Bewusst & regelmäßig" statt `bewusst_regelmaessig`). Da das Frontend bereits die exakten technischen Werte sendet, ist Node 03 effektiv idempotent — aber es schützt vor Tippfehlern und ist die Stelle, an der Tally-/Drittsysteme bei Bedarf wieder andocken könnten.
