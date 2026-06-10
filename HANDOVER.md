@@ -127,11 +127,43 @@ Etabliert im A–F-Audit am 2026-06-10. Verbindlich für künftige Sheet-Wert-En
 
 **Wichtige Beobachtung aus dem Vollrun (2026-06-10):** Sheet-Werte ohne PDF-Beleg sind nicht nur Doku-Schuld, sie produzieren aktiv falsche Empfehlungen. Beispiel: `monat_black.nebenfunktionen=volumen` (PDF-untreu, PDF spricht von „Dichte" und „Verdichtend") führte dazu, dass Maria + Julia (`scalp=normal`, `goal=volumen`) das falsche Shampoo bekamen — monat_black ist laut PDF für **fettige Kopfhaut**. Nach Fix gewinnt revive_shampoo (`hauptfunktion=volumen`), das funktionsspezifisch richtige Shampoo. K-04 hat damit direkten Output-Effekt auf die Kundenempfehlung.
 
+## Datenblatt-Provenienz-Audit (Stand 2026-06-11)
+
+Spalten-Reihenfolge nach Scoring-Relevanz: Block 1 (scoring-kritisch: `hauptfunktion`, `nebenfunktionen`) → Block 2 (Filter: `haarstaerke`, `haarstruktur`, `haarzustand`, `kopfhaut`) → Block 3 (Bool-Flags + Level) → Block 4 (Doku). Produkt-Reihenfolge je Block in 4 Stufen nach Bug-Risiko (Multi-Funktion → seltene Tokens → A–F-Re-Verify → Singulär-Sanity).
+
+**Block 1 Stufe 1** — 8 Produkte (Multi-Funktions-`hauptfunktion`: 4× bond_iq + 3× curl + moxie_mousse) — abgeschlossen 2026-06-11. 7 Zellen-Edits in `produktdatenbank.nebenfunktionen` (16 Token-Ergänzungen), alle K-04/K-05 strikt (eigener Vorteils-Bullet oder eigene FAQ-Aussage Pflicht; Tagline, reine Inhaltsstoff-Mechanismus-Beschreibung oder Nebensatz-Erwähnung zählen nicht):
+
+| Produkt | nebenfunktionen ergänzt um | belegende Bullet-Kategorie |
+|---|---|---|
+| bond_iq_leave_in | `frizz_reduktion`, `kaemmbarkeit`, `glanz` | je eigener Vorteils-Bullet + Test 91 % für kaemmbarkeit |
+| bond_iq_night_day_serum | `frizz_reduktion`, `kaemmbarkeit`, `elastizitaet` | Test 91 % für frizz_reduktion; eigener Bullet für elastizitaet |
+| bond_iq_shampoo | `glanz`, `kaemmbarkeit` | je eigener Vorteils-Bullet |
+| bond_iq_spuelung | `frizz_reduktion`, `glanz`, `elastizitaet` | Test 89 % für frizz_reduktion; eigener Bullet für glanz + elastizitaet |
+| curl_creme | `kaemmbarkeit` | eigener Bullet + Test 91 % |
+| curl_gelee | `frizz_reduktion`, `glanz` | Test 91 % für frizz_reduktion; eigener Bullet für glanz |
+| curl_auffrischer | `frizz_reduktion`, `definition` | Test 91 % bzw. 94 % |
+
+**Bewusst NICHT ergänzt** (per Sammel-Entscheidung 2026-06-11):
+- `bonding` bei bond_iq_night_day_serum / bond_iq_shampoo / bond_iq_spuelung — nur via Inhaltsstoff-Beschreibung (Lupinenprotein „stabilisiert die inneren Haarbindungen") belegt, kein eigener Vorteils-Bullet. Sheet-Status quo (`bonding` bleibt in `hauptfunktion`).
+- `moxie_mousse.verdichtend` + `moxie_mousse.definition` — nur Header-Tagline („Volumen und Dichte") + CAPIXYL-Inhaltsstoff + konditionale FAQ-Aussage, kein eigener Vorteils-Bullet.
+
+`hauptfunktion` aller 8 Produkte unverändert.
+
+**Neu im Sheet-Vokabular**: `elastizitaet` (vorher nur bei `super_feuchtigkeitsmaske`, jetzt zusätzlich `bond_iq_night_day_serum`, `bond_iq_spuelung`). 0 Treffer in `map_slot_rules` / `map_conflict_rules` / `map_priorities` → kein Filter/REQ-Hard-Fail. Node 12 ohne care_goal-Match → +0 Score, kein Scoring-Effekt.
+
+**Reihenfolge irrelevant**: Node 12 nutzt `csvToArr` + `.some()` → Set-Verhalten. Reihenfolge der Token in `nebenfunktionen` ohne funktionalen Effekt.
+
+**Backup**: `~/Projekte/myglowmatch/backups/sheets_20260611_010951_pre_block1_stufe1/produktdatenbank.csv` (38 Zeilen, Pre-Edit-Snapshot).
+
+**Regression**: Full-Run 2026-06-11 — 7/7 Profile produkt_key-identisch zur 10.06.-Baseline. Erwartete Score-Drift nur für Lena (`mehr_glanz`-Goal, substring-Match auf neu-ergänztes `glanz` bei bond_iq + curl_gelee) — kein Slot-Shift, da Lenas Pool die jeweiligen Slots bereits via REQ-Routing (Renew, Hitzeschutzspray) bzw. ohne Konkurrenz (curl_gelee in styling_2) dominiert.
+
+**Offen**: Block 1 Stufe 2 (8 Produkte mit seltenen Tokens: monat_black, rejuvabeads, ir_clinical_kopfhautserum, the_champ, replenish_maske, super_feuchtigkeitsmaske, restore_leave_in, kopfhaut_peeling) + Stufe 3 (A–F-Re-Verify, 8 Produkte) + Stufe 4 (Singulär-Sanity, 13 Produkte). Danach Block 2–4.
+
 ## Offene Punkte (priorisiert)
 
 | Prio | Aufgabe | Stelle |
 |---|---|---|
-| 🟡 | Datenblatt-Provenienz-Audit | 37 Produkte × ~15 audit-relevante Spalten gegen `~/Projekte/myglowmatch/produktdatenblaetter/` |
+| 🟡 (in Arbeit) | Datenblatt-Provenienz-Audit — Block 1 Stufe 1 (8 Produkte) erledigt 2026-06-11, Stufe 2–4 offen | siehe Abschnitt „Datenblatt-Provenienz-Audit" oben |
 | 🟡 | Node 06 Phase 2 migrieren (Ziele-Bonus, max +2 Pkt) | Node 06 inline |
 | 🟡 | Node 05 migrieren (17 Bool-Flag-Heuristiken) | Node 05 inline, 69 LOC; bei Gelegenheit `needs_lightweight_logic` mitentfernen (seit #5 ungenutzt) |
 | 🟢 | Node 11 Z. 163-164: `minimal → optional = []` als REQ-Regel ins Sheet | Node 11 inline |
