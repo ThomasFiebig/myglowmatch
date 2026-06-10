@@ -279,7 +279,7 @@ def _extract_first_name_from_detail(detail: dict):
     """Holt first_name aus einer Execution (für Profil-Verifikation)."""
     try:
         rd = detail.get("data", {}).get("resultData", {}).get("runData", {}) or {}
-        for node_name in ("15 Routine sortieren", "03 Werte normieren"):
+        for node_name in ("15 Routine sortieren", "02 Felder extrahieren"):
             node_runs = rd.get(node_name, [])
             if not node_runs:
                 continue

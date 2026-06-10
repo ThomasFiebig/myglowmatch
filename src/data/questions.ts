@@ -254,7 +254,7 @@ export const formSteps: Step[] = [
       { value: "glanz", label: "mehr Glanz" },
       { value: "volumen", label: "mehr Volumen" },
       { value: "gesunde_kopfhaut", label: "gesunde Kopfhaut" },
-      { value: "mehr_dichte", label: "volleres Haar / mehr Dichte" },
+      { value: "verdichtend", label: "volleres Haar / mehr Dichte" },
     ],
   },
 

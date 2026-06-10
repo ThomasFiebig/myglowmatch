@@ -1,4 +1,4 @@
-# HANDOVER — Stand 2026-05-28
+# HANDOVER — Stand 2026-06-10
 
 Faktische Momentaufnahme des MONAT-Haaranalyse-Systems. Kein Verlauf, keine Diskussion.
 
@@ -53,45 +53,46 @@ Beim Service-Account-Setup am 2026-06-10 sichtbar geworden, am selben Tag auditi
 
 | Tab | Zeilen | Header | Status | Folge-Aktion |
 |---|---|---|---|---|
-| `map_input_normalization` | 10 | `feld \| rohwert \| technischer_wert \| hinweis` | **halbfertig, Daten OK** — exakt das Mapping für die 160-LOC-Node-03-Inline-Normalisierung; Format ist lookup-tauglich | Node-03-Migration ansetzen + `care_goals`-Zeilen ergänzen (löst `mehr_dichte`-Bug mit 1 Sheet-Edit) |
+| `map_input_normalization` | 10 | `feld \| rohwert \| technischer_wert \| hinweis` | **verwaist (Migration entfallen)** — Tally-Pfad ist tot; Frontend liefert technische Werte direkt. Node 03 am 2026-06-10 entfernt statt migriert. | Bei nächster Bereinigung archivieren/löschen |
 | `map_derived_variables` | 13 | `variable \| berechnungslogik \| erlaubte_werte \| verwendung` | **halbfertig, Format ungeeignet** — `berechnungslogik`-Spalte ist Freitext-Doku, nicht parsbar; 13 vs. 17 Bool-Flags in Node 05 | Format-Umbau (strukturierte Spalten) nötig bevor Node-05-Migration möglich |
 | `map_requirement_rules` | 19 | `regel_id \| bedingung \| action \| slot_typ \| filter \| beschreibung` | **verwaist (Vorgänger)** — gleiche Struktur wie Live-`map_slot_rules` (25 Regeln), aber älter/kürzer | Bei nächster Bereinigung archivieren/löschen |
 | `map_priority_resolution` | 15 | `feld \| rang \| wert \| beschreibung` | **verwaist (Vorgänger)** — 4-Spalten-Variante; Live-`map_priorities` hat 6 Spalten | Bei nächster Bereinigung archivieren/löschen |
 | `map_system_dictionary` | 25 | `feld \| technischer_wert \| anzeige_text \| kategorie` | **verwaist, latent nützlich** — Reverse-Lookup technisch→deutsch (z.B. `juckend_empfindlich → "juckend / empfindlich"`) | Liegenlassen (K-05). Für Output-Lokalisierung oder Frontend-Anzeige reaktivierbar |
 
-**Dominanter nächster Schritt**: `map_input_normalization`-Migration. Tabelle existiert mit passendem Schema, Hebel hoch (160 LOC inline → Loader-Lookup), und der 🟡-`mehr_dichte`-Bug fällt als Sheet-Edit raus statt Frontend-Eingriff. `map_derived_variables` für Node 05 ist **noch nicht reif** — eigene Format-Vorab-Etappe nötig.
+**Dominanter nächster Schritt**: Node 05 (17 Bool-Flag-Heuristiken) — `map_derived_variables` braucht aber erst Format-Umbau (strukturierte Spalten statt Freitext-Doku), bevor Migration möglich. `map_input_normalization`-Migration wurde am 2026-06-10 verworfen: Frontend sendet bereits technische Werte, Node 03 war im Wesentlichen ein No-Op über Tally-Legacy-Maps → komplett entfernt statt migriert.
 
-## Workflow-Nodes (25)
+## Workflow-Nodes (24)
 
 Datenflussreihenfolge (Hauptpfad):
 
 | # | Name | Typ | Funktion |
 |---|---|---|---|
-| 1 | Webhook | webhook | Tally-Endpunkt |
+| 1 | Webhook | webhook | Tally-Endpunkt (Header-Check siehe 🔴 unten) |
 | 2 | Signature prüfen | if | `x-tally-signature` validieren |
-| 3 | 02 Felder extrahieren | code | Tally-JSON in flache Felder |
-| 4 | 03 Werte normieren | code | 13 Aliase-Maps (Tally → Workflow-Vokabular), 160 LOC |
-| 5 | 04a Prioritäten laden | googleSheets | `map_priorities` |
-| 6 | 04 Prioritäten auflösen | code | scalp_primary/secondary, condition_primary/secondary, generischer Auswerter |
-| 7 | 05 Bool-Flags berechnen | code | 17 Heuristik-Flags (needs_repair_focus, needs_lightweight_logic …), 69 LOC, **noch inline** |
-| 8 | 06a Pflegelevel-Scoring laden | googleSheets | `map_pflegelevel_scoring` |
-| 9 | 06b Pflegelevel-Overrides laden | googleSheets | `map_pflegelevel_overrides` |
-| 10 | 06c Max-Products laden | googleSheets | `map_max_products` |
-| 11 | 06 Pflegelevel berechnen | code | Phase 1+3 (Scoring), Phase 2 (Ziele-Bonus, **noch inline**), Phase 4+5+6 sheet-getrieben |
-| 12 | 07 Produktdatenbank laden | googleSheets | Hauptpool 37 Produkte |
-| 13 | 08a Pool-Filter laden | googleSheets | `map_pool_filter` |
-| 14 | 08 Ausschluss-Filter | code | aktiv/produkt_key-Sanity, `ausschluss_bei`, `haarstaerke`, Pool-Regeln aus 08a, `pflegelevel`-Filter |
-| 15 | 09 Pool validieren | code | Sanity-Check (Pool nicht leer) |
-| 16 | 10 map_slot_rules | googleSheets | REQ-Regeln |
-| 17 | 11 REQ-Regeln auswerten | code | Slot-Trigger-Auswertung, generisch; Z. 163-164 `minimal → optional = []` **noch inline** |
-| 18 | 13 Konfliktregeln laden | googleSheets | `map_conflict_rules` |
-| 19 | 14 Konflikte auflösen | code | match_typ ∈ {produkt_key, produktlinie, key_contains}; `gewicht_eq` entfernt |
-| 20 | 12 Scoring & Slot-Befüllung | code | Score-Gewichte 3/2/1 **noch inline**, generischer Filter (Boolean-Flags + Substring) |
-| 21 | 15 Routine sortieren | code | Finale Routine, Reihenfolge + Pflichtproduktauswahl |
-| 22 | 17 Claude E-Mail formulieren | code | Templating, 517 LOC, CSS inline (mobile + desktop) |
-| 23 | 18 E-Mail senden | emailSend | An Kunde (`info@myglowmatch.de` in Tests) |
-| 24 | 18b Partner-Mail senden | emailSend | An Partner |
-| 25 | 19 Log speichern | googleSheets | Anhang an Log-Tab |
+| 3 | 02 Felder extrahieren | code | Body in flache Felder, Defaults (`'glatt'`/`'mittel'` u.a.), Array-Dedup; Output `{ normalized, raw_input, partner_id }`. Frontend liefert bereits technische Werte. |
+| 4 | 04a Prioritäten laden | googleSheets | `map_priorities` |
+| 5 | 04 Prioritäten auflösen | code | scalp_primary/secondary, condition_primary/secondary, generischer Auswerter; liest aus `$node["02 Felder extrahieren"]` |
+| 6 | 05 Bool-Flags berechnen | code | 17 Heuristik-Flags (needs_repair_focus, needs_lightweight_logic …), 69 LOC, **noch inline** |
+| 7 | 06a Pflegelevel-Scoring laden | googleSheets | `map_pflegelevel_scoring` |
+| 8 | 06b Pflegelevel-Overrides laden | googleSheets | `map_pflegelevel_overrides` |
+| 9 | 06c Max-Products laden | googleSheets | `map_max_products` |
+| 10 | 06 Pflegelevel berechnen | code | Phase 1+3 (Scoring), Phase 2 (Ziele-Bonus, **noch inline**), Phase 4+5+6 sheet-getrieben |
+| 11 | 07 Produktdatenbank laden | googleSheets | Hauptpool 37 Produkte |
+| 12 | 08a Pool-Filter laden | googleSheets | `map_pool_filter` |
+| 13 | 08 Ausschluss-Filter | code | aktiv/produkt_key-Sanity, `ausschluss_bei`, `haarstaerke`, Pool-Regeln aus 08a, `pflegelevel`-Filter |
+| 14 | 09 Pool validieren | code | Sanity-Check (Pool nicht leer) |
+| 15 | 10 map_slot_rules | googleSheets | REQ-Regeln |
+| 16 | 11 REQ-Regeln auswerten | code | Slot-Trigger-Auswertung, generisch; Z. 163-164 `minimal → optional = []` **noch inline** |
+| 17 | 13 Konfliktregeln laden | googleSheets | `map_conflict_rules` |
+| 18 | 14 Konflikte auflösen | code | match_typ ∈ {produkt_key, produktlinie, key_contains}; `gewicht_eq` entfernt |
+| 19 | 12 Scoring & Slot-Befüllung | code | Score-Gewichte 3/2/1 **noch inline**, generischer Filter (Boolean-Flags + Substring) |
+| 20 | 15 Routine sortieren | code | Finale Routine, Reihenfolge + Pflichtproduktauswahl |
+| 21 | 17 Claude E-Mail formulieren | code | Templating, 517 LOC, CSS inline (mobile + desktop); liest `raw_input` aus `$node["02 Felder extrahieren"]` |
+| 22 | 18 E-Mail senden | emailSend | An Kunde (`info@myglowmatch.de` in Tests) |
+| 23 | 18b Partner-Mail senden | emailSend | An Partner |
+| 24 | 19 Log speichern | googleSheets | Anhang an Log-Tab |
+
+Hinweis: ehemals Node `03 Werte normieren` (160 LOC, 14 Tally-Aliase-Maps) am 2026-06-10 entfernt — Frontend liefert technische Werte direkt, Maps waren idempotent / toter Code. Logik-Reste (Defaults `'glatt'`/`'mittel'`, Array-Dedup, `{ normalized, raw_input, partner_id }`-Output) sind in Node 02 zusammengeführt.
 
 Sticky Notes zählen nicht. Mail-Routing zwischen 18 und 18b geht aus Code-Quelle Node 17 hervor (kein eigener Router-Node).
 
@@ -104,6 +105,7 @@ Sticky Notes zählen nicht. Mail-Routing zwischen 18 und 18b geht aus Code-Quell
 | #3 | Pflegelevel Phase 4+5 | `map_pflegelevel_overrides` | Node 06 Phase 4+5 generisch |
 | #4 | Pflegelevel Phase 6 | `map_max_products` | Node 06 Phase 6 generisch (2D-Lookup) |
 | #5 | Pool-Filter | `map_pool_filter` | Node 08 generisch (Profil- + Produkt-Bedingungen); Inline-Filter Bonding/Gewicht/Locken entfernt; `gewicht_eq`-Case aus Node 14 entfernt |
+| #6 | Node 03 entfernen (statt migrieren) | `map_input_normalization` verwaist | Node 03 gelöscht (Tally-Maps = toter Code); Logik-Reste in Node 02 (Defaults, Dedup, `normalized`-Output); Frontend-Edit `mehr_dichte → verdichtend` (questions.ts) fixt 🟡-Goal-Match |
 
 Mini-Syntax in `map_pool_filter` und `map_pflegelevel_overrides`-ähnlichen Tabs:
 - Bedingungen mit `;` getrennt, Liste `feld:operator[:wert]`
@@ -130,7 +132,6 @@ Etabliert im A–F-Audit am 2026-06-10. Verbindlich für künftige Sheet-Wert-En
 | Prio | Aufgabe | Stelle |
 |---|---|---|
 | 🔴 | **`x-tally-signature`-Header wird vom Frontend nicht (mehr) geschickt** — Node 02 (Signatur-Prüfung) läuft mit leerem Header durch oder ist effektiv toter Code. Sicherheitsrelevant: Webhook ist faktisch ungeschützt, jeder mit URL kann Beratungen triggern. **Vor Skalierung auf weitere Partner zwingend klären.** Entdeckt 2026-06-10 beim A–F-Audit. | `src/components/Questionnaire.tsx:101` + `src/app/api/submit/route.ts:38` setzen nur `Content-Type`; n8n-Node 02 prüfen |
-| 🟡 | **`mehr_dichte` ist toter Profil-Goal-Pfad** — Frontend-Goal-Option „volleres Haar / mehr Dichte" wird in Node 03 zu `mehr_dichte` normalisiert, matched in Node 12 (L32 `f.includes(goal) ‖ goal.includes(f)`) gegen kein Produkt im Sortiment (`verdichtend` ≠ `mehr_dichte`, beidseitig fail). Fix-Optionen: Normalisierung anpassen (`'dichte': 'dichte'`) oder Produkt-Werte ergänzen. Entdeckt 2026-06-10 beim A–F-Audit. | Node 03 L101–103 ↔ Produktdatenbank `hauptfunktion`/`nebenfunktionen` |
 | 🟡 | Datenblatt-Provenienz-Audit | 37 Produkte × ~15 audit-relevante Spalten gegen `~/Projekte/myglowmatch/produktdatenblaetter/` |
 | 🟡 | Node 06 Phase 2 migrieren (Ziele-Bonus, max +2 Pkt) | Node 06 inline |
 | 🟡 | Node 05 migrieren (17 Bool-Flag-Heuristiken) | Node 05 inline, 69 LOC; bei Gelegenheit `needs_lightweight_logic` mitentfernen (seit #5 ungenutzt) |
@@ -149,10 +150,12 @@ Test-Profile in `test_suite.py`, alle mit `partner_id=desiree`, `email=info@mygl
 | anna   | glatt, mittel, keine_probleme, unbehandelt, Hitze gelegentlich, minimal | LOW | 0 | 3 | 1 | CON-07 |
 | maria  | wellig, fein, duenn, kraftlos, gefaerbt, Hitze nie, ausgewogen | MID | 7 | 5 | 5 | CON-09, CON-11, CON-12 |
 | lena   | kraus, dick, trocken, frizz, gefaerbt, Hitze sehr_haeufig, bestmoeglich | HIGH | 15 | 10 | 7 | CON-09, CON-11 |
-| julia  | glatt, fein, kraftlos, unbehandelt, Hitze gelegentlich, ausgewogen | MID | 4 | 5 | 5 | CON-07, CON-12 |
+| julia  | glatt, fein, kraftlos, unbehandelt, Hitze gelegentlich, ausgewogen | MID | 4 | 5 | 4 | CON-12 |
 | bianca | wellig, mittel, trocken, gefaerbt, Hitze gelegentlich, ausgewogen | MID | 7 | 5 | 5 | CON-02, CON-09 |
 | vivien | wellig, dick, keine_probleme, gefaerbt, Hitze regelmaessig, bestmoeglich | MID | 4 | 7 | 7 | CON-09, CON-11, CON-12 |
-| sarah  | lockig, fein, stark_geschaedigt+spliss+trocken, blondiert, Hitze sehr_haeufig, bestmoeglich | HIGH | 18 | 10 | 8 | CON-09, CON-11 |
+| sarah  | lockig, fein, stark_geschaedigt+spliss+trocken, blondiert, Hitze sehr_haeufig, bestmoeglich | HIGH | 18 | 10 | 7 | CON-09, CON-11 |
+
+Sollwerte stand 2026-06-10-Full-Run nach Node-03-Removal. Vorherige Werte (julia count=5/CON-07,12; sarah count=8) reflektierten den Pre-A-F-Audit-Stand (vor monat_black- + smoothing_fohn_spray-Korrekturen).
 
 ## Test-Suite
 

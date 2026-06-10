@@ -276,7 +276,7 @@ Das Formular sendet beim Absenden folgendes JSON an n8n:
 | mehr Glanz | `glanz` |
 | mehr Volumen | `volumen` |
 | gesunde Kopfhaut | `gesunde_kopfhaut` |
-| volleres Haar / mehr Dichte | `mehr_dichte` |
+| volleres Haar / mehr Dichte | `verdichtend` |
 
 ---
 
