@@ -31,9 +31,13 @@ Faktische Momentaufnahme des MONAT-Haaranalyse-Systems. Kein Verlauf, keine Disk
 
 ## Google-Sheet-Tabs
 
+**Wichtig:** `MONAT_Produktdatenbank_KOMPLETT` ist der **Sheet-Dokumenten-Name** (Doc-ID `1Osmmkrtk4uu5hz6Xk65-HgVgoLMSAYhe1VXOTjLtx0A`), nicht ein Tab-Name. Tabs werden im Code per Loader-Node mit ihrem exakten Namen referenziert.
+
+### Vom aktuellen Workflow genutzte Tabs (8)
+
 | Tab | Spalten / Zweck | Genutzt von |
 |---|---|---|
-| `MONAT_Produktdatenbank_KOMPLETT` | 37 Produkte × 24 Spalten (produkt_key, produktname_de, produktlinie, produkttyp, slot_typ, routine_schritt, kopfhaut, haarstruktur, haarstaerke, haarzustand, hauptfunktion, nebenfunktionen, pflegelevel, ausschluss_bei, ist_hitzeschutz, ist_bonding, ist_scalp_focus, locken_geeignet, kombinationen, kombi_optional, aktiv, produkt_url, anwendung, row_number) | Node 07 |
+| `produktdatenbank` | 37 Produkte × 24 Spalten (produkt_key, produktname_de, produktlinie, produkttyp, slot_typ, routine_schritt, kopfhaut, haarstruktur, haarstaerke, haarzustand, hauptfunktion, nebenfunktionen, pflegelevel, ausschluss_bei, ist_hitzeschutz, ist_bonding, ist_scalp_focus, locken_geeignet, kombinationen, kombi_optional, aktiv, produkt_url, anwendung, row_number) | Node 07 |
 | `map_priorities` | scalp/condition-Priorisierung (Long-Format, Spalten: regel_id, kategorie, wert, reihenfolge, aktiv, beschreibung) | Node 04a |
 | `map_pflegelevel_scoring` | Punktevergabe-Regeln pro Profilfeld | Node 06a |
 | `map_pflegelevel_overrides` | Floor/Cap-Regeln (PFL-OV-01 bis PFL-OV-04) | Node 06b |
@@ -41,7 +45,21 @@ Faktische Momentaufnahme des MONAT-Haaranalyse-Systems. Kein Verlauf, keine Disk
 | `map_slot_rules` | REQ-Regeln (25 aktive Regeln, Trigger + Filter) | Node 10 |
 | `map_conflict_rules` | CON-Regeln (CON-01 bis CON-12), match_typ + action | Node 13 |
 | `map_pool_filter` | POOL-01 (Bonding) und POOL-03 (Locken-Styling). POOL-02 (Gewicht) bewusste Lücke. | Node 08a |
-| Log-Tab | Run-Log (von Node 19 geschrieben) | Node 19 |
+| `beratungs_log` | Run-Log (1196 Zeilen Stand 2026-06-10) | Node 19 |
+
+### Nicht vom Workflow geladene Tabs (6) — Audit-Status offen
+
+Beim Service-Account-Setup am 2026-06-10 sichtbar geworden. Funktion vermutet, **vor Folge-Migrationen verifizieren**:
+
+| Tab | Vermutung Funktion |
+|---|---|
+| `map_input_normalization` | Vermutlich Tally/Frontend-Wertenormalisierung — möglicher Migrations-Ziel für Node 03 (160 LOC, noch inline) |
+| `map_derived_variables` | Vermutlich Bool-Flag-Definitionen — möglicher Migrations-Ziel für Node 05 (17 Heuristiken, noch inline) |
+| `map_system_dictionary` | Vermutlich zentrales Vokabular (hauptfunktion/nebenfunktion-Werte, slot_typ-Liste, etc.) |
+| `map_priority_resolution` | Vermutlich älterer Stand von `map_priorities` oder andere Prioritäts-Logik |
+| `map_requirement_rules` | Vermutlich REQ-Regel-Definitionen ergänzend zu `map_slot_rules` |
+
+Welche der 6 Tabs sind aktiv gepflegte Daten und welche sind Restbestände? Klärung spart Folge-Migrations-Audit-Arbeit (besonders für Node 03/05). Falls die ersten zwei bereits sinnvolle Schemas haben, könnte die Node-03/05-Migration deutlich kleiner werden als geplant.
 
 ## Workflow-Nodes (25)
 
@@ -93,10 +111,26 @@ Mini-Syntax in `map_pool_filter` und `map_pflegelevel_overrides`-ähnlichen Tabs
 - Listenwerte bei `in`/`not_in` mit `|` getrennt
 - Profil-Pfade: `flags.<feld>`, `normalized.<feld>`, `pflegelevel.<feld>`
 
+## Audit-Konventionen (Datenblatt-Provenienz)
+
+Etabliert im A–F-Audit am 2026-06-10. Verbindlich für künftige Sheet-Wert-Entscheidungen.
+
+| # | Konvention | Quelle |
+|---|---|---|
+| K-01 | `ist_hitzeschutz = TRUE` ⟺ `hauptfunktion` enthält `hitzeschutz`. Sekundäre Hitzeschutz-Eigenschaft bleibt nur in `nebenfunktionen`. Analog ist als Default-Muster für andere Boolean-Eigenschafts-Flags (`ist_bonding`, `ist_scalp_focus` etc.) zu prüfen. | bond_iq_leave_in vs. hitzeschutzspray + smoothing_fohn_spray |
+| K-02 | MONAT-Layering-Notation aus PDFs („Schritt-1-Prep" / „Schritt-2-Styling") **≠** unser `routine_schritt`. PDF-„Schritt-1-Prep" = funktional **nach Reinigung+Pflege, auf handtuchtrocknes Haar, vor Styling** → bei uns `slot_typ=leave_in` (`routine_schritt=5`). PDF-„Schritt-2-Styling" → unsere `styling_1` (7) / `styling_2` (8). | rejuvabeads-PDF, smoothing_tiefenbehandlung-PDF |
+| K-03 | `haarstaerke` spiegelt die explizite **„Wer profitiert / Ideal für"-Hauptaussage** des PDFs (Bullet-Sektion oder FAQ-Q&A). **Nicht** Header-Schlagwörter, **nicht** Marketing-Description. Bei mehreren Empfehlungs-Aussagen: die mit dem konkretesten Sortiments-Signal gewinnt. | smoothing_tiefenbehandlung (`mittel,dick`) + moxie_mousse (`alle`) |
+| K-04 | **PDF strikt**: Was nicht im Datenblatt belegt ist, kommt nicht ins Sheet. „Funktional besser" / „Beratungs-Praxis sagt" / „Kunden brauchen" sind **keine** legitimen Argumente, um nicht-PDF-belegte Sheet-Werte zu verteidigen. Beratungs-Heuristik gehört als **separate** Regel (REQ/CON) ins Sheet, nicht als impliziter Produktstammdaten-Wert. | essig-*.kopfhaut=schuppig nicht PDF-belegt — User-Klarstellung 2026-06-10 |
+| K-05 | Sheet-Werte folgen PDF-Belegen **auch wenn aktuell kein Scoring-/Regel-Trigger darauf greift**. Scoring-Stille ist kein Grund für PDF-Verzicht — sie ist eine Folge der Migrations-Reihenfolge und ggf. ein eigener Folge-Punkt. | `staerkend` als nebenfunktion für monat_black akzeptiert, obwohl aktuell kein Profil-Goal darauf matched |
+
+**Wichtige Beobachtung aus dem Vollrun (2026-06-10):** Sheet-Werte ohne PDF-Beleg sind nicht nur Doku-Schuld, sie produzieren aktiv falsche Empfehlungen. Beispiel: `monat_black.nebenfunktionen=volumen` (PDF-untreu, PDF spricht von „Dichte" und „Verdichtend") führte dazu, dass Maria + Julia (`scalp=normal`, `goal=volumen`) das falsche Shampoo bekamen — monat_black ist laut PDF für **fettige Kopfhaut**. Nach Fix gewinnt revive_shampoo (`hauptfunktion=volumen`), das funktionsspezifisch richtige Shampoo. K-04 hat damit direkten Output-Effekt auf die Kundenempfehlung.
+
 ## Offene Punkte (priorisiert)
 
 | Prio | Aufgabe | Stelle |
 |---|---|---|
+| 🔴 | **`x-tally-signature`-Header wird vom Frontend nicht (mehr) geschickt** — Node 02 (Signatur-Prüfung) läuft mit leerem Header durch oder ist effektiv toter Code. Sicherheitsrelevant: Webhook ist faktisch ungeschützt, jeder mit URL kann Beratungen triggern. **Vor Skalierung auf weitere Partner zwingend klären.** Entdeckt 2026-06-10 beim A–F-Audit. | `src/components/Questionnaire.tsx:101` + `src/app/api/submit/route.ts:38` setzen nur `Content-Type`; n8n-Node 02 prüfen |
+| 🟡 | **`mehr_dichte` ist toter Profil-Goal-Pfad** — Frontend-Goal-Option „volleres Haar / mehr Dichte" wird in Node 03 zu `mehr_dichte` normalisiert, matched in Node 12 (L32 `f.includes(goal) ‖ goal.includes(f)`) gegen kein Produkt im Sortiment (`verdichtend` ≠ `mehr_dichte`, beidseitig fail). Fix-Optionen: Normalisierung anpassen (`'dichte': 'dichte'`) oder Produkt-Werte ergänzen. Entdeckt 2026-06-10 beim A–F-Audit. | Node 03 L101–103 ↔ Produktdatenbank `hauptfunktion`/`nebenfunktionen` |
 | 🟡 | Datenblatt-Provenienz-Audit | 37 Produkte × ~15 audit-relevante Spalten gegen `~/myglowmatch/produktdatenblaetter/` |
 | 🟡 | Node 06 Phase 2 migrieren (Ziele-Bonus, max +2 Pkt) | Node 06 inline |
 | 🟡 | Node 05 migrieren (17 Bool-Flag-Heuristiken) | Node 05 inline, 69 LOC; bei Gelegenheit `needs_lightweight_logic` mitentfernen (seit #5 ungenutzt) |

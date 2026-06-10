@@ -45,6 +45,12 @@ workflow_backup_*.json
 # local claude settings
 .claude/settings.local.json
 
+# google sheets service account credentials (file, directory, or symlink)
+credentials
+
+# google sheets csv backups
+backups/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
