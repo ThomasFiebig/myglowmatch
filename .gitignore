@@ -54,3 +54,5 @@ backups/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+produktdatenblaetter/
+node17_current.js

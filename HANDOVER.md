@@ -21,10 +21,10 @@ Faktische Momentaufnahme des MONAT-Haaranalyse-Systems. Kein Verlauf, keine Disk
 | Pfad | Inhalt |
 |---|---|
 | `/Users/thomasfiebig/Projekte/myglowmatch/` | Git-Repo (Branch `main`), Next.js-Frontend + Test-Suite |
-| `~/myglowmatch/chat-archive/` | Session-Dokus |
-| `~/myglowmatch/produktdatenblaetter/` | 37 Hersteller-PDFs, benannt nach `produkt_key.pdf` + `_produktliste_uebersicht.pdf` + `produkte_index.md` |
-| `~/myglowmatch/map_*.csv` | Import-Vorlagen der bisherigen Sheet-Migrationen |
-| `~/myglowmatch/workflow_backup_*.json` | Pre-PUT-Backups |
+| `~/Projekte/myglowmatch/chat-archive/` | Session-Dokus |
+| `~/Projekte/myglowmatch/produktdatenblaetter/` | 37 Hersteller-PDFs, benannt nach `produkt_key.pdf` + `_produktliste_uebersicht.pdf` + `produkte_index.md` |
+| `~/Projekte/myglowmatch/map_*.csv` | Import-Vorlagen der bisherigen Sheet-Migrationen |
+| `~/Projekte/myglowmatch/workflow_backup_*.json` | Pre-PUT-Backups |
 | `/Users/thomasfiebig/Projekte/myglowmatch/.env` | `N8N_API_KEY`, `N8N_BASE_URL` (gitignored) |
 | `/Users/thomasfiebig/Projekte/myglowmatch/test_suite.py` | Test-Runner über Execution-API |
 | `/Users/thomasfiebig/Projekte/myglowmatch/inspect_workflow.py` | Read-only Workflow-Inspektor |
@@ -47,19 +47,19 @@ Faktische Momentaufnahme des MONAT-Haaranalyse-Systems. Kein Verlauf, keine Disk
 | `map_pool_filter` | POOL-01 (Bonding) und POOL-03 (Locken-Styling). POOL-02 (Gewicht) bewusste Lücke. | Node 08a |
 | `beratungs_log` | Run-Log (1196 Zeilen Stand 2026-06-10) | Node 19 |
 
-### Nicht vom Workflow geladene Tabs (6) — Audit-Status offen
+### Nicht vom Workflow geladene Tabs (5) — Audit 2026-06-10
 
-Beim Service-Account-Setup am 2026-06-10 sichtbar geworden. Funktion vermutet, **vor Folge-Migrationen verifizieren**:
+Beim Service-Account-Setup am 2026-06-10 sichtbar geworden, am selben Tag auditiert. **Alle 5 sind 0-Hit im Workflow-JSON** (Grep im neuesten Backup, Sanity-Check via Loader-Tabs 4–10 Hits). Inhalts-Status pro Tab:
 
-| Tab | Vermutung Funktion |
-|---|---|
-| `map_input_normalization` | Vermutlich Tally/Frontend-Wertenormalisierung — möglicher Migrations-Ziel für Node 03 (160 LOC, noch inline) |
-| `map_derived_variables` | Vermutlich Bool-Flag-Definitionen — möglicher Migrations-Ziel für Node 05 (17 Heuristiken, noch inline) |
-| `map_system_dictionary` | Vermutlich zentrales Vokabular (hauptfunktion/nebenfunktion-Werte, slot_typ-Liste, etc.) |
-| `map_priority_resolution` | Vermutlich älterer Stand von `map_priorities` oder andere Prioritäts-Logik |
-| `map_requirement_rules` | Vermutlich REQ-Regel-Definitionen ergänzend zu `map_slot_rules` |
+| Tab | Zeilen | Header | Status | Folge-Aktion |
+|---|---|---|---|---|
+| `map_input_normalization` | 10 | `feld \| rohwert \| technischer_wert \| hinweis` | **halbfertig, Daten OK** — exakt das Mapping für die 160-LOC-Node-03-Inline-Normalisierung; Format ist lookup-tauglich | Node-03-Migration ansetzen + `care_goals`-Zeilen ergänzen (löst `mehr_dichte`-Bug mit 1 Sheet-Edit) |
+| `map_derived_variables` | 13 | `variable \| berechnungslogik \| erlaubte_werte \| verwendung` | **halbfertig, Format ungeeignet** — `berechnungslogik`-Spalte ist Freitext-Doku, nicht parsbar; 13 vs. 17 Bool-Flags in Node 05 | Format-Umbau (strukturierte Spalten) nötig bevor Node-05-Migration möglich |
+| `map_requirement_rules` | 19 | `regel_id \| bedingung \| action \| slot_typ \| filter \| beschreibung` | **verwaist (Vorgänger)** — gleiche Struktur wie Live-`map_slot_rules` (25 Regeln), aber älter/kürzer | Bei nächster Bereinigung archivieren/löschen |
+| `map_priority_resolution` | 15 | `feld \| rang \| wert \| beschreibung` | **verwaist (Vorgänger)** — 4-Spalten-Variante; Live-`map_priorities` hat 6 Spalten | Bei nächster Bereinigung archivieren/löschen |
+| `map_system_dictionary` | 25 | `feld \| technischer_wert \| anzeige_text \| kategorie` | **verwaist, latent nützlich** — Reverse-Lookup technisch→deutsch (z.B. `juckend_empfindlich → "juckend / empfindlich"`) | Liegenlassen (K-05). Für Output-Lokalisierung oder Frontend-Anzeige reaktivierbar |
 
-Welche der 6 Tabs sind aktiv gepflegte Daten und welche sind Restbestände? Klärung spart Folge-Migrations-Audit-Arbeit (besonders für Node 03/05). Falls die ersten zwei bereits sinnvolle Schemas haben, könnte die Node-03/05-Migration deutlich kleiner werden als geplant.
+**Dominanter nächster Schritt**: `map_input_normalization`-Migration. Tabelle existiert mit passendem Schema, Hebel hoch (160 LOC inline → Loader-Lookup), und der 🟡-`mehr_dichte`-Bug fällt als Sheet-Edit raus statt Frontend-Eingriff. `map_derived_variables` für Node 05 ist **noch nicht reif** — eigene Format-Vorab-Etappe nötig.
 
 ## Workflow-Nodes (25)
 
@@ -131,7 +131,7 @@ Etabliert im A–F-Audit am 2026-06-10. Verbindlich für künftige Sheet-Wert-En
 |---|---|---|
 | 🔴 | **`x-tally-signature`-Header wird vom Frontend nicht (mehr) geschickt** — Node 02 (Signatur-Prüfung) läuft mit leerem Header durch oder ist effektiv toter Code. Sicherheitsrelevant: Webhook ist faktisch ungeschützt, jeder mit URL kann Beratungen triggern. **Vor Skalierung auf weitere Partner zwingend klären.** Entdeckt 2026-06-10 beim A–F-Audit. | `src/components/Questionnaire.tsx:101` + `src/app/api/submit/route.ts:38` setzen nur `Content-Type`; n8n-Node 02 prüfen |
 | 🟡 | **`mehr_dichte` ist toter Profil-Goal-Pfad** — Frontend-Goal-Option „volleres Haar / mehr Dichte" wird in Node 03 zu `mehr_dichte` normalisiert, matched in Node 12 (L32 `f.includes(goal) ‖ goal.includes(f)`) gegen kein Produkt im Sortiment (`verdichtend` ≠ `mehr_dichte`, beidseitig fail). Fix-Optionen: Normalisierung anpassen (`'dichte': 'dichte'`) oder Produkt-Werte ergänzen. Entdeckt 2026-06-10 beim A–F-Audit. | Node 03 L101–103 ↔ Produktdatenbank `hauptfunktion`/`nebenfunktionen` |
-| 🟡 | Datenblatt-Provenienz-Audit | 37 Produkte × ~15 audit-relevante Spalten gegen `~/myglowmatch/produktdatenblaetter/` |
+| 🟡 | Datenblatt-Provenienz-Audit | 37 Produkte × ~15 audit-relevante Spalten gegen `~/Projekte/myglowmatch/produktdatenblaetter/` |
 | 🟡 | Node 06 Phase 2 migrieren (Ziele-Bonus, max +2 Pkt) | Node 06 inline |
 | 🟡 | Node 05 migrieren (17 Bool-Flag-Heuristiken) | Node 05 inline, 69 LOC; bei Gelegenheit `needs_lightweight_logic` mitentfernen (seit #5 ungenutzt) |
 | 🟢 | Node 11 Z. 163-164: `minimal → optional = []` als REQ-Regel ins Sheet | Node 11 inline |
@@ -177,7 +177,7 @@ PUT `/api/v1/workflows/{id}` Body-Whitelisting:
 - Aktueller Workflow nutzt davon nur `executionOrder`
 - Read-only Felder (`id`, `versionId`, `createdAt`, `updatedAt`, `active`, `tags`, `triggerCount`, `pinData`, `meta`, `shared`, `isArchived`, `staticData` etc.) müssen aus dem Body raus
 - `active`-State bleibt nach PUT erhalten
-- Vor jedem PUT: GET → Backup als `~/myglowmatch/workflow_backup_<ts>_<kontext>.json`
+- Vor jedem PUT: GET → Backup als `~/Projekte/myglowmatch/workflow_backup_<ts>_<kontext>.json`
 - Eventually Consistency der Execution-Liste: Polling über `since_id > baseline_id` (nicht `since_ts`)
 
 Neuer Sheet-Loader-Node — Pflichtfelder:

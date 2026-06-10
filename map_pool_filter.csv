@@ -1,0 +1,3 @@
+regel_id,prioritaet,beschreibung,profil_bedingungen,produkt_bedingungen,aktiv
+POOL-01,1,Bonding-Produkte nur bei Reparatur-Fokus zulassen,flags.needs_repair_focus:is_false,ist_bonding:is_true,TRUE
+POOL-03,3,"Nicht-locken-taugliches Styling-1 raus bei lockigem/krausem Haar (Ausnahme: Hitzeschutz, Basis-Linie)",normalized.hair_structure:in:lockig|kraus,"locken_geeignet:is_false;slot_typ:=:styling_1;ist_hitzeschutz:is_false;produktlinie:!=:basis",TRUE

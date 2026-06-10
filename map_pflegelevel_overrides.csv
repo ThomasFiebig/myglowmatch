@@ -1,0 +1,5 @@
+regel_id,prioritaet,bedingung1_feld,bedingung1_typ,bedingung1_wert,bedingung2_feld,bedingung2_typ,bedingung2_wert,aktion,ziel_level,aktiv,beschreibung
+PFL-OV-01,1,hair_treatments,equals,blondiert,heat_frequency,in_list,regelmaessig|sehr_haeufig,raise_to,HIGH,TRUE,Blondiert + häufige Hitze → mindestens HIGH (maximaler Schutzbedarf)
+PFL-OV-02,2,hair_treatments,equals,blondiert,,,,raise_to,MID,TRUE,Blondiert allein → mindestens MID (Farbpflege)
+PFL-OV-03,3,hair_condition,array_contains,stark_geschaedigt,,,,raise_to,HIGH,TRUE,Stark geschädigt → mindestens HIGH (Reparatur priorisiert)
+PFL-OV-04,10,routine_preference,equals,minimal,,,,cap_at,MID,TRUE,Minimal-Präferenz cappt auf MID (außer Floor-Regel hat bereits höher gesetzt)

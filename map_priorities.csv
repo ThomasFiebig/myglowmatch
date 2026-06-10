@@ -1,0 +1,16 @@
+regel_id,kategorie,wert,reihenfolge,aktiv,beschreibung
+PRIO-SCALP-01,scalp,juckend_empfindlich,1,TRUE,Höchste Priorität – akute Reizung
+PRIO-SCALP-02,scalp,schuppig,2,TRUE,Sichtbares Symptom – vorrang vor fettig
+PRIO-SCALP-03,scalp,fettig,3,TRUE,
+PRIO-SCALP-04,scalp,trocken,4,TRUE,
+PRIO-SCALP-05,scalp,schnell_nachfettender_ansatz,5,TRUE,
+PRIO-SCALP-06,scalp,normal,6,TRUE,Default-Fallback
+PRIO-COND-01,condition,stark_geschaedigt,1,TRUE,Schwerster Schaden – überlagert haarbruch/spliss
+PRIO-COND-02,condition,haarbruch,2,TRUE,
+PRIO-COND-03,condition,spliss,3,TRUE,
+PRIO-COND-04,condition,trocken,4,TRUE,
+PRIO-COND-05,condition,frizz,5,TRUE,
+PRIO-COND-06,condition,glanzlos,6,TRUE,
+PRIO-COND-07,condition,kraftlos,7,TRUE,
+PRIO-COND-08,condition,duenn,8,TRUE,
+PRIO-COND-09,condition,keine_probleme,9,TRUE,Default-Fallback

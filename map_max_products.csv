@@ -1,0 +1,10 @@
+regel_id,routine_preference,pflegelevel,max_products,aktiv,beschreibung
+MAX-MIN-LOW,minimal,LOW,3,TRUE,Minimal-Pref ignoriert Level — immer max 3 Produkte
+MAX-MIN-MID,minimal,MID,3,TRUE,Minimal-Pref ignoriert Level — immer max 3 Produkte
+MAX-MIN-HIGH,minimal,HIGH,3,TRUE,Minimal-Pref ignoriert Level — immer max 3 Produkte
+MAX-AUS-LOW,ausgewogen,LOW,3,TRUE,Default-Pref bei LOW-Bedarf
+MAX-AUS-MID,ausgewogen,MID,5,TRUE,Default-Pref bei MID-Bedarf
+MAX-AUS-HIGH,ausgewogen,HIGH,7,TRUE,Default-Pref bei HIGH-Bedarf
+MAX-BEST-LOW,bestmoeglich,LOW,5,TRUE,Max-Pref bei LOW
+MAX-BEST-MID,bestmoeglich,MID,7,TRUE,Max-Pref bei MID
+MAX-BEST-HIGH,bestmoeglich,HIGH,10,TRUE,Max-Pref bei HIGH (Sarah-Profil)
