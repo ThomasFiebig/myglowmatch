@@ -32,7 +32,7 @@ from pathlib import Path
 # ─── Konfiguration ──────────────────────────────────────────────
 WEBHOOK_URL = "https://veradex.app.n8n.cloud/webhook/glowmatch-haaranalyse"
 WORKFLOW_ID = "pwSWA5NatKiLhueB"
-SIGNATURE = "acf86723-a18d-4418-8788-cf5c5a4eaf54"
+SIGNATURE = None  # gefüllt aus .env (N8N_WEBHOOK_SECRET) in main()
 TARGET_NODE = "15 Routine sortieren"
 CONFLICT_NODE = "14 Konflikte auflösen"  # propagiert applied_conflict_rules
 TIMEOUT = 30
@@ -235,7 +235,7 @@ def trigger_webhook(profile_data: dict) -> dict:
         method="POST",
         headers={
             "Content-Type": "application/json",
-            "x-tally-signature": SIGNATURE,
+            "x-glowmatch-secret": SIGNATURE,
         },
     )
     with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
@@ -520,10 +520,17 @@ def main():
     env = load_env(Path(__file__).parent / ".env")
     api_key = env.get("N8N_API_KEY") or os.environ.get("N8N_API_KEY")
     base_url = env.get("N8N_BASE_URL") or os.environ.get("N8N_BASE_URL")
+    secret = env.get("N8N_WEBHOOK_SECRET") or os.environ.get("N8N_WEBHOOK_SECRET")
 
     if not api_key or not base_url:
         print(f"{C.RED}FEHLER: N8N_API_KEY oder N8N_BASE_URL fehlt in .env{C.R}", file=sys.stderr)
         sys.exit(1)
+    if not secret:
+        print(f"{C.RED}FEHLER: N8N_WEBHOOK_SECRET fehlt in .env{C.R}", file=sys.stderr)
+        sys.exit(1)
+
+    global SIGNATURE
+    SIGNATURE = secret
 
     to_test = list(PROFILES.keys()) if args.profile == "all" else [args.profile]
 

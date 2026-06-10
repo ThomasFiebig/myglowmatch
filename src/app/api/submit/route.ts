@@ -11,11 +11,12 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const webhookUrl = process.env.N8N_WEBHOOK_URL;
+  const webhookSecret = process.env.N8N_WEBHOOK_SECRET;
 
-  // Sicherheitsnetz: Ist die Webhook-URL überhaupt konfiguriert?
-  if (!webhookUrl) {
+  // Sicherheitsnetz: Sind URL und Secret konfiguriert?
+  if (!webhookUrl || !webhookSecret) {
     return NextResponse.json(
-      { error: "Server-Konfiguration fehlt: N8N_WEBHOOK_URL ist nicht gesetzt." },
+      { error: "Server-Konfiguration fehlt: N8N_WEBHOOK_URL / N8N_WEBHOOK_SECRET." },
       { status: 500 },
     );
   }
@@ -35,7 +36,10 @@ export async function POST(request: Request) {
   try {
     const n8nResponse = await fetch(webhookUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-glowmatch-secret": webhookSecret,
+      },
       body: JSON.stringify(payload),
       signal: AbortSignal.timeout(15000),
     });

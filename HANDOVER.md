@@ -10,7 +10,7 @@ Faktische Momentaufnahme des MONAT-Haaranalyse-Systems. Kein Verlauf, keine Disk
 | Workflow | `MONAT Haarpflege-Beratungssystem v1.0`, aktiv |
 | Workflow-ID | `pwSWA5NatKiLhueB` |
 | Webhook-URL | `https://veradex.app.n8n.cloud/webhook/glowmatch-haaranalyse` |
-| Tally-Signatur (Header `x-tally-signature`) | `acf86723-a18d-4418-8788-cf5c5a4eaf54` |
+| Webhook-Secret (Header `x-glowmatch-secret`) | siehe `.env` / `.env.local` als `N8N_WEBHOOK_SECRET` (rotierbar) |
 | Webhook-Response-Mode | `onReceived` (Frontend bekommt sofort `{"message":"Workflow was started"}`) |
 | Google-Sheet-Doc-ID | `1Osmmkrtk4uu5hz6Xk65-HgVgoLMSAYhe1VXOTjLtx0A` |
 | Sheet-Name | `MONAT_Produktdatenbank_KOMPLETT` |
@@ -67,8 +67,8 @@ Datenflussreihenfolge (Hauptpfad):
 
 | # | Name | Typ | Funktion |
 |---|---|---|---|
-| 1 | Webhook | webhook | Tally-Endpunkt (Header-Check siehe 🔴 unten) |
-| 2 | Signature prüfen | if | `x-tally-signature` validieren |
+| 1 | Webhook | webhook | POST-Endpunkt; Response-Mode `onReceived` (Browser bekommt sofort `{"message":"Workflow was started"}`) |
+| 2 | Signature prüfen | if | `x-glowmatch-secret` gegen `N8N_WEBHOOK_SECRET` validieren (Expression `={{ $json.headers['x-glowmatch-secret'] }}`); true → Hauptpfad, false → Pipeline endet still (Eindringling sieht keine Differenz im Webhook-Response) |
 | 3 | 02 Felder extrahieren | code | Body in flache Felder, Defaults (`'glatt'`/`'mittel'` u.a.), Array-Dedup; Output `{ normalized, raw_input, partner_id }`. Frontend liefert bereits technische Werte. |
 | 4 | 04a Prioritäten laden | googleSheets | `map_priorities` |
 | 5 | 04 Prioritäten auflösen | code | scalp_primary/secondary, condition_primary/secondary, generischer Auswerter; liest aus `$node["02 Felder extrahieren"]` |
@@ -131,7 +131,6 @@ Etabliert im A–F-Audit am 2026-06-10. Verbindlich für künftige Sheet-Wert-En
 
 | Prio | Aufgabe | Stelle |
 |---|---|---|
-| 🔴 | **`x-tally-signature`-Header wird vom Frontend nicht (mehr) geschickt** — Node 02 (Signatur-Prüfung) läuft mit leerem Header durch oder ist effektiv toter Code. Sicherheitsrelevant: Webhook ist faktisch ungeschützt, jeder mit URL kann Beratungen triggern. **Vor Skalierung auf weitere Partner zwingend klären.** Entdeckt 2026-06-10 beim A–F-Audit. | `src/components/Questionnaire.tsx:101` + `src/app/api/submit/route.ts:38` setzen nur `Content-Type`; n8n-Node 02 prüfen |
 | 🟡 | Datenblatt-Provenienz-Audit | 37 Produkte × ~15 audit-relevante Spalten gegen `~/Projekte/myglowmatch/produktdatenblaetter/` |
 | 🟡 | Node 06 Phase 2 migrieren (Ziele-Bonus, max +2 Pkt) | Node 06 inline |
 | 🟡 | Node 05 migrieren (17 Bool-Flag-Heuristiken) | Node 05 inline, 69 LOC; bei Gelegenheit `needs_lightweight_logic` mitentfernen (seit #5 ungenutzt) |
