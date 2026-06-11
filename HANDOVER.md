@@ -124,6 +124,11 @@ Etabliert im A–F-Audit am 2026-06-10. Verbindlich für künftige Sheet-Wert-En
 | K-03 | `haarstaerke` spiegelt die explizite **„Wer profitiert / Ideal für"-Hauptaussage** des PDFs (Bullet-Sektion oder FAQ-Q&A). **Nicht** Header-Schlagwörter, **nicht** Marketing-Description. Bei mehreren Empfehlungs-Aussagen: die mit dem konkretesten Sortiments-Signal gewinnt. | smoothing_tiefenbehandlung (`mittel,dick`) + moxie_mousse (`alle`) |
 | K-04 | **PDF strikt**: Was nicht im Datenblatt belegt ist, kommt nicht ins Sheet. „Funktional besser" / „Beratungs-Praxis sagt" / „Kunden brauchen" sind **keine** legitimen Argumente, um nicht-PDF-belegte Sheet-Werte zu verteidigen. Beratungs-Heuristik gehört als **separate** Regel (REQ/CON) ins Sheet, nicht als impliziter Produktstammdaten-Wert. | essig-*.kopfhaut=schuppig nicht PDF-belegt — User-Klarstellung 2026-06-10 |
 | K-05 | Sheet-Werte folgen PDF-Belegen **auch wenn aktuell kein Scoring-/Regel-Trigger darauf greift**. Scoring-Stille ist kein Grund für PDF-Verzicht — sie ist eine Folge der Migrations-Reihenfolge und ggf. ein eigener Folge-Punkt. | `staerkend` als nebenfunktion für monat_black akzeptiert, obwohl aktuell kein Profil-Goal darauf matched |
+| K-06 | Eine haupt-/nebenfunktion zählt als belegt, wenn das PDF eine konkrete **Funktions-Aussage über die Wirkung am Haar** enthält — an beliebiger Stelle (Vorteils-Bullet, IDEAL-Bullet, FAQ, Test-Bullet ODER Beschreibungssatz). **NICHT** belegt: bloße Header/Taglines (Schlagwort ohne Aussage) und reine Inhaltsstoff-Mechanismus-Beschreibungen (z. B. „Lupinenprotein stabilisiert die Haarbindungen" = wie, nicht was am Haar passiert). Gilt **symmetrisch** für Hinzufügen/Behalten/Entfernen — keine historische Asymmetrie. | Negativbeispiel: `moxie_mousse.verdichtend` (nur Tagline „Volumen und Dichte" + CAPIXYL-Inhaltsstoff). Positiv-Kontrast: `monat_black.verdichtend` ist belegt (IDEAL-Bullet „Die Dichte verbessern und das Haar voller erscheinen lassen möchten"). |
+
+**bond_iq-Linie als Lehrbeispiel für K-06**: Die Bond-IQ-Produktlinie ist bewusst **nicht durchgängig bonding-klassifiziert** in `hauptfunktion`. `bond_iq_leave_in` behält `bonding` (eigener Funktions-Bullet „Stärkt die Haarstruktur und repariert Haarbindungen*"). `bond_iq_night_day_serum`, `bond_iq_shampoo`, `bond_iq_spuelung` haben `bonding` per K-06-Gegencheck verloren — bei ihnen ist Bindungs-Reparatur **nur** in der Inhaltsstoff-Beschreibung (Lupinenprotein „stabilisiert die inneren Haarbindungen") belegt, kein eigener Funktions-Bullet am Haar. Das ist PDF-Realität, kein Daten-Fehler. **Nicht "korrigieren"** in späteren Sessions.
+
+**POOL-01-Architektur (K-06-Konsequenz)**: Das Bool-Flag `ist_bonding` hatte zwei Rollen vermischt — (a) Stammdatum „Produkt wirkt bonding am Haar" und (b) Routing-Proxy „Produkt gehört zur Reparatur-Linie". K-06 trennt sie: `ist_bonding` ist jetzt reines Wirkungs-Flag (analog `ist_hitzeschutz` per K-01). Das Routing der Bond-IQ-Linie liegt in POOL-01 jetzt explizit auf `produktlinie:=:bond_iq` statt auf `ist_bonding:is_true`. **`ist_bonding` darf in anderen Regeln nicht als Linien-Proxy verwendet werden** — wer das findet, behandelt es als Bug (Folge-Punkt: Sheet auf weitere Linien-Proxy-Misuses prüfen).
 
 **Wichtige Beobachtung aus dem Vollrun (2026-06-10):** Sheet-Werte ohne PDF-Beleg sind nicht nur Doku-Schuld, sie produzieren aktiv falsche Empfehlungen. Beispiel: `monat_black.nebenfunktionen=volumen` (PDF-untreu, PDF spricht von „Dichte" und „Verdichtend") führte dazu, dass Maria + Julia (`scalp=normal`, `goal=volumen`) das falsche Shampoo bekamen — monat_black ist laut PDF für **fettige Kopfhaut**. Nach Fix gewinnt revive_shampoo (`hauptfunktion=volumen`), das funktionsspezifisch richtige Shampoo. K-04 hat damit direkten Output-Effekt auf die Kundenempfehlung.
 
@@ -143,11 +148,12 @@ Spalten-Reihenfolge nach Scoring-Relevanz: Block 1 (scoring-kritisch: `hauptfunk
 | curl_gelee | `frizz_reduktion`, `glanz` | Test 91 % für frizz_reduktion; eigener Bullet für glanz |
 | curl_auffrischer | `frizz_reduktion`, `definition` | Test 91 % bzw. 94 % |
 
-**Bewusst NICHT ergänzt** (per Sammel-Entscheidung 2026-06-11):
-- `bonding` bei bond_iq_night_day_serum / bond_iq_shampoo / bond_iq_spuelung — nur via Inhaltsstoff-Beschreibung (Lupinenprotein „stabilisiert die inneren Haarbindungen") belegt, kein eigener Vorteils-Bullet. Sheet-Status quo (`bonding` bleibt in `hauptfunktion`).
-- `moxie_mousse.verdichtend` + `moxie_mousse.definition` — nur Header-Tagline („Volumen und Dichte") + CAPIXYL-Inhaltsstoff + konditionale FAQ-Aussage, kein eigener Vorteils-Bullet.
+**Bewusst NICHT ergänzt** (Stand Stufe-1-Sammel-Entscheidung 2026-06-11; teilweise später per **K-06-Gegencheck** revidiert, siehe Block unten):
+- `bonding` bei bond_iq_night_day_serum / bond_iq_shampoo / bond_iq_spuelung — nur via Inhaltsstoff-Beschreibung belegt, kein eigener Vorteils-Bullet. → **K-06-Gegencheck**: zusätzlich **entfernt** aus `hauptfunktion` der 3 Produkte.
+- `moxie_mousse.verdichtend` — nur Header-Tagline + CAPIXYL-Inhaltsstoff → **K-06**: bleibt draußen (Negativbeispiel zu K-06).
+- `moxie_mousse.definition` — vorher als „nur FAQ" abgelehnt → **K-06-Gegencheck**: nachträglich aufgenommen (FAQ-Q2 „sorgt bei Locken oder Wellen für definierte Form und Frizz-Kontrolle" ist konkrete Funktions-Aussage am Haar).
 
-`hauptfunktion` aller 8 Produkte unverändert.
+`hauptfunktion` aller 8 Produkte unverändert (Stufe 1); 3 bonding-Entfernungen erst im K-06-Gegencheck — siehe Block unten.
 
 **Neu im Sheet-Vokabular**: `elastizitaet` (vorher nur bei `super_feuchtigkeitsmaske`, jetzt zusätzlich `bond_iq_night_day_serum`, `bond_iq_spuelung`). 0 Treffer in `map_slot_rules` / `map_conflict_rules` / `map_priorities` → kein Filter/REQ-Hard-Fail. Node 12 ohne care_goal-Match → +0 Score, kein Scoring-Effekt.
 
@@ -157,13 +163,67 @@ Spalten-Reihenfolge nach Scoring-Relevanz: Block 1 (scoring-kritisch: `hauptfunk
 
 **Regression**: Full-Run 2026-06-11 — 7/7 Profile produkt_key-identisch zur 10.06.-Baseline. Erwartete Score-Drift nur für Lena (`mehr_glanz`-Goal, substring-Match auf neu-ergänztes `glanz` bei bond_iq + curl_gelee) — kein Slot-Shift, da Lenas Pool die jeweiligen Slots bereits via REQ-Routing (Renew, Hitzeschutzspray) bzw. ohne Konkurrenz (curl_gelee in styling_2) dominiert.
 
-**Offen**: Block 1 Stufe 2 (8 Produkte mit seltenen Tokens: monat_black, rejuvabeads, ir_clinical_kopfhautserum, the_champ, replenish_maske, super_feuchtigkeitsmaske, restore_leave_in, kopfhaut_peeling) + Stufe 3 (A–F-Re-Verify, 8 Produkte) + Stufe 4 (Singulär-Sanity, 13 Produkte). Danach Block 2–4.
+**Block 1 Stufe 2** — 8 Produkte (seltene/auffällige Tokens: monat_black, rejuvabeads, ir_clinical_kopfhautserum, the_champ, replenish_maske, super_feuchtigkeitsmaske, restore_leave_in, kopfhaut_peeling) — abgeschlossen 2026-06-11. 5 Zellen-Edits in `nebenfunktionen`, 7 Token-Ergänzungen, nach dem damals geltenden „eigener Vorteils-Bullet"-Kriterium (Stufe-1-Regel):
+
+| Produkt | nebenfunktionen ergänzt um | belegender Bullet/Aussage |
+|---|---|---|
+| rejuvabeads | `kaemmbarkeit`, `staerkend`, `frizz_reduktion` | je eigener WARUM-/IDEAL-Bullet |
+| ir_clinical_kopfhautserum | `staerkend` | Test-Bullet 82 % „zur Stärkung der Haare beiträgt" |
+| replenish_maske | `kaemmbarkeit` | IDEAL „Verbesserte Haarstruktur und Kämmbarkeit wünschen" |
+| super_feuchtigkeitsmaske | `kaemmbarkeit` | WARUM „Fördert die Elastizität und verbessert die Kämmbarkeit" |
+| kopfhaut_peeling | `frische` | IDEAL „gereinigt und erfrischt hinterlassen möchten" |
+
+Grenzfälle behalten (per Sammel-Entscheidung): `rejuvabeads.glanz` (Beschreibung „glatt, glänzend") + `replenish_maske.kraeftigend` (Beschreibung „stellt Glanz, Kraft und Vitalität wieder her"). Beide haben *keinen* eigenen Vorteils-Bullet, sind aber wörtliche PDF-Aussage über die Wirkung am Haar. Unter K-06 jetzt eindeutig belegt.
+
+`hauptfunktion` aller 8 Produkte unverändert.
+
+**Backup**: `~/Projekte/myglowmatch/backups/sheets_20260611_015455_pre_block1_stufe2/produktdatenbank.csv`.
+
+**Regression**: Full-Run 2026-06-11 — 7/7 produkt_key-identisch zur Pre-Stufe-2-Baseline.
+
+### K-06-Gegencheck (2026-06-11)
+
+Anlass: Nach Stufe 2 wurde die „Bullet-Pflicht" aus Stufe 1 zu K-06 in finaler Form ausgeweitet (Funktions-Aussage am Haar — egal an welcher Stelle — vs. Tagline/Inhaltsstoff-Mechanik). K-06 wirkt **symmetrisch** auf Hinzufügen/Behalten/Entfernen. Folge: rückwirkender Gegencheck über alle 16 Produkte aus Stufe 1+2.
+
+**Aufnahmen** (13 Token über 7 Produkte, vorher übersehen oder per damals strenger Bullet-Pflicht ausgeschlossen):
+
+| Produkt | Token | Beleg-Quelle |
+|---|---|---|
+| bond_iq_leave_in | +`staerkend` | Test 91 % „die Haarsträhnen stärkt" |
+| bond_iq_night_day_serum | +`staerkend`, +`kraeftigend` | Bullets „Repariert und stärkt das Haar", „Baut Haarstruktur auf … für mehr Kraft" |
+| bond_iq_shampoo | +`staerkend` | Test 89 % „das Haar fühlt sich kräftiger an" |
+| bond_iq_spuelung | +`staerkend` | Test 89 % „stärkt die Haarfasern, reduziert Haarbruch" |
+| curl_creme | +`elastizitaet` | Test 88 % „Locken Elastizität und Definition verleiht" |
+| curl_gelee | +`elastizitaet`, +`staerkend`, +`reparatur` | Bullets „Elastizität wiederherzustellen", „Pflegt, stärkt und repariert welliges, lockiges und krauses Haar" |
+| curl_auffrischer | +`elastizitaet`, +`staerkend` | Bullets „Verbessert die Haarelastizität", „Macht Locken stärker, weicher und glänzender" |
+| moxie_mousse | +`definition` | FAQ-Q2 „sorgt bei Locken oder Wellen für definierte Form und Frizz-Kontrolle" |
+| kopfhaut_peeling | +`feuchtigkeit` | Beschreibung „Angereichert mit REJUVENIQE® spendet es Feuchtigkeit und hinterlässt das Haar gereinigt und erfrischt" |
+
+**Entfernungen aus `hauptfunktion`** (3 Token):
+- bond_iq_night_day_serum: `reparatur,bonding` → `reparatur`
+- bond_iq_shampoo: `reparatur,bonding` → `reparatur`
+- bond_iq_spuelung: `reparatur,bonding` → `reparatur`
+
+Begründung: bei diesen 3 Produkten ist Bonding **nur** über die Inhaltsstoff-Beschreibung Lupinenprotein belegt — Inhaltsstoff-Mechanik, kein Funktions-Bullet am Haar. K-06 verlangt symmetrische Konsequenz: Token raus. `bond_iq_leave_in.bonding` bleibt (eigener Bullet „repariert Haarbindungen*").
+
+**K-01-Konsistenzkorrektur (3 Bool-Flags vorgezogen aus Block 3)**: `ist_bonding` bei bond_iq_night_day_serum, bond_iq_shampoo, bond_iq_spuelung von `TRUE` auf `FALSE` gesetzt. K-01 fordert `ist_bonding=TRUE ⟺ hauptfunktion enthält bonding` — nachdem `bonding` aus `hauptfunktion` raus ist, muss das Flag folgen. **Rest von Block 3 (übrige Bool-Flags, Pflegelevel-Audit) noch offen** — wurde nicht mit-erledigt, nur diese 3 K-01-Konsistenzfälle.
+
+**POOL-01-Umstellung** (in `map_pool_filter`): `produkt_bedingungen` von `ist_bonding:is_true` auf `produktlinie:=:bond_iq`, `beschreibung` von „Bonding-Produkte nur bei Reparatur-Fokus zulassen" auf „Bond-IQ-Linie nur bei Reparatur-Fokus zulassen". Architektur-Hintergrund: siehe K-06-Block oben („POOL-01-Architektur"). Effekt: Routing-Verhalten bleibt funktional identisch zur Pre-K-06-Baseline, aber das Routing-Kriterium ist jetzt sauber an `produktlinie` gekoppelt statt am vermischten Stammdatum `ist_bonding`.
+
+**Backups**:
+- `~/Projekte/myglowmatch/backups/sheets_20260611_092835_pre_k06_gegencheck/produktdatenbank.csv`
+- `~/Projekte/myglowmatch/backups/sheets_20260611_110432_pre_pool01_relink/map_pool_filter.csv`
+
+**Regression**: Full-Run nach POOL-01-Umstellung — **7/7 Profile produkt_key-identisch zur HANDOVER-Baseline** (Stand nach Stufe 2). Sarah (needs_repair_focus=TRUE) bekommt weiter alle 4 Bond-IQ-Produkte; Lena/Bianca/Vivien wieder auf Renew/Feuchtigkeits-Linie wie vorher.
+
+**Offen**: Block 1 Stufe 3 (A–F-Re-Verify, 8 Produkte: hitzeschutzspray, smoothing_fohn_spray, essig_shampoo, essig_spuelung, fohncreme, smoothing_shampoo, smoothing_deep_conditioner, smoothing_tiefenbehandlung) + Stufe 4 (Singulär-Sanity, 13 Produkte). Danach Block 2 (Filter-Spalten: haarstaerke/haarstruktur/haarzustand/kopfhaut) + Block 3 Rest (Bool-Flags ohne die 3 vorgezogenen + Pflegelevel + ausschluss_bei) + Block 4 (Doku-Spalten).
 
 ## Offene Punkte (priorisiert)
 
 | Prio | Aufgabe | Stelle |
 |---|---|---|
-| 🟡 (in Arbeit) | Datenblatt-Provenienz-Audit — Block 1 Stufe 1 (8 Produkte) erledigt 2026-06-11, Stufe 2–4 offen | siehe Abschnitt „Datenblatt-Provenienz-Audit" oben |
+| 🟡 (in Arbeit) | Datenblatt-Provenienz-Audit — Block 1 Stufen 1+2 + K-06-Gegencheck erledigt 2026-06-11; Stufe 3+4 offen, Block 2+3-Rest+4 offen | siehe Abschnitt „Datenblatt-Provenienz-Audit" oben |
+| 🟡 | Sheet auf weitere `ist_bonding`-Misuses als Linien-Proxy prüfen — `ist_bonding` ist seit K-06 reines Wirkungs-Flag, Routing-Logik gehört auf `produktlinie` | Tabs: `map_slot_rules`, `map_conflict_rules`, weitere Filter |
 | 🟡 | Node 06 Phase 2 migrieren (Ziele-Bonus, max +2 Pkt) | Node 06 inline |
 | 🟡 | Node 05 migrieren (17 Bool-Flag-Heuristiken) | Node 05 inline, 69 LOC; bei Gelegenheit `needs_lightweight_logic` mitentfernen (seit #5 ungenutzt) |
 | 🟢 | Node 11 Z. 163-164: `minimal → optional = []` als REQ-Regel ins Sheet | Node 11 inline |
