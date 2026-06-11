@@ -216,13 +216,38 @@ Begründung: bei diesen 3 Produkten ist Bonding **nur** über die Inhaltsstoff-B
 
 **Regression**: Full-Run nach POOL-01-Umstellung — **7/7 Profile produkt_key-identisch zur HANDOVER-Baseline** (Stand nach Stufe 2). Sarah (needs_repair_focus=TRUE) bekommt weiter alle 4 Bond-IQ-Produkte; Lena/Bianca/Vivien wieder auf Renew/Feuchtigkeits-Linie wie vorher.
 
-**Offen**: Block 1 Stufe 3 (A–F-Re-Verify, 8 Produkte: hitzeschutzspray, smoothing_fohn_spray, essig_shampoo, essig_spuelung, fohncreme, smoothing_shampoo, smoothing_deep_conditioner, smoothing_tiefenbehandlung) + Stufe 4 (Singulär-Sanity, 13 Produkte). Danach Block 2 (Filter-Spalten: haarstaerke/haarstruktur/haarzustand/kopfhaut) + Block 3 Rest (Bool-Flags ohne die 3 vorgezogenen + Pflegelevel + ausschluss_bei) + Block 4 (Doku-Spalten).
+**Block 1 Stufe 3** — 8 Produkte (A–F-Re-Verify-Cluster + Smoothing-/Föhn-Doppelung: hitzeschutzspray, smoothing_fohn_spray, essig_shampoo, essig_spuelung, fohncreme, smoothing_shampoo, smoothing_deep_conditioner, smoothing_tiefenbehandlung) — abgeschlossen 2026-06-11. 7 Zellen-Edits in `nebenfunktionen` (16 Token-Ergänzungen über 7 Produkte + 1 K-06-konforme Entfernung; fohncreme unverändert):
+
+| Produkt | nebenfunktionen ergänzt um (Entfernung in **fett**) | Belege |
+|---|---|---|
+| hitzeschutzspray | `staerkend`, `elastizitaet` | IDEAL „Stärke und Elastizität des Haares verbessern" + Test „mehr Stärke und Elastizität" + Beschreibung „stärkt und schützt das Haar" |
+| smoothing_fohn_spray | `kaemmbarkeit`, `staerkend`, `elastizitaet`, `farbschutz` | Test 4x/3x Kämmbarkeit; WARUM „Stärkt das Haar"; Test „Gestärktes Haar, verbesserte Elastizität"; Test „Farbbrillanz bis zu 20 Haarwäschen erhalten" |
+| essig_shampoo | `kopfhautpflege`, `frische` | WARUM „Reduziert überschüssiges Fett und stellt das Gleichgewicht der Kopfhaut wieder her"; IDEAL „Frisches, sauberes … Haar möchten" |
+| essig_spuelung | `entgiftung`, `farbschutz`, `kopfhautpflege` | WARUM „Entfernt Produktrückstände" + Test 80 % „Feuchtigkeitsgehalts der Kopfhaut"; WARUM „bewahrt die Farbe für bis zu 20 Haarwäschen" + Test 83 % |
+| smoothing_shampoo | `glanz`, `reparatur` | Test „24 % mehr Glanz"; WARUM „weniger Haarbruch" + Test „68 %" |
+| smoothing_deep_conditioner | `glanz`, `reparatur` | Test „56 % mehr Glanz"; WIE „7x weniger Haarbruch" + Test „87 %" |
+| smoothing_tiefenbehandlung | `kaemmbarkeit`, `glanz`, `reparatur`; **−`feuchtigkeit`** | Test 6x/5x Kämmbarkeit; Test „80 % mehr Glanz"; WIE „Reduziert Haarbruch um 91 %" |
+| fohncreme | (keine) | hauptfunktion + Sheet-`glanz` PDF-belegt; keine weiteren Funktions-Aussagen am Haar |
+
+**Erste K-06-konforme nebenfunktion-Entfernung**: `smoothing_tiefenbehandlung.feuchtigkeit` raus. Das Wort „Feuchtigkeit" kommt im PDF nicht vor; Wirkung nur indirekt über „Pflanzliche Buttern verwöhnen das Haar, machen es geschmeidig und weich" + Conditioner-Charakter ausgedrückt. Conditioner-Produkttyp-Rückschluss ist unter K-06 keine Funktions-Aussage am Haar. Symmetrie-Beleg für K-06: die Regel greift nicht nur bei `hauptfunktion`-Tokens (wie bei den 3 bond_iq-bondings), sondern auch bei nebenfunktion-Tokens. Auswirkung auf Routing: null (smoothing_tiefenbehandlung ist via CON-11 ohnehin aus allen 7 Profilpools).
+
+`hauptfunktion` aller 8 Produkte unverändert.
+
+**K-01-Konsistenz-Check** (zweite Block-3-Spot-Prüfung): `ist_hitzeschutz`-Flag bei allen 8 Produkten konsistent mit `hauptfunktion` — `hitzeschutzspray` (`hauptfunktion=hitzeschutz` → TRUE), `smoothing_fohn_spray` + `fohncreme` (enthält `hitzeschutz` → TRUE), übrige 5 (enthält nicht → FALSE). 8/8 konsistent, **keine weiteren Block-3-Vorziehungen** nötig.
+
+**Vokabular-Beobachtung**: alle 9 verschiedenen ergänzten Tokens (`staerkend`, `elastizitaet`, `kaemmbarkeit`, `farbschutz`, `kopfhautpflege`, `frische`, `entgiftung`, `glanz`, `reparatur`) bereits im Vokabular etabliert — keine Neueinführungen. `farbschutz` war bisher nur bei `ir_clinical_shampoo` + `ir_clinical_spuelung` etabliert; Stufe 3 ist die erste Verwendung bei Styling- und Reinigungs-Produkten (`smoothing_fohn_spray`, `essig_spuelung`). Falls künftig eine Scoring-Regel `goal=farbschutz` auswertet, sind diese zwei Produkte jetzt korrekt im Pool — nur als Beobachtung, kein offener Punkt.
+
+**Backup**: `~/Projekte/myglowmatch/backups/sheets_20260611_210600_pre_block1_stufe3/produktdatenbank.csv`.
+
+**Regression**: Full-Run nach den 7 Zell-Updates — **7/7 Profile produkt_key-identisch zur HANDOVER-Baseline** (Stand nach K-06-Gegencheck + POOL-01-Relink). Erwartung bestätigt: keiner der ergänzten Tokens matched ein direktes Profil-Goal, das einen Slot-Shift auslösen würde; die `feuchtigkeit`-Entfernung bei smoothing_tiefenbehandlung wirkt sich nicht aus, da CON-11 das Produkt in allen 7 Pools blockiert.
+
+**Offen**: Block 1 Stufe 4 (Singulär-Sanity, 13 Produkte: feuchtigkeits_shampoo, renew_shampoo, renew_spuelung, erweiterte_feuchtigkeit_spuelung, revive_shampoo, revitalize_spuelung, volumen_spray, rejuveniqe_oel, entwirrungsspray, scalp_comfort_behandlung, scalp_comfort_serum, ir_clinical_shampoo, ir_clinical_spuelung). Danach Block 2 (Filter-Spalten: haarstaerke/haarstruktur/haarzustand/kopfhaut) + Block 3 Rest (Bool-Flags ohne die 3 bei K-06-Gegencheck vorgezogenen + Pflegelevel + ausschluss_bei) + Block 4 (Doku-Spalten).
 
 ## Offene Punkte (priorisiert)
 
 | Prio | Aufgabe | Stelle |
 |---|---|---|
-| 🟡 (in Arbeit) | Datenblatt-Provenienz-Audit — Block 1 Stufen 1+2 + K-06-Gegencheck erledigt 2026-06-11; Stufe 3+4 offen, Block 2+3-Rest+4 offen | siehe Abschnitt „Datenblatt-Provenienz-Audit" oben |
+| 🟡 (in Arbeit) | Datenblatt-Provenienz-Audit — Block 1 Stufen 1+2+3 + K-06-Gegencheck erledigt 2026-06-11; Stufe 4 offen, Block 2+3-Rest+4 offen | siehe Abschnitt „Datenblatt-Provenienz-Audit" oben |
 | 🟡 | Sheet auf weitere `ist_bonding`-Misuses als Linien-Proxy prüfen — `ist_bonding` ist seit K-06 reines Wirkungs-Flag, Routing-Logik gehört auf `produktlinie` | Tabs: `map_slot_rules`, `map_conflict_rules`, weitere Filter |
 | 🟡 | Node 06 Phase 2 migrieren (Ziele-Bonus, max +2 Pkt) | Node 06 inline |
 | 🟡 | Node 05 migrieren (17 Bool-Flag-Heuristiken) | Node 05 inline, 69 LOC; bei Gelegenheit `needs_lightweight_logic` mitentfernen (seit #5 ungenutzt) |
