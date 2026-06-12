@@ -125,6 +125,7 @@ Etabliert im A–F-Audit am 2026-06-10. Verbindlich für künftige Sheet-Wert-En
 | K-04 | **PDF strikt**: Was nicht im Datenblatt belegt ist, kommt nicht ins Sheet. „Funktional besser" / „Beratungs-Praxis sagt" / „Kunden brauchen" sind **keine** legitimen Argumente, um nicht-PDF-belegte Sheet-Werte zu verteidigen. Beratungs-Heuristik gehört als **separate** Regel (REQ/CON) ins Sheet, nicht als impliziter Produktstammdaten-Wert. | essig-*.kopfhaut=schuppig nicht PDF-belegt — User-Klarstellung 2026-06-10 |
 | K-05 | Sheet-Werte folgen PDF-Belegen **auch wenn aktuell kein Scoring-/Regel-Trigger darauf greift**. Scoring-Stille ist kein Grund für PDF-Verzicht — sie ist eine Folge der Migrations-Reihenfolge und ggf. ein eigener Folge-Punkt. | `staerkend` als nebenfunktion für monat_black akzeptiert, obwohl aktuell kein Profil-Goal darauf matched |
 | K-06 | Eine haupt-/nebenfunktion zählt als belegt, wenn das PDF eine konkrete **Funktions-Aussage über die Wirkung am Haar** enthält — an beliebiger Stelle (Vorteils-Bullet, IDEAL-Bullet, FAQ, Test-Bullet ODER Beschreibungssatz). **NICHT** belegt: bloße Header/Taglines (Schlagwort ohne Aussage) und reine Inhaltsstoff-Mechanismus-Beschreibungen (z. B. „Lupinenprotein stabilisiert die Haarbindungen" = wie, nicht was am Haar passiert). Gilt **symmetrisch** für Hinzufügen/Behalten/Entfernen — keine historische Asymmetrie. | Negativbeispiel: `moxie_mousse.verdichtend` (nur Tagline „Volumen und Dichte" + CAPIXYL-Inhaltsstoff). Positiv-Kontrast: `monat_black.verdichtend` ist belegt (IDEAL-Bullet „Die Dichte verbessern und das Haar voller erscheinen lassen möchten"). |
+| K-07 | Ein Test-Bullet zählt als Beleg **NUR** wenn die entsprechende Funktion auch im **Produktversprechen verankert** ist (WARUM / IDEAL / Beschreibung / Header — auch implizit). Test-Bullet ohne jede Produktversprechen-Verankerung = Nebenbeobachtung der Studie (35 Frauen, 14 Tage), zählt nicht als Produktfunktion. Gilt symmetrisch für Aufnahme und Entfernung. Grenzfall-Präzedenz: Inhaltsstoff-Mechanik als Verankerung zählt nicht — konsistent mit K-06 bond_iq-Entscheidung. | Negativbeispiel: `ir_clinical_spuelung.glanz` (94%-Test, aber Glanz nirgendwo im Produktversprechen). Konsistenz: K-06 schließt Inhaltsstoff-Mechanik als Verankerung aus (siehe bond_iq-Linie). |
 
 **bond_iq-Linie als Lehrbeispiel für K-06**: Die Bond-IQ-Produktlinie ist bewusst **nicht durchgängig bonding-klassifiziert** in `hauptfunktion`. `bond_iq_leave_in` behält `bonding` (eigener Funktions-Bullet „Stärkt die Haarstruktur und repariert Haarbindungen*"). `bond_iq_night_day_serum`, `bond_iq_shampoo`, `bond_iq_spuelung` haben `bonding` per K-06-Gegencheck verloren — bei ihnen ist Bindungs-Reparatur **nur** in der Inhaltsstoff-Beschreibung (Lupinenprotein „stabilisiert die inneren Haarbindungen") belegt, kein eigener Funktions-Bullet am Haar. Das ist PDF-Realität, kein Daten-Fehler. **Nicht "korrigieren"** in späteren Sessions.
 
@@ -241,13 +242,81 @@ Begründung: bei diesen 3 Produkten ist Bonding **nur** über die Inhaltsstoff-B
 
 **Regression**: Full-Run nach den 7 Zell-Updates — **7/7 Profile produkt_key-identisch zur HANDOVER-Baseline** (Stand nach K-06-Gegencheck + POOL-01-Relink). Erwartung bestätigt: keiner der ergänzten Tokens matched ein direktes Profil-Goal, das einen Slot-Shift auslösen würde; die `feuchtigkeit`-Entfernung bei smoothing_tiefenbehandlung wirkt sich nicht aus, da CON-11 das Produkt in allen 7 Pools blockiert.
 
-**Offen**: Block 1 Stufe 4 (Singulär-Sanity, 13 Produkte: feuchtigkeits_shampoo, renew_shampoo, renew_spuelung, erweiterte_feuchtigkeit_spuelung, revive_shampoo, revitalize_spuelung, volumen_spray, rejuveniqe_oel, entwirrungsspray, scalp_comfort_behandlung, scalp_comfort_serum, ir_clinical_shampoo, ir_clinical_spuelung). Danach Block 2 (Filter-Spalten: haarstaerke/haarstruktur/haarzustand/kopfhaut) + Block 3 Rest (Bool-Flags ohne die 3 bei K-06-Gegencheck vorgezogenen + Pflegelevel + ausschluss_bei) + Block 4 (Doku-Spalten).
+**Block 1 Stufe 4** — 13 Produkte (Singulär-Sanity: feuchtigkeits_shampoo, renew_shampoo, renew_spuelung, erweiterte_feuchtigkeit_spuelung, revive_shampoo, revitalize_spuelung, volumen_spray, rejuveniqe_oel, entwirrungsspray, scalp_comfort_behandlung, scalp_comfort_serum, ir_clinical_shampoo, ir_clinical_spuelung) — abgeschlossen 2026-06-12. **Block 1 damit vollständig**. 19 Zell-Updates in `nebenfunktionen` (26 Token-Aufnahmen über 12 Produkte + 10 Token-Entfernungen über 8 Produkte; fohncreme + scalp_comfort_serum unverändert):
+
+| Produkt | Aufnahmen | Entfernungen | Quelle |
+|---|---|---|---|
+| feuchtigkeits_shampoo | `reinigung` | — | Stufe 4 |
+| renew_shampoo | `reinigung`, `kaemmbarkeit` | — | Stufe 4 |
+| renew_spuelung | `kaemmbarkeit` | **−`glanz`** (K-06: Glanz im PDF nicht erwähnt) | Stufe 4 |
+| erweiterte_feuchtigkeit_spuelung | `kaemmbarkeit` | — | Stufe 4 |
+| revive_shampoo | `staerkend`, `feuchtigkeit`, `kaemmbarkeit`, `reparatur` | — | Stufe 4 |
+| revitalize_spuelung | `staerkend`, `kaemmbarkeit`, `reparatur` | — | Stufe 4 |
+| volumen_spray | `verdichtend`, `staerkend` | — | Stufe 4 |
+| rejuveniqe_oel | `kraeftigend`, `kaemmbarkeit` | — | Stufe 4 |
+| entwirrungsspray | `glanz`, `staerkend`, `kaemmbarkeit` | — | Stufe 4 |
+| scalp_comfort_behandlung | `reinigung`, `entgiftung`, `frische` | — | Stufe 4 |
+| ir_clinical_shampoo | `haarwuchs`, `staerkend`, `frische` | — | Stufe 4 (4 weitere per K-07 gestrichen) |
+| ir_clinical_spuelung | `haarwuchs`, `staerkend`, `kaemmbarkeit`, `frische` | — | Stufe 4 (glanz per K-07 gestrichen) |
+
+**Erste K-06-konforme nebenfunktion-Entfernung außerhalb Stufe 3**: `renew_spuelung.glanz` — das Wort „Glanz" / „glänzend" kommt im renew_spuelung-PDF nirgendwo vor (kein WARUM, IDEAL, VORTEILE, Test oder Beschreibung). Cross-References in „FUNKTIONIERT GUT MIT" beziehen sich auf Replenish-Maske als Begleiter, nicht auf renew_spuelung selbst. Analog zu smoothing_tiefenbehandlung.feuchtigkeit-Entfernung aus Stufe 3.
+
+**Vokabular-Beobachtung**:
+- `frische` jetzt 5 Produkte: essig_shampoo, scalp_comfort_behandlung, ir_clinical_shampoo, ir_clinical_spuelung, the_champ (vorher nur the_champ; Stufe 3 ergänzte essig + kopfhaut_peeling; Stufe 4 ergänzte 3 weitere).
+- `haarwuchs` jetzt **komplett bei IR-Clinical-Linie**: ir_clinical_kopfhautserum (Stufe 2) + ir_clinical_shampoo + ir_clinical_spuelung (Stufe 4). Konsistente Linien-Klassifikation.
+- `verdichtend` neu als nebenfunktion bei volumen_spray — vorher nur als hauptfunktion bei IR-Clinical-Linie + monat_black. Erste Verwendung als sekundäre Funktion.
+- `kraeftigend` neu bei rejuveniqe_oel — vorher nur replenish_maske + bond_iq_night_day_serum.
+- Keine Neueinführungen ins Vokabular.
+
+**Backup**: `~/Projekte/myglowmatch/backups/sheets_20260611_234938_pre_stufe4_k07/produktdatenbank.csv`.
+
+**Regression**: Full-Run nach den 19 Zell-Updates — **7/7 Profile produkt_key-identisch zur HANDOVER-Baseline**. Lena (`mehr_glanz`-Goal) trotz `renew_spuelung.glanz`-Entfernung unverändert: Score-Differenz reicht nicht für Slot-Wechsel; konkurrierende Spülungen (`erweiterte_feuchtigkeit_spuelung`, `revitalize_spuelung`) sind durch andere Kriterien dominiert.
+
+### K-07-Gegencheck (2026-06-12)
+
+Anlass: User-Befund zu `ir_clinical_spuelung.glanz` (Stufe-4-Vorschlag) — Glanz nur in 94%-Test, nirgendwo im Produktversprechen. K-07 als Präzisierung eingeführt (siehe Konventionen-Tabelle), rückwirkender Gegencheck über alle eingespielten Token aus Stufen 1+2+3+K-06.
+
+**Rückwirkende Entfernungen aus eingespieltem Material** (10 Token-Entfernungen über 7 Produkte; davon 1 K-06-konform aus Stufe 4 oben + 9 K-07-konform):
+
+| Produkt | Token | Quelle | Test-Wortlaut | Grund |
+|---|---|---|---|---|
+| bond_iq_spuelung | `frizz_reduktion` | Stufe 1 | „89 % … glättet die Schuppenschicht, reduziert Frizz und verbessert die Frisierbarkeit*" | Frizz nirgendwo in WARUM-Aussage-Bullets, IDEAL, Beschreibung |
+| curl_creme | `elastizitaet` | K-06 | „88 % … Locken Elastizität und Definition verleiht" | Elastizität nirgendwo in WARUM, IDEAL, Beschreibung |
+| smoothing_fohn_spray | `kaemmbarkeit` | Stufe 3 | „4x/3x bessere Kämmbarkeit" | Kämmbarkeit nirgendwo im Produktversprechen |
+| smoothing_fohn_spray | `elastizitaet` | Stufe 3 | „Gestärktes Haar, verbesserte Elastizität …" | Elastizität nirgendwo im Produktversprechen |
+| smoothing_fohn_spray | `farbschutz` | Stufe 3 | „Farbbrillanz bis zu 20 Haarwäschen erhalten" | Farbe nirgendwo im Produktversprechen |
+| smoothing_shampoo | `glanz` | Stufe 3 | „24 % mehr Glanz" | Glanz nirgendwo im Produktversprechen |
+| smoothing_deep_conditioner | `glanz` | Stufe 3 | „56 % mehr Glanz" | Glanz nirgendwo im Produktversprechen |
+| smoothing_tiefenbehandlung | `glanz` | Stufe 3 | „80 % mehr Glanz" | Glanz nirgendwo im Produktversprechen |
+| ir_clinical_kopfhautserum | `staerkend` | Stufe 2 | „82 % … zur Stärkung der Haare beiträgt" | Verankerung nur via CAPIXYL-Inhaltsstoff-Mechanik (K-06-Grenzfall-Präzedenz: Mechanik zählt nicht) |
+
+**Streichungen aus Stufe-4-Vorschlag** (9 Token, gar nicht erst geschrieben):
+- feuchtigkeits_shampoo: `farbschutz` (Test, keine Produktversprechen-Verankerung)
+- erweiterte_feuchtigkeit_spuelung: `farbschutz` (analog)
+- ir_clinical_shampoo: `kopfhautpflege`, `glanz`, `kaemmbarkeit`, `feuchtigkeit` (4 Tokens; nur in Tests, nicht im Produktversprechen) — **K-01-Cascade entfällt**: `ist_scalp_focus` bleibt FALSE (kopfhautpflege nicht aufgenommen)
+- ir_clinical_spuelung: `glanz` (K-07-Negativbeispiel)
+- scalp_comfort_serum: `frische` (Test sagt „erfrischt", Produktversprechen sagt nur „kühlend" — semantisch verwandt aber kein wörtlicher Beleg)
+
+**Vokabular nach K-07-Cleanup**: `farbschutz` jetzt nur noch IR-Clinical-Linie (`ir_clinical_shampoo`, `ir_clinical_spuelung` — `smoothing_fohn_spray` rausgeflogen). `elastizitaet` nur noch bei super_feuchtigkeitsmaske + bond_iq_night_day_serum + bond_iq_spuelung + curl_gelee + curl_auffrischer (curl_creme + hitzeschutzspray + smoothing_fohn_spray rausgeflogen).
+
+**Regression**: 7/7 produkt_key-identisch zur HANDOVER-Baseline. Vorhersage bestätigt — keiner der entfernten Tokens matched ein direktes Profil-Goal, das einen Slot-Shift auslösen würde; betroffene Smoothing-Produkte sind via CON-11 ohnehin aus den Pools blockiert.
+
+### Block 1 — Gesamt-Bilanz nach Abschluss
+
+Stufen 1+2+K-06+3+4+K-07 zusammen:
+- **32 Produkte angefasst** (5 unverändert: ir_clinical_shampoo war kein Stufe-1-Cluster, fohncreme + scalp_comfort_serum keine Edits, 2 weitere ohne fehlt-im-Sheet)
+- **Netto-Aufnahmen**: ~73 Token-Ergänzungen über alle Stufen
+- **Entfernungen**: 14 Token (3 bonding aus hauptfunktion via K-06, 11 nebenfunktion via K-06/K-07)
+- **3 Konventionen geschärft**: K-06 (Wirkung am Haar vs. Schlagwort/Mechanik), K-07 (Test-Verankerung im Produktversprechen), K-01-Bond-IQ-Cascade (3 ist_bonding-Flags + POOL-01-Umstellung)
+- **0 Routing-Drift über alle Stufen**: HANDOVER-Sollwerte unverändert
+
+**Offen**: Block 2 (Filter/Ausschluss-Spalten: `haarstaerke`, `haarstruktur`, `haarzustand`, `kopfhaut`) + Block 3 Rest (Bool-Flags ohne die 3 bei K-06-Gegencheck vorgezogenen + `pflegelevel` + `ausschluss_bei`) + Block 4 (Doku-Spalten: `anwendung`, `produkt_url`, `locken_geeignet`).
 
 ## Offene Punkte (priorisiert)
 
 | Prio | Aufgabe | Stelle |
 |---|---|---|
-| 🟡 (in Arbeit) | Datenblatt-Provenienz-Audit — Block 1 Stufen 1+2+3 + K-06-Gegencheck erledigt 2026-06-11; Stufe 4 offen, Block 2+3-Rest+4 offen | siehe Abschnitt „Datenblatt-Provenienz-Audit" oben |
+| 🟡 (in Arbeit) | Datenblatt-Provenienz-Audit — **Block 1 vollständig abgeschlossen** 2026-06-12 (Stufen 1+2+K-06+3+4+K-07); Block 2 (Filter-Spalten) + Block 3 Rest + Block 4 offen | siehe Abschnitt „Datenblatt-Provenienz-Audit" oben |
 | 🟡 | Sheet auf weitere `ist_bonding`-Misuses als Linien-Proxy prüfen — `ist_bonding` ist seit K-06 reines Wirkungs-Flag, Routing-Logik gehört auf `produktlinie` | Tabs: `map_slot_rules`, `map_conflict_rules`, weitere Filter |
 | 🟡 | Node 06 Phase 2 migrieren (Ziele-Bonus, max +2 Pkt) | Node 06 inline |
 | 🟡 | Node 05 migrieren (17 Bool-Flag-Heuristiken) | Node 05 inline, 69 LOC; bei Gelegenheit `needs_lightweight_logic` mitentfernen (seit #5 ungenutzt) |
