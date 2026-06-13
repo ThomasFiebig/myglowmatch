@@ -126,6 +126,7 @@ Etabliert im A–F-Audit am 2026-06-10. Verbindlich für künftige Sheet-Wert-En
 | K-05 | Sheet-Werte folgen PDF-Belegen **auch wenn aktuell kein Scoring-/Regel-Trigger darauf greift**. Scoring-Stille ist kein Grund für PDF-Verzicht — sie ist eine Folge der Migrations-Reihenfolge und ggf. ein eigener Folge-Punkt. | `staerkend` als nebenfunktion für monat_black akzeptiert, obwohl aktuell kein Profil-Goal darauf matched |
 | K-06 | Eine haupt-/nebenfunktion zählt als belegt, wenn das PDF eine konkrete **Funktions-Aussage über die Wirkung am Haar** enthält — an beliebiger Stelle (Vorteils-Bullet, IDEAL-Bullet, FAQ, Test-Bullet ODER Beschreibungssatz). **NICHT** belegt: bloße Header/Taglines (Schlagwort ohne Aussage) und reine Inhaltsstoff-Mechanismus-Beschreibungen (z. B. „Lupinenprotein stabilisiert die Haarbindungen" = wie, nicht was am Haar passiert). Gilt **symmetrisch** für Hinzufügen/Behalten/Entfernen — keine historische Asymmetrie. | Negativbeispiel: `moxie_mousse.verdichtend` (nur Tagline „Volumen und Dichte" + CAPIXYL-Inhaltsstoff). Positiv-Kontrast: `monat_black.verdichtend` ist belegt (IDEAL-Bullet „Die Dichte verbessern und das Haar voller erscheinen lassen möchten"). |
 | K-07 | Ein Test-Bullet zählt als Beleg **NUR** wenn die entsprechende Funktion auch im **Produktversprechen verankert** ist (WARUM / IDEAL / Beschreibung / Header — auch implizit). Test-Bullet ohne jede Produktversprechen-Verankerung = Nebenbeobachtung der Studie (35 Frauen, 14 Tage), zählt nicht als Produktfunktion. Gilt symmetrisch für Aufnahme und Entfernung. Grenzfall-Präzedenz: Inhaltsstoff-Mechanik als Verankerung zählt nicht — konsistent mit K-06 bond_iq-Entscheidung. | Negativbeispiel: `ir_clinical_spuelung.glanz` (94%-Test, aber Glanz nirgendwo im Produktversprechen). Konsistenz: K-06 schließt Inhaltsstoff-Mechanik als Verankerung aus (siehe bond_iq-Linie). |
+| K-08 | Für **Filter-Spalten** (`kopfhaut`, `haarstaerke`, `haarstruktur`, `haarzustand`) zählt die strukturelle **Zielgruppen-Spezifikation im Header-Untertitel** des MONAT-PDFs (Format „Zustand / Haartyp / Haartextur / Step") als legitimer Beleg, **auch ohne** zusätzliche Verankerung in WARUM/IDEAL/Beschreibung. Begründung: Hersteller-Untertitel ist eine direkte „Für wen ist das"-Aussage, methodisch näher an K-03's „Wer profitiert"-Hauptaussage als an einer Werbe-Tagline. Abgrenzung zu K-06: Für **Funktions-Spalten** (`hauptfunktion`, `nebenfunktionen`) zählt der Header **weiter nicht** als Beleg (Werbe-Tagline ≠ Funktions-Aussage am Haar). K-03 bleibt der Konflikt-Löser: bei Widerspruch zwischen Header-Untertitel und IDEAL-Bullet gewinnt IDEAL. Gilt symmetrisch für Aufnahme/Behalten/Entfernen. | `monat_black.kopfhaut=fettig` + `.haarstaerke=fein,mittel` ausschließlich durch Header-Untertitel belegt (keine WARUM-/IDEAL-Verankerung). Abgrenzungskontrast: `essig_spuelung.kopfhaut=fettig` ist **nicht** durch K-08 belegbar — Header-Untertitel sagt nur „Kopfhautpflege", kein „Fettiges Haar". |
 
 **bond_iq-Linie als Lehrbeispiel für K-06**: Die Bond-IQ-Produktlinie ist bewusst **nicht durchgängig bonding-klassifiziert** in `hauptfunktion`. `bond_iq_leave_in` behält `bonding` (eigener Funktions-Bullet „Stärkt die Haarstruktur und repariert Haarbindungen*"). `bond_iq_night_day_serum`, `bond_iq_shampoo`, `bond_iq_spuelung` haben `bonding` per K-06-Gegencheck verloren — bei ihnen ist Bindungs-Reparatur **nur** in der Inhaltsstoff-Beschreibung (Lupinenprotein „stabilisiert die inneren Haarbindungen") belegt, kein eigener Funktions-Bullet am Haar. Das ist PDF-Realität, kein Daten-Fehler. **Nicht "korrigieren"** in späteren Sessions.
 
@@ -133,7 +134,16 @@ Etabliert im A–F-Audit am 2026-06-10. Verbindlich für künftige Sheet-Wert-En
 
 **Wichtige Beobachtung aus dem Vollrun (2026-06-10):** Sheet-Werte ohne PDF-Beleg sind nicht nur Doku-Schuld, sie produzieren aktiv falsche Empfehlungen. Beispiel: `monat_black.nebenfunktionen=volumen` (PDF-untreu, PDF spricht von „Dichte" und „Verdichtend") führte dazu, dass Maria + Julia (`scalp=normal`, `goal=volumen`) das falsche Shampoo bekamen — monat_black ist laut PDF für **fettige Kopfhaut**. Nach Fix gewinnt revive_shampoo (`hauptfunktion=volumen`), das funktionsspezifisch richtige Shampoo. K-04 hat damit direkten Output-Effekt auf die Kundenempfehlung.
 
-## Datenblatt-Provenienz-Audit (Stand 2026-06-11)
+## Audit-Workflow (Test-Disziplin)
+
+Konventionen für **wie** auditiert wird, ergänzend zu den K-Datenkonventionen (K-01..K-08).
+
+| # | Regel | Begründung |
+|---|---|---|
+| T-01 | **Isolations-Regel**: Edits, die potenziell dieselbe Slot-Entscheidung berühren, werden einzeln getestet (ein Edit → ein Full-Run → Drift-Analyse), nicht gekoppelt. Im Zweifel — wenn Slot-Disjunktheit nicht verifiziert ist — gilt isoliert als Default. Maskierung ist möglich, wenn zwei Edits dieselbe Slot-Entscheidung beeinflussen (Pool-Veränderung **oder** Score-Verschiebung im selben Slot). **Zwei Test-Modi unterscheiden**: (a) **strikt-isoliert** = nur der zu testende Edit ist aktiv im Sheet während des Runs; (b) **diff-isoliert** = mehrere Edits sind aktiv, der einzelne Effekt wird per Diff zum vorherigen Run extrahiert. Beide Modi sind nur bei verifizierter Slot-Disjunktheit äquivalent; bei unklarer Disjunktheit ist strikt-isoliert der Default. Mehraufwand pro Edit ~1 Run, Erkenntnis-Verlust 0. | Block-2-Stufe-1, 2026-06-13: Edit A strikt-isoliert (nur A im Sheet), Edit C diff-isoliert (A+C im Sheet, C-Effekt per Diff zum A-Run). Disjunkte Slots verifiziert → diff-isoliert war zulässig. |
+| T-02 | **Mechanismus-Belegpflicht**: Aussagen in HANDOVER über das, was der Workflow tut/nicht tut (welcher Node was konsumiert, wie ein Filter/Score wirkt, welche Spalte aktiv ist) müssen **entweder** mit konkretem Code-Zitat belegt sein (Node-Name + Zeilen-Referenz aus Workflow-Backup oder file:line aus dem Repo) **oder** explizit als Hypothese markiert werden („vermutlich", „zu verifizieren"). Beobachtungs-Befunde (Run-Output, Sheet-Stand, JSON-Inspektion) sind ohne Code-Verifikation gültig, dürfen aber **nicht** zu Architektur-Schlüssen extrapoliert werden. Vor jeder Mechanismus-Aussage Stop-Frage: „Habe ich den Code dazu gelesen?" Wenn nein → kurz lesen oder als Hypothese formulieren. | Block-2-Stufe-1, 2026-06-13: erste Behauptung „kopfhaut-Spalte filtert nicht" basierte auf Beobachtungs-Extrapolation (Maria's Pool unverändert), nicht auf Code-Inspektion. Korrektur erst nach Tomi-Rückfrage: Node 12 Z. 26 zeigt Score-Bonus +2 statt Filter — die plausible „Doku-Spalte"-Erklärung wurde mit Wahrheit verwechselt. Schadensklasse: Mechanismus-Doku falsch, Routing 0/7 trotzdem korrekt — aber Audit-Vertrauen leidet. |
+
+## Datenblatt-Provenienz-Audit (Stand 2026-06-13)
 
 Spalten-Reihenfolge nach Scoring-Relevanz: Block 1 (scoring-kritisch: `hauptfunktion`, `nebenfunktionen`) → Block 2 (Filter: `haarstaerke`, `haarstruktur`, `haarzustand`, `kopfhaut`) → Block 3 (Bool-Flags + Level) → Block 4 (Doku). Produkt-Reihenfolge je Block in 4 Stufen nach Bug-Risiko (Multi-Funktion → seltene Tokens → A–F-Re-Verify → Singulär-Sanity).
 
@@ -310,14 +320,55 @@ Stufen 1+2+K-06+3+4+K-07 zusammen:
 - **3 Konventionen geschärft**: K-06 (Wirkung am Haar vs. Schlagwort/Mechanik), K-07 (Test-Verankerung im Produktversprechen), K-01-Bond-IQ-Cascade (3 ist_bonding-Flags + POOL-01-Umstellung)
 - **0 Routing-Drift über alle Stufen**: HANDOVER-Sollwerte unverändert
 
-**Offen**: Block 2 (Filter/Ausschluss-Spalten: `haarstaerke`, `haarstruktur`, `haarzustand`, `kopfhaut`) + Block 3 Rest (Bool-Flags ohne die 3 bei K-06-Gegencheck vorgezogenen + `pflegelevel` + `ausschluss_bei`) + Block 4 (Doku-Spalten: `anwendung`, `produkt_url`, `locken_geeignet`).
+**Offen**: Block 2 Stufe 1 in Arbeit (`kopfhaut`-Spalte, siehe unten); Block 2 Stufen 2-3 (`haarstruktur`/`haarstaerke`/`haarzustand`) + Block 3 Rest (Bool-Flags ohne die 3 bei K-06-Gegencheck vorgezogenen + `pflegelevel` + `ausschluss_bei`) + Block 4 (Doku-Spalten: `anwendung`, `produkt_url`, `locken_geeignet`).
+
+**Block 2 Stufe 1** — `kopfhaut`-Spalte, 6 Produkte mit non-Default-Wert + Cross-Check der 31 Default-Produkte — in Arbeit 2026-06-13.
+
+Audit-Befund pro Produkt (6 non-Default + ir_clinical_kopfhautserum als Cross-Check-Treffer):
+
+| Produkt | Sheet-Wert | PDF-Beleg | Entscheidung |
+|---|---|---|---|
+| essig_shampoo | `fettig` | Header-Untertitel „Fettiges Haar und Kopfhaut" (K-08 ✓) + WARUM „Reduziert überschüssiges Fett und stellt das Gleichgewicht der Kopfhaut wieder her" (K-06 ✓) | Status Quo |
+| **essig_spuelung** | `fettig` → **`-`** | Header-Untertitel sagt nur „Kopfhautpflege" (K-08 nicht einschlägig); WARUM-Bullet „Entfernt Produktrückstände, Schmutz und Öl" ist allgemeine Reinigungs-Aussage, kein Fett-spezifischer Beleg; „Talgablagerungen lösen" steht nur unter APFELESSIG-Inhaltsstoff-Erklärung → K-06 schließt Inhaltsstoff-Mechanik aus. Symmetrische K-06-Entfernung. | **Edit A** ✓ |
+| kopfhaut_peeling | `fettig` | Header-Untertitel „Fettiges Haar und Kopfhaut" (K-08 ✓) + WARUM „Reduziert überschüssiges Öl und stellt das Gleichgewicht der Kopfhaut wieder her" (K-06 ✓) | Status Quo |
+| monat_black | `fettig` | **Ausschließlich** Header-Untertitel „Fettiges Haar und Kopfhaut / Verdichtend / Feine bis mittlere Haartypen" (K-08 ✓). Keine weitere WARUM-/IDEAL-Verankerung — Anlass für K-08-Einführung. | Status Quo (K-08-Primärbeispiel) |
+| scalp_comfort_behandlung | `juckend_empfindlich,schuppig,trocken` | Header + IDEAL „trockene, gereizte, juckende, schuppige und empfindliche Kopfhaut" + Test-Bullets 89/96/96 % — alle 3 Tokens dreifach belegt (K-06 + K-07 ✓) | Status Quo |
+| scalp_comfort_serum | `juckend_empfindlich,schuppig,trocken` | analog scalp_comfort_behandlung (Header + IDEAL + Test); zusätzlich Test 87 % „schützende Feuchtigkeitsbarriere" | Status Quo |
+| **ir_clinical_kopfhautserum** | `-` → **`trocken`** | Cross-Check-Fund (war auf Default trotz „Kopfhaut" im Produktnamen). IDEAL-Bullet 3 wörtlich „Trockene Kopfhaut haben" (K-06 ✓); Test 87 % „Kopfhaut mit Feuchtigkeit versorgt" mit K-07-Verankerung via IDEAL. Andere Tokens geprüft + abgelehnt: `juckend_empfindlich` (Test 77 % „weniger juckt", keine Produktversprechen-Verankerung → K-07 ausschließt), `fettig` (Test 85 % „weniger fettig", keine Verankerung → K-07), `schuppig` (nirgendwo). | **Edit C** |
+
+**Architektur-Klärung zur `kopfhaut`-Produktspalte** (Code-verifiziert, T-02): Node 12 Z. 26 (workflow_backup_20260610_222030_pre_signature_fix.json, „12 Scoring & Slot-Befüllung"):
+```javascript
+if (kopfhaut.includes(p.primary_scalp_state) || kopfhaut.length === 0)
+  score += (kopfhaut.includes(p.primary_scalp_state) ? 2 : 0);
+```
+→ `kopfhaut` wirkt als **Score-Bonus +2 bei scalp-Match**, **nicht als Pool-Filter**. Default `-` (leeres Array) lässt durch ohne Bonus. Werte ohne Match lassen ebenfalls durch ohne Bonus. Cross-Verifikation: `haarstaerke`-Spalte filtert aktiv (Maria fein → nur `fein,mittel`/`alle`-Produkte im Pool) — Block-2-Filter-Spalten haben damit **unterschiedliche Wirkmechanismen**, Cross-Check für `haarstruktur` + `haarzustand` separat nötig.
+
+**Edit A — Drift-Analyse (strikt-isoliert, 2026-06-13)** — Sheet-Setup beim Run: nur Edit A aktiv:
+- 7/7 Profile produkt_key-identisch zur Pre-Edit-A-Baseline (test_results_20260612_000047.json vs. test_results_20260613_012029.json)
+- Edit A entfernt essig_spuelung's +2-Score-Bonus für scalp=fettig-Profile (Node 12 Z. 26). Aktueller Test-Suite-Stand: nur anna hat scalp=fettig (siehe 🔴-Folgepunkt zu anna), bei anna feuert CON-07 mit count=1 → essig_spuelung käme score-mäßig nicht ins Slot-Rennen.
+- Zusätzlich erweitert Edit A essig_spuelung's nominelle Pool-Zugehörigkeit; **CON-12** (`exclude_product` bei `primary_scalp_state=normal|trocken|juckend_empfindlich`) fängt das für maria/julia/bianca/sarah/vivien sofort wieder ab; lena (scalp=normal) ebenfalls. Netto-Pool-Effekt null.
+- K-05-Fall: Stammdaten-Korrektur ohne aktuellen Scoring-Trigger.
+
+**Edit C — Drift-Analyse (diff-isoliert nach Edit A, 2026-06-13)** — Sheet-Setup beim Run: A+C beide aktiv, C-Effekt per Diff zum A-Run extrahiert (Slot-Disjunktheit A/C verifiziert, siehe T-01):
+- 7/7 Profile produkt_key-identisch + 7/7 CON-Listen identisch zu Edit-A-Run (test_results_20260613_095740.json vs. _012029.json)
+- ir_clinical_kopfhautserum bleibt im filtered_pool von maria/julia/bianca/sarah (`irck_in_pool` true→true) — konsistent mit Score-Bonus-Mechanik (kein Filter)
+- Edit C fügt ir_clinical_kopfhautserum's +2-Score-Bonus für scalp=trocken neu hinzu. Keines der 7 Test-Profile hat scalp=trocken (lena hat `trocken` nur im **haarzustand**, nicht im scalp_status). Score-Effekt jetzt null, **aber für künftige Profile mit scalp=trocken hat Edit C Slot-Wirkung**.
+- K-05-Fall: PDF-Provenienz-Korrektur mit potentiellem zukünftigen Score-Effekt.
+
+**Methodische Einsicht aus essig_spuelung-Analyse**: HANDOVER-Stufen-Audit-Tabellen (Block 1 Stufen 1-4) listen **Stufen-Deltas** (Aufnahmen pro Stufe), **nicht** finale Zellwerte. Pre-Edit-Ist-Stand muss immer per Sheet-Read verifiziert werden, nie aus Delta-Tabelle abgeleitet. Während Frage-2-Audit (essig_spuelung.glanz) wurde `glanz,feuchtigkeit` als bereits etabliert übersehen → falscher Edit-B-Vorschlag. Beide Tokens sind K-06-belegt (IDEAL „glänzend macht" + WARUM/IDEAL „mit Feuchtigkeit versorgt"), kein rückwirkender Block-1-Edit nötig.
+
+**Backup**: `~/Projekte/myglowmatch/backups/sheets_20260612_225817_pre_block2_stufe1/produktdatenbank.csv`.
+
+**Befund zur Baseline-Tabelle**: HANDOVER-Baseline (Z. 333 ff.) listete bei julia nur CON-12, alle Test-Runs seit 27.05. zeigen aber durchgängig **CON-07 + CON-12** (CON-07 routine-neutral, weil hitzeschutzspray bei julia ohnehin nicht in finale Routine geht). Cross-Check der anderen 6 Profile gegen Run-Output: alle 6 listen tatsächlich alle gefeuerten CONs (anna: CON-07; maria: CON-09,11,12; lena: CON-09,11; bianca: CON-02,09; vivien: CON-09,11,12; sarah: CON-09,11). **Implizite Konvention: „vollständig listen"** — julia war Update-Versäumnis (vermutlich 10.06.-A-F-Audit-Lücke, als count auf 4 + CON-12 aktualisiert wurde, CON-07 übersehen). Julia-Zeile heute korrigiert auf `CON-07, CON-12`. Kein offener Klärungspunkt mehr — Konvention ist implizit klar.
 
 ## Offene Punkte (priorisiert)
 
 | Prio | Aufgabe | Stelle |
 |---|---|---|
-| 🟡 (in Arbeit) | Datenblatt-Provenienz-Audit — **Block 1 vollständig abgeschlossen** 2026-06-12 (Stufen 1+2+K-06+3+4+K-07); Block 2 (Filter-Spalten) + Block 3 Rest + Block 4 offen | siehe Abschnitt „Datenblatt-Provenienz-Audit" oben |
+| 🟡 (in Arbeit) | Datenblatt-Provenienz-Audit — **Block 1 vollständig abgeschlossen** 2026-06-12 (Stufen 1+2+K-06+3+4+K-07); **Block 2 Stufe 1 (`kopfhaut`) in Arbeit 2026-06-13**, K-08 eingeführt; Block 2 Stufen 2-3 + Block 3 Rest + Block 4 offen | siehe Abschnitt „Datenblatt-Provenienz-Audit" oben |
 | 🟡 | Sheet auf weitere `ist_bonding`-Misuses als Linien-Proxy prüfen — `ist_bonding` ist seit K-06 reines Wirkungs-Flag, Routing-Logik gehört auf `produktlinie` | Tabs: `map_slot_rules`, `map_conflict_rules`, weitere Filter |
+| 🟢 (geklärt) | `kopfhaut`-Spalte der Produktdatenbank: **Score-Bonus +2 bei scalp-Match, kein Pool-Filter** (Node 12 Z. 26, Code-Zitat im Block-2-Stufe-1-Block). Block-2-Edits wirken als Score-Faktor für künftige Profile mit passendem scalp_status, nicht als Pool-Filter. Cross-Check für `haarstruktur` + `haarzustand` separat noch offen (`haarstaerke` ist verifiziert aktiv als Filter). | Node 12 Z. 26 |
+| 🔴 | **Test-Profil `anna` scalp_status-Diskrepanz**: Run-Output sagt `scalp_status=['fettig']`, HANDOVER Z. 335 dokumentiert „keine_probleme" als Eingabe. **Warum 🔴**: falsches Test-Profil macht alle Drift-Analysen über anna wertlos — und damit jede darauf gestützte Audit-Entscheidung. Heute: anna's Routine (1× monat_black) ist nur dann legitim, wenn anna wirklich scalp=fettig hat; bei scalp=keine_probleme wäre monat_black eine Fehlempfehlung (Stammdaten-Bug-Klasse, vgl. monat_black-volumen-Bug 10.06.). Die Annahme „Test-Profile sind korrekt definiert" liegt implizit jeder 0/N-Drift-Aussage zugrunde — wenn sie für ein Profil bricht, brechen alle daran gemessenen Audit-Schritte. Klären **vor Block 2 Stufe 2**: (i) mappt Node 02 „keine_probleme → fettig" (echter Normalisierungs-Bug, betrifft jede Produktiv-Kundin mit dieser Eingabe) oder (ii) weicht `test_suite.py` von HANDOVER ab (Test-Daten-Fehler, betrifft nur die Test-Baseline)? | `test_suite.py` Profil-Definition + Node 02 jsCode |
 | 🟡 | Node 06 Phase 2 migrieren (Ziele-Bonus, max +2 Pkt) | Node 06 inline |
 | 🟡 | Node 05 migrieren (17 Bool-Flag-Heuristiken) | Node 05 inline, 69 LOC; bei Gelegenheit `needs_lightweight_logic` mitentfernen (seit #5 ungenutzt) |
 | 🟢 | Node 11 Z. 163-164: `minimal → optional = []` als REQ-Regel ins Sheet | Node 11 inline |
@@ -335,7 +386,7 @@ Test-Profile in `test_suite.py`, alle mit `partner_id=desiree`, `email=info@mygl
 | anna   | glatt, mittel, keine_probleme, unbehandelt, Hitze gelegentlich, minimal | LOW | 0 | 3 | 1 | CON-07 |
 | maria  | wellig, fein, duenn, kraftlos, gefaerbt, Hitze nie, ausgewogen | MID | 7 | 5 | 5 | CON-09, CON-11, CON-12 |
 | lena   | kraus, dick, trocken, frizz, gefaerbt, Hitze sehr_haeufig, bestmoeglich | HIGH | 15 | 10 | 7 | CON-09, CON-11 |
-| julia  | glatt, fein, kraftlos, unbehandelt, Hitze gelegentlich, ausgewogen | MID | 4 | 5 | 4 | CON-12 |
+| julia  | glatt, fein, kraftlos, unbehandelt, Hitze gelegentlich, ausgewogen | MID | 4 | 5 | 4 | CON-07, CON-12 |
 | bianca | wellig, mittel, trocken, gefaerbt, Hitze gelegentlich, ausgewogen | MID | 7 | 5 | 5 | CON-02, CON-09 |
 | vivien | wellig, dick, keine_probleme, gefaerbt, Hitze regelmaessig, bestmoeglich | MID | 4 | 7 | 7 | CON-09, CON-11, CON-12 |
 | sarah  | lockig, fein, stark_geschaedigt+spliss+trocken, blondiert, Hitze sehr_haeufig, bestmoeglich | HIGH | 18 | 10 | 7 | CON-09, CON-11 |
