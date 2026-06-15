@@ -322,7 +322,7 @@ Stufen 1+2+K-06+3+4+K-07 zusammen:
 
 **Offen**: Block 2 Stufe 1 in Arbeit (`kopfhaut`-Spalte, siehe unten); Block 2 Stufen 2-3 (`haarstruktur`/`haarstaerke`/`haarzustand`) + Block 3 Rest (Bool-Flags ohne die 3 bei K-06-Gegencheck vorgezogenen + `pflegelevel` + `ausschluss_bei`) + Block 4 (Doku-Spalten: `anwendung`, `produkt_url`, `locken_geeignet`).
 
-**Block 2 Stufe 1** — `kopfhaut`-Spalte, 6 Produkte mit non-Default-Wert + Cross-Check der 31 Default-Produkte — in Arbeit 2026-06-13.
+**Block 2 Stufe 1** — `kopfhaut`-Spalte, 6 Produkte mit non-Default-Wert + Cross-Check der 31 Default-Produkte — abgeschlossen 2026-06-15.
 
 Audit-Befund pro Produkt (6 non-Default + ir_clinical_kopfhautserum als Cross-Check-Treffer):
 
@@ -361,18 +361,57 @@ if (kopfhaut.includes(p.primary_scalp_state) || kopfhaut.length === 0)
 
 **Befund zur Baseline-Tabelle**: HANDOVER-Baseline (Z. 333 ff.) listete bei julia nur CON-12, alle Test-Runs seit 27.05. zeigen aber durchgängig **CON-07 + CON-12** (CON-07 routine-neutral, weil hitzeschutzspray bei julia ohnehin nicht in finale Routine geht). Cross-Check der anderen 6 Profile gegen Run-Output: alle 6 listen tatsächlich alle gefeuerten CONs (anna: CON-07; maria: CON-09,11,12; lena: CON-09,11; bianca: CON-02,09; vivien: CON-09,11,12; sarah: CON-09,11). **Implizite Konvention: „vollständig listen"** — julia war Update-Versäumnis (vermutlich 10.06.-A-F-Audit-Lücke, als count auf 4 + CON-12 aktualisiert wurde, CON-07 übersehen). Julia-Zeile heute korrigiert auf `CON-07, CON-12`. Kein offener Klärungspunkt mehr — Konvention ist implizit klar.
 
+**Cross-Check der 32 Default-`kopfhaut`-Produkte** (2026-06-15, abschließend): Methode in 3 Stufen — (1) pypdf-Extraktion aller 32 PDFs, Keyword-Scan auf `kopfhaut`, `scalp`, `fettig`, `trocken`, `schuppig`, `juckend`, `empfindlich`, `gereizt`, `öl`, `talg`, `schuppen`, `irritation`; (2) Kontext-Extraktion (±200 Zeichen) um jeden Treffer der scalp-spezifischen Keywords; (3) Co-Occurrence-Filter `(trocken|schuppen|öl|talg)` ∧ `(kopfhaut|scalp)` als Sanity-Check über die schwachen Keywords. Sieben Kandidaten ergaben sich, alle nach K-06/K-07/K-08-Prüfung **abgelehnt**:
+
+| Kandidat | Befund | Entscheidung |
+|---|---|---|
+| curl_auffrischer/creme/gelee | „Kopfhaut" in edukativem Block über Lockenhaar-Typen + LOC/LCO-Methode, keine Produkt-Funktions-Aussage | – |
+| essig_spuelung | Header-Untertitel „Kopfhautpflege" allgemein, kein scalp-spezifischer Token (K-08 nicht einschlägig); zweite „scalp"-Erwähnung ist Cross-Reference auf kopfhaut_peeling | – (Edit A war Default-Setzung, korrekt) |
+| ir_clinical_shampoo | „91 %/92 % Kopfhaut und Haar weniger fettig" + „97 % Kopfhaut gereinigt" nur in Test-Bullets; weder WARUM, IDEAL, Header noch Beschreibung enthalten Kopfhaut-Bezug → K-07-Verankerung fehlt (konsistent mit Stufe-4 K-07-Cleanup: `kopfhautpflege` damals aus selbem Grund abgelehnt) | – |
+| ir_clinical_spuelung | „scalp" nur Cross-Reference auf Scalp Serum + Anwendungshinweis „von der Kopfhaut bis in die Spitzen auftragen" (= Anwendung, keine Zielgruppen-/Funktions-Aussage) | – |
+| rejuveniqe_oel | „fettig" = Wiesenschaumkraut-Inhaltsstoff („ohne fettig zu wirken", K-06 ausschließt Inhaltsstoff-Mechanik); „schuppig" = Körperpflege-Hinweis „schuppige Haut" (nicht Kopfhaut) | – |
+| the_champ | alle 7 „trocken"-Hits = Produktname „Trockenshampoo" oder dessen Kontext; einziger „Kopfhaut"-Bezug ist Anwendungs-Warnung „nicht auf die gesamte Kopfhaut" | – |
+| bond_iq-Linie (Leave-In/Serum/Shampoo/Spülung) | alle „schuppen"-Hits = „Schuppenschicht" (Haar-Kutikula), nicht Kopfhautschuppen | – |
+
+**Ergebnis Cross-Check**: 0 zusätzliche Edits. ir_clinical_kopfhautserum (Edit C, 13.06.) bleibt der einzige übersehene Treffer im Default-Pool. Stufe 1 damit vollständig: 6 non-Default + 1 Cross-Check-Treffer auditiert, 2 Edits (A+C) gefahren, 0/7 Routing-Drift.
+
+## Scoring-Audit & Node-12-Trace (2026-06-15)
+
+Anlass: Tomi-Grundsatzfrage zu Sinnhaftigkeit/Determinismus/Skalierbarkeit der Punkteverteilung. Audit zeigte: System A (Node 06 Pflegelevel) ist sheet-getrieben + plausibel (Doku-Schuld bei Punkt-Höhen, kein Logik-Bug); System B (Node 12 Produkt-Slot-Score, 6 Inline-Regeln) hat drei Quirks (haarstruktur-Asymmetrie, Doppelzählung Hauptfunktion+Goal, Tie-Breaking via Sheet-Reihenfolge) plus zwei Architektur-Probleme (Inline-Gewichte, keine Score-Aufschlüsselung im Output). Block-2-Audit ist **pausiert** bis Scoring-Reparatur, weil jeder neue `nebenfunktionen`-Token durch die ungeprüfte Doppelzählungs-Logik läuft.
+
+**Schritt 1 abgeschlossen** — Node 12 Trace-Erweiterung (deployed 2026-06-15):
+
+`scoreProduct(prod)` liefert jetzt `{score, fired_rules}` statt nur `score`. Pro Slot-Winner erscheint im Output:
+- `fired_rules: [{regel_id, punkte, beschreibung}, …]` — je Score-Regel ein Eintrag mit konkretem Match-Beleg (z.B. „care_goal 'volumen' matcht funktion 'volumen' (Substring)")
+- `score_competition: [{produkt_key, score}, …]` — Top-5 Konkurrenz für Tie-Breaking-Sichtbarkeit
+
+6 Score-Regeln nummeriert: SCO-01 (hauptfunktion +3), SCO-02 (kopfhaut +2), SCO-03 (haarstruktur +1, Match-Asymmetrie explizit im Beschreibungstext kommentiert), SCO-04 (care_goal +1 pro Match), SCO-05 (pflegelev +1), SCO-06 (needs_curl_care +2). Score-Werte sind mathematisch identisch zur Pre-Edit-Logik — kein Routing-Drift möglich.
+
+**Backup**: `~/Projekte/myglowmatch/workflow_backup_20260615_215307_pre_node12_trace.json`.
+
+**Regression**: 6/7 Profile produkt_key-identisch zur Pre-Edit-Baseline (`test_results_20260613_095740.json`). Anna's Vollrun-Polling-Timeout (90s) ist Test-Suite-Artefakt (Cold-Start beim ersten Webhook), Einzel-Re-Run lief sauber durch mit identischer Routine. **0/7 echter Drift**.
+
+**Beobachtungs-Beispiel** (Maria's shampoo-Slot): Winner revive_shampoo Score=4 (SCO-04 +1 volumen-Match, SCO-05 +1 mid-Match, SCO-06 +2 Curl-Bonus) gegen 3 Konkurrenten mit je Score=3 (feuchtigkeits_shampoo, ir_clinical_shampoo, monat_black). Curl-Bonus ist Slot-entscheidend — fragwürdig bei einem welligen Profil. Für Schritt-2-Diagnose vermerkt.
+
+**Folge-Schritte aus diesem Audit** (siehe „Offene Punkte" unten 🔴):
+- Schritt 2: 7 Test-Profile per Trace durchschauen (Doppelzählungs- und Asymmetrie-Befunde sammeln)
+- Schritt 3: Reparatur auf Basis Befunde (Tie-Breaker, ggf. SCO-03-Symmetrie, ggf. SCO-04-Cap defensiv)
+- Schritt 4: Gewichte in `map_scoring_weights` migrieren (Sheet-First-Konsistenz mit Node 06)
+- Schritt 5: Begründungen pro Punkt-Höhe in Sheet-Spalte `quelle` dokumentieren
+
 ## Offene Punkte (priorisiert)
 
 | Prio | Aufgabe | Stelle |
 |---|---|---|
-| 🟡 (in Arbeit) | Datenblatt-Provenienz-Audit — **Block 1 vollständig abgeschlossen** 2026-06-12 (Stufen 1+2+K-06+3+4+K-07); **Block 2 Stufe 1 (`kopfhaut`) in Arbeit 2026-06-13**, K-08 eingeführt; Block 2 Stufen 2-3 + Block 3 Rest + Block 4 offen | siehe Abschnitt „Datenblatt-Provenienz-Audit" oben |
+| 🔴 (PAUSIERT bis Scoring-Reparatur) | Datenblatt-Provenienz-Audit — **Block 1 abgeschlossen** 2026-06-12; **Block 2 Stufe 1 (`kopfhaut`) abgeschlossen** 2026-06-15 (K-08, 2 Edits A+C, 0 Cross-Check-Funde). **Block 2 Stufe 2 + 3 + Block 3 Rest + Block 4** pausiert: Audit pumpt `nebenfunktionen`-Tokens, die durch SCO-04 (care_goal-Substring-Match) ohne Cap im Score landen → erst Scoring reparieren. Code-Check für Block 2 Stufe 2: `haarstaerke` = Pool-Filter (Node 08 Z. 110-113), `haarstruktur` = Score-Bonus +1 mit Default-Asymmetrie (Node 12 Z. 28), `haarzustand` = toter Code in Node 12 (Z. 23 nur deklariert). | siehe „Datenblatt-Provenienz-Audit" + „Scoring-Audit & Node-12-Trace" oben |
+| 🔴 | Scoring-Reparatur Node 12 — Schritt 1 ✅ (Trace deployed). Offen: Schritt 2 (7-Profil-Trace-Analyse → Doppelzählungs-/Asymmetrie-Befunde), Schritt 3 (Reparatur: Tie-Breaker, SCO-03-Symmetrie?, SCO-04-Cap defensiv?), Schritt 4 (Gewichte in `map_scoring_weights` migrieren — analog Node 06 Sheet-First), Schritt 5 (Begründungs-Spalte `quelle` in map_scoring_weights). | Node 12, siehe „Scoring-Audit"-Block oben |
 | 🟡 | Sheet auf weitere `ist_bonding`-Misuses als Linien-Proxy prüfen — `ist_bonding` ist seit K-06 reines Wirkungs-Flag, Routing-Logik gehört auf `produktlinie` | Tabs: `map_slot_rules`, `map_conflict_rules`, weitere Filter |
 | 🟢 (geklärt) | `kopfhaut`-Spalte der Produktdatenbank: **Score-Bonus +2 bei scalp-Match, kein Pool-Filter** (Node 12 Z. 26, Code-Zitat im Block-2-Stufe-1-Block). Block-2-Edits wirken als Score-Faktor für künftige Profile mit passendem scalp_status, nicht als Pool-Filter. Cross-Check für `haarstruktur` + `haarzustand` separat noch offen (`haarstaerke` ist verifiziert aktiv als Filter). | Node 12 Z. 26 |
 | 🟢 (geklärt 2026-06-13) | **anna/bianca scalp_status-Diskrepanz** war reine HANDOVER-Doku-Unvollständigkeit, kein Bug. test_suite.py ist autoritativ und korrekt: anna `scalp_status=['fettig']` + hair_condition `['keine_probleme']`, bianca `scalp_status=['juckend_empfindlich']` + hair_condition `['trocken']`. HANDOVER-Eingabe-Kurzform (Z. 333 ff.) listete nur hair_*-Felder, nicht scalp_status — daraus entstanden Fehlinterpretation als Test-Profil-Bug. Node 02 macht keine `keine_probleme → fettig`-Normalisierung (Z. 13: nur `dedupArr`). Anna's monat_black-Routine ist funktional korrekt (scalp=fettig + care_goal=gesunde_kopfhaut); bianca's scalp_comfort_behandlung wird durch REQ-05 + CON-02 (beide trigger auf juckend_empfindlich) ausgelöst. **Fix in dieser Session**: Baseline-Tabelle Z. 335-341 um explizite `scalp_status`-Spalte erweitert + Vermerk dass „trocken" bei bianca hair_condition ist. **Lehre**: T-02 (System-State-Belegpflicht) erweitert um Daten-Aussagen — HANDOVER ist abgeleitete Doku, nicht autoritative Quelle. | erledigt |
 | 🟡 | Node 06 Phase 2 migrieren (Ziele-Bonus, max +2 Pkt) | Node 06 inline |
 | 🟡 | Node 05 migrieren (17 Bool-Flag-Heuristiken) | Node 05 inline, 69 LOC; bei Gelegenheit `needs_lightweight_logic` mitentfernen (seit #5 ungenutzt) |
 | 🟢 | Node 11 Z. 163-164: `minimal → optional = []` als REQ-Regel ins Sheet | Node 11 inline |
-| 🟢 | Node 12 Score-Gewichte (6 Inline-Werte 3/2/1) optional in `map_scoring_weights` | Node 12 inline |
+| ↑ | (Node 12 Score-Gewichte ⇒ siehe 🔴 Scoring-Reparatur oben) | Node 12 inline |
 | 🟢 | `extract_routine_output()`-Workaround in Test-Suite aufräumen | `test_suite.py` (CONFLICT_NODE-Merge seit Pass-Through in Node 12 überflüssig) |
 | 🟢 | Sheet-Spalte `gewicht` in Produktdatenbank löschen | (vermutlich bereits leer/weg — Google-Sheets-API liefert sie nicht mehr aus) |
 | 🟢 | Sheet-Loader 06a/06b/06c parallelisieren | Performance-Tuning, nur falls Live-Latenz spürbar |
