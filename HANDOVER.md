@@ -145,6 +145,7 @@ Konventionen für **wie** auditiert wird, ergänzend zu den K-Datenkonventionen 
 |---|---|---|
 | T-01 | **Isolations-Regel**: Edits, die potenziell dieselbe Slot-Entscheidung berühren, werden einzeln getestet (ein Edit → ein Full-Run → Drift-Analyse), nicht gekoppelt. Im Zweifel — wenn Slot-Disjunktheit nicht verifiziert ist — gilt isoliert als Default. Maskierung ist möglich, wenn zwei Edits dieselbe Slot-Entscheidung beeinflussen (Pool-Veränderung **oder** Score-Verschiebung im selben Slot). **Zwei Test-Modi unterscheiden**: (a) **strikt-isoliert** = nur der zu testende Edit ist aktiv im Sheet während des Runs; (b) **diff-isoliert** = mehrere Edits sind aktiv, der einzelne Effekt wird per Diff zum vorherigen Run extrahiert. Beide Modi sind nur bei verifizierter Slot-Disjunktheit äquivalent; bei unklarer Disjunktheit ist strikt-isoliert der Default. Mehraufwand pro Edit ~1 Run, Erkenntnis-Verlust 0. | Block-2-Stufe-1, 2026-06-13: Edit A strikt-isoliert (nur A im Sheet), Edit C diff-isoliert (A+C im Sheet, C-Effekt per Diff zum A-Run). Disjunkte Slots verifiziert → diff-isoliert war zulässig. |
 | T-02 | **System-State-Belegpflicht**: Aussagen in HANDOVER über System-State — was der Workflow tut/nicht tut, welcher Node was konsumiert, wie ein Filter/Score wirkt, **welche Inputs/Test-Profile definiert sind, welche Sheet-Werte gesetzt sind** — müssen mit konkretem Zitat aus der **autoritativen Quelle** belegt sein: Code-Zeile (file:line oder Workflow-Backup Node+Z.), Sheet-Read, `test_suite.py`-Zeile, `.env`-Eintrag. **HANDOVER-Doku ist abgeleitete Information und darf nicht als Beleg für Aussagen über System-State dienen** — sie kann unvollständig oder veraltet sein. Beobachtungs-Befunde (Run-Output, Sheet-Stand, JSON-Inspektion) sind ohne Quell-Verifikation gültig, dürfen aber **nicht** zu Architektur-Schlüssen extrapoliert werden. Stop-Frage vor jeder System-State-Aussage: „Habe ich die autoritative Quelle dazu gelesen, oder reproduziere ich nur eine andere Doku-Stelle?" | Block-2-Stufe-1, 2026-06-13: zwei Fehler-Klassen abgedeckt. (a) **Mechanismus**: „kopfhaut-Spalte filtert nicht" basierte auf Beobachtungs-Extrapolation (Maria's Pool unverändert), nicht auf Code-Inspektion. Korrektur erst nach Tomi-Rückfrage: Node 12 Z. 26 zeigt Score-Bonus +2 statt Filter. (b) **Daten**: „anna scalp_status=keine_probleme" basierte auf HANDOVER-Eingabe-Kurzform (Z. 335 dokumentiert hair_condition als „keine_probleme") statt test_suite.py-Read (Z. 62: `scalp_status=['fettig']`). HANDOVER war die Doku-Quelle, nicht die autoritative — test_suite.py ist autoritativ. Korrektur erst nach Tomi-Rückfrage. |
+| T-03 | **API↔API-Drift-Check** statt test_suite-Polling: bei Pipeline-Latenz >90 s (Standard mit 6 Sheet-Loadern + Cold-Start) timed test_suite-Polling ab. Workaround = direkter n8n-API-Read der success-Executions, Set-Vergleich `final_routine.produkt_key` pro `first_name` zwischen Pre-Edit-Baseline und Post-Edit-Lauf. Vorgehen: (1) Pre-Edit-Baseline-Execution-IDs notieren; (2) Edits + test_suite.py starten; (3) `until python3 -c "…sys.exit(0 if succ>=7 else 1)"; do sleep 30; done` bis 7 neue success-Executions; (4) pro Execution Node `15 Routine sortieren` → `final_routine.produkt_key` extrahieren; (5) Set-Vergleich. **Polling-Bug-Warnung**: niemals `until python3 -c "…" 2>&1 \| grep …; do …; done` — grep returnt immer 0 und überschreibt python-Exit-Status → Loop exited fälschlich nach 1. Iteration. Entweder `set -o pipefail` setzen oder grep weglassen (stderr für Status, stdout = leer). | Block 2 Stufe 3 Cluster 1 + 2A + 2B-1 (2026-06-16, 3 Sessions in Folge): test_suite-Polling alle 7 timed out, API-Direkt-Read war zuverlässige Wahrheits-Quelle. Grep-Bug in 2B-1 entdeckt nach 1-Iteration-Exit mit „0 success" Output. |
 
 ## Datenblatt-Provenienz-Audit (Stand 2026-06-13)
 
@@ -438,20 +439,51 @@ Backup: `~/Projekte/myglowmatch/backups/sheets_20260616_143526_pre_bondiq_haarzu
 
 Backup: `~/Projekte/myglowmatch/backups/sheets_20260616_203135_pre_block2_stufe3_cluster2_4ohne_k08/produktdatenbank.csv`. **Slot-Disjunktheits-Befund**: 4 Edits in 4 verschiedenen `slot_typ` (spuelung, shampoo, leave_in, finish). Konflikt-Slot shampoo nur mit Variable monat_black (essig_shampoo unverändert), daher diff-isoliert sicher. Test-Suite-Vollrun: alle 7 Profile pre↔post **Set-identisch** (0/7 Drift), via direktem API↔API-Vergleich verifiziert (ex401-407 vs ex408-414). Pipeline-Latenz erneut ~3 min/Profil, Polling-Cascade-Workaround per API-Direkt-Read.
 
-**Stufe-3-Gesamtbilanz** (Re-Klassifizierung 2026-06-16 abends nach strengem Vokabular-Match — siehe Klassen-Definitionen; aktualisiert nach 2B-1):
+**Stufe-3-Gesamtbilanz** — abgeschlossen 2026-06-17:
 
 | Klasse | Anzahl | Stand |
 |---|---|---|
-| Cluster 1 done (Bond-IQ + Curl) | 7 | ✅ 4 Edits, 0/7 Drift |
-| Cluster 2 Teil A done (4 ohne-K-08 + monat_black) | 5 | ✅ 4 Edits, 0/7 Drift |
-| Cluster 2 Teil B Sub-Cluster 2B-1 done (5 Default-Produkte) | 5 | ✅ 3 Edits, 0/7 Drift |
-| K-08-Aufnahme done (moxie_mousse, volumen_spray) | 2 | ✅ Vormittag |
+| Cluster 1 (Bond-IQ + Curl) | 7 | ✅ 4 Edits, 0/7 Drift |
+| Cluster 2 Teil A (4 ohne-K-08 + monat_black) | 5 | ✅ 4 Edits, 0/7 Drift |
+| Cluster 2 Teil B Sub-Cluster 2B-1 (5 Default-Produkte) | 5 | ✅ 3 Edits, 0/7 Drift |
+| Cluster 2 Teil B Sub-Cluster 2B-2 bis 2B-6 (12 Produkte) | 12 | ✅ 10 Edits, 0/7 Drift |
+| K-08-Aufnahme (moxie_mousse, volumen_spray) | 2 | ✅ Vormittag 2026-06-16 |
 | K-08-Match (Sheet = Header exakt, Status Quo) | 6 | ✅ kein Audit nötig |
-| K-08-Bestätigung mit Sheet-Plus (Cluster 2 Teil B restlich) | 11 | 🟡 K-06 für Plus-Tokens |
-| Ohne K-08-Beleg (Cluster 2 Teil B restlich) | 1 | 🟡 K-06-Vollaudit (super_feuchtigkeitsmaske) |
-| **Gesamt** | **37** | **19 done, 12 pending, 6 Status Quo** |
+| **Gesamt** | **37** | **✅ 37/37 abgeschlossen** |
 
 **Korrektur zur Vormittag-Klassifizierung**: 3 IR-Clinical-Produkte (`ir_clinical_kopfhautserum`, `ir_clinical_shampoo`, `ir_clinical_spuelung`) waren als K-08-Match geführt, sind streng aber K-08-Bestätigung: Sheet hat `duenn,kraftlos`, Header sagt nur „Verdichtend" → K-08 belegt nur `duenn` (Vokabular-Mapping: „Verdichtend"/„Volumen und Dichte" → duenn; „Volumen" → kraftlos sind getrennte Mappings). `kraftlos` braucht K-06-Verifikation. Pending-Anzahl somit 14 → 17.
+
+**Stufe 3 K-06-Vollaudit Cluster 2 Teil B Sub-Cluster 2B-2 bis 2B-6** (12 Produkte: super_feuchtigkeitsmaske + Renew/Replenish-Trio + IR-Clinical-Trio + Smoothing-Trio + Feuchtigkeit-Duo) — abgeschlossen 2026-06-17. 10 Edits, 2 unverändert. **6 K-06/K-07-Entfernungen + 8 Aufnahmen** = größte Audit-Welle der gesamten Stufe 3:
+
+| Sub | Produkt | Vorher | Nachher | Aktion |
+|---|---|---|---|---|
+| 2B-2 | `super_feuchtigkeitsmaske` | `trocken,frizz,glanzlos` | `trocken,glanzlos` | **−frizz K-06** (nur Inhaltsstoff-Bullets „Aminosäure-Komplex"/„Macadamia-Öl", kein Produktversprechen) |
+| 2B-3 | `renew_shampoo` | `trocken,glanzlos` | unverändert | WARUM „Glanz" + IDEAL „glänzendes" verankert |
+| 2B-3 | `renew_spuelung` | `trocken,glanzlos` | `trocken` | **−glanzlos K-06** (Wort „Glanz" / „glänzend" nirgendwo im renew_spuelung-PDF — Cross-Reference auf Replenish zählt nicht). Exakte Analogie zur `renew_spuelung.glanz`-Entfernung aus `nebenfunktionen` vom 2026-06-12 |
+| 2B-3 | `replenish_maske` | `trocken,glanzlos` | unverändert | WARUM-DU „Glanz wiederherstellen" + WARUM/IDEAL verankert |
+| 2B-4 | `ir_clinical_kopfhautserum` | `duenn,kraftlos` | `duenn,kraftlos,haarbruch` | +haarbruch (WARUM-DU „Haarbruch sofort reduziert" + IDEAL „Haarausfall beim Bürsten" + 92 %-Test) |
+| 2B-4 | `ir_clinical_shampoo` | `duenn,kraftlos` | `duenn,kraftlos,haarbruch` | +haarbruch (WARUM „84 % Haarausfall" + „Schäden verhindern" + IDEAL „Haarbruch erleben"). 89 %-Glanz-Test ohne Versprechen → K-07 NICHT |
+| 2B-4 | `ir_clinical_spuelung` | `duenn,kraftlos` | `duenn,kraftlos,haarbruch` | +haarbruch (WARUM „91 % Haarausfall" + „Schäden" + IDEAL „Haarbruch"). Glanz-94 %-Test bleibt draußen (K-07-Original-Präzedenz vom 2026-06-12 bestätigt) |
+| 2B-5 | `smoothing_deep_conditioner` | `frizz,trocken` | `frizz,trocken,haarbruch` | +haarbruch (WARUM „7x weniger Haarbruch" + IDEAL „weniger Haarbruch wünschen" + 87 %-Test). 56 %-Glanz-Test ohne Versprechen → K-07 NICHT |
+| 2B-5 | `smoothing_shampoo` | `frizz,glanzlos` | `frizz,haarbruch` | **−glanzlos K-07** (24 %-Test ohne Versprechen-Verankerung) + +haarbruch (WARUM „weniger Haarbruch" + 68 %-Test). Exakte Analogie zu `ir_clinical_spuelung.glanz`-Entfernung vom 2026-06-12 |
+| 2B-5 | `smoothing_tiefenbehandlung` | `frizz,trocken` | `frizz,haarbruch` | **−trocken K-06** (Feuchtigkeit nirgendwo im PDF für die Maske selbst; nur Conditioner-Produkttyp-Rückschluss) + +haarbruch (WARUM „91 % Haarbruch" + Test). Exakte Analogie zur `smoothing_tiefenbehandlung.feuchtigkeit`-Entfernung aus `nebenfunktionen` vom 2026-06-11 |
+| 2B-6 | `erweiterte_feuchtigkeit_spuelung` | `trocken,frizz` | `trocken,glanzlos` | **−frizz K-06** (Frizz nirgendwo im PDF — kein WARUM, IDEAL, ERGEBNISSE) + +glanzlos (WARUM-DU „strahlendem Glanz" + WARUM „glänzenderes" + 98 %-Test) |
+| 2B-6 | `feuchtigkeits_shampoo` | `trocken,frizz` | `trocken,glanzlos` | **−frizz K-06** (Frizz nirgendwo im PDF) + +glanzlos (WARUM-DU „strahlendem Glanz" + WARUM „glänzenderes" + IDEAL „Glanz erhöhen" + 82 %-Test) |
+
+**Drei historische K-06/K-07-Analogien bestätigt** für die haarzustand-Spalte:
+- `renew_spuelung.glanzlos` ↔ `renew_spuelung.glanz` aus `nebenfunktionen` (2026-06-12, K-07)
+- `smoothing_shampoo.glanzlos` ↔ `ir_clinical_spuelung.glanz` aus `nebenfunktionen` (2026-06-12, K-07)
+- `smoothing_tiefenbehandlung.trocken` ↔ `smoothing_tiefenbehandlung.feuchtigkeit` aus `nebenfunktionen` (2026-06-11, K-06)
+
+Damit ist die haarzustand-Spalte mit den gleichen K-06/K-07-Kriterien wie `nebenfunktionen` saniert. Spalten-übergreifende Konsistenz für jedes Produkt erreicht.
+
+**Frizz-Erbe-Cluster in Feuchtigkeit-Linie**: erweiterte_feuchtigkeit_spuelung + feuchtigkeits_shampoo hatten beide `frizz` im Sheet, das in keinem der beiden PDFs erwähnt wird. Klassisches ChatGPT-Erbe (vermutlich thematische Nähe „glatteres Haar" → „weniger Frizz").
+
+**IR-Clinical-Linie haarbruch-Lücke**: Alle 3 IR-Clinical-Produkte haben Haarausfall/Haarbruch als primäres Versprechen mit Tests (92 %/84 %/91 %), aber das Token fehlte komplett im Sheet. Klassisches K-08-Erbe (Header sagt nur „Verdichtend", also wurde „duenn" + „kraftlos" gesetzt; aber WARUM/IDEAL sind viel breiter).
+
+Backup: `~/Projekte/myglowmatch/backups/sheets_20260616_231557_pre_block2_stufe3_cluster2b_rest/produktdatenbank.csv`. **Slot-Konflikt verifiziert** (4 Edits in slot_typ=spuelung, 3 in shampoo, 2 in maske, 1 in kopfhaut_taeglich — nicht disjunkt). Aber haarzustand ist tot in Node 12 v2 (T-02 Code-verifiziert: keine Referenzen) → **diff-isoliert sicher trotz Konflikt, K-05-Fall, Routing-Wirkung null**. Test-Suite-Vollrun: alle 7 Profile pre↔post **Set-identisch** (0/7 Drift), via T-03 API↔API-Vergleich verifiziert (ex415-421 vs ex422-428).
+
+---
 
 **Stufe 3 K-06-Vollaudit Cluster 2 Teil B Sub-Cluster 2B-1** (5 Default-Produkte mit haarzustand=`-`: hitzeschutzspray, kopfhaut_peeling, scalp_comfort_behandlung, scalp_comfort_serum, the_champ) — abgeschlossen 2026-06-16 abends. 3 Aufnahme-Edits, 2 unverändert:
 
@@ -469,7 +501,17 @@ Backup: `~/Projekte/myglowmatch/backups/sheets_20260616_203135_pre_block2_stufe3
 
 Backup: `~/Projekte/myglowmatch/backups/sheets_20260616_220153_pre_block2_stufe3_cluster2b1/produktdatenbank.csv`. **Slot-Disjunktheit verifiziert** (3 Edits in 3 verschiedenen slot_typs: styling_1/kopfhaut/finish), Edit-Modus diff-isoliert. Test-Suite-Vollrun: alle 7 Profile pre↔post **Set-identisch** (0/7 Drift), via direktem API↔API-Vergleich verifiziert (ex408-414 vs ex415-421).
 
-**Stufe 3 noch offen**: K-06-Audit der **12 verbleibenden Produkte** (Cluster 2 Teil B restlich: 11 K-08-Bestätigungen mit Sheet-Plus + 1 ohne K-08-Beleg = `super_feuchtigkeitsmaske`). Geschätzter Aufwand: 1 weitere Session à la Block 1. **Node 12 v3 Reaktivierung von `haarzustand` + `haarstruktur` als zusätzliche Ranking-Stufen erst NACH komplettem K-06-Audit** — sonst riskieren wir ChatGPT-Erbe-Werte ins Routing einzubauen.
+**Stufe 3 ✅ ABGESCHLOSSEN 2026-06-17**: alle 37 Produkte K-06/K-07/K-08-auditiert. Gesamtbilanz Stufe 3: **24 Edits** (4 Cluster 1 + 4 Cluster 2A + 3 2B-1 + 10 2B-2-6 + 2 K-08-Aufnahmen Vormittag + 1 K-08-Aufnahme nebenwirkend) bei **0/7 Drift** über alle Edit-Wellen.
+
+**Aggregierte Cluster-2-Teil-B-2-bis-6-Befunde** zeigen größtes Erbe-Risiko genau dort, wo es methodisch erwartet wurde: bei den K-08-Bestätigungen mit Sheet-Plus. 6 K-06/K-07-Entfernungen bei 12 auditierten Produkten = **50 % ChatGPT-Erbe-Quote in dieser Klasse**, vs. 1 Entfernung (rejuvabeads.trocken) bei 5 Cluster-2A-Produkten und 0 Entfernungen bei 7 Cluster-1-Produkten. Lehre: **K-08-Bestätigung-Klasse hatte die meisten unbelegten Plus-Tokens**, weil Header-Token korrekt ist und Plus-Tokens als „naheliegend" gesetzt wurden ohne PDF-Verifikation.
+
+**Nächster Schritt: Node 12 v3 Reaktivierung** — `haarzustand` als zusätzliche Ranking-Stufe einbauen. Vorgehen:
+
+1. Node 12 v2 → v3 Design: `haarzustand` als **Stufe 1.5** zwischen aktuell Stufe 1 (Hauptfunktion-Match via map_profil_funktion) und Stufe 2 (Score). `rawInput.hair_condition` → Produkt-`haarzustand`-Token-Match via Set-Schnittmenge, lexikographisch.
+2. Parallel `haarstruktur` als Stufe 4 einbauen (3 PDF-belegte Differenzierungen aus 2026-06-16-Audit).
+3. Vor Deploy: Trace-Update analog Node-12-v2-Deploy (`fired_rules` um `RANK-haarzustand` und `RANK-haarstruktur` ergänzen).
+4. Regression: 7-Profil-Vollrun, **Routing-Drift erwartet** (anders als bisher) — manueller Profil-für-Profil-Check ob neue Differenzierungen sinnvoll sind. Bei Sarah z.B. spielt jetzt `stark_geschaedigt`-Match auf Bond-IQ-Linie eine Rolle.
+5. Sobald validiert: Block 3 (Bool-Flags + Pflegelevel + ausschluss_bei) und Block 4 (Doku-Spalten) als Folge-Sessions.
 
 ## Scoring-Audit & Node-12-Trace (2026-06-15)
 
