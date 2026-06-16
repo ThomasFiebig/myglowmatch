@@ -438,7 +438,38 @@ Backup: `~/Projekte/myglowmatch/backups/sheets_20260616_143526_pre_bondiq_haarzu
 
 Backup: `~/Projekte/myglowmatch/backups/sheets_20260616_203135_pre_block2_stufe3_cluster2_4ohne_k08/produktdatenbank.csv`. **Slot-Disjunktheits-Befund**: 4 Edits in 4 verschiedenen `slot_typ` (spuelung, shampoo, leave_in, finish). Konflikt-Slot shampoo nur mit Variable monat_black (essig_shampoo unverändert), daher diff-isoliert sicher. Test-Suite-Vollrun: alle 7 Profile pre↔post **Set-identisch** (0/7 Drift), via direktem API↔API-Vergleich verifiziert (ex401-407 vs ex408-414). Pipeline-Latenz erneut ~3 min/Profil, Polling-Cascade-Workaround per API-Direkt-Read.
 
-**Stufe 3 noch offen**: K-06-Vollaudit der **14 verbleibenden Produkte** (Cluster 2 Teil B: 8 K-08-Bestätigungen mit Sheet-Plus + 6 weitere ohne K-08-Beleg; 7 aus Cluster 1 + 5 aus Cluster 2 Teil A erledigt). Geschätzter Aufwand: 1-2 weitere Sessions à la Block 1. **Node 12 v3 Reaktivierung von `haarzustand` + `haarstruktur` als zusätzliche Ranking-Stufen erst NACH komplettem K-06-Audit** — sonst riskieren wir ChatGPT-Erbe-Werte ins Routing einzubauen.
+**Stufe-3-Gesamtbilanz** (Re-Klassifizierung 2026-06-16 abends nach strengem Vokabular-Match — siehe Klassen-Definitionen; aktualisiert nach 2B-1):
+
+| Klasse | Anzahl | Stand |
+|---|---|---|
+| Cluster 1 done (Bond-IQ + Curl) | 7 | ✅ 4 Edits, 0/7 Drift |
+| Cluster 2 Teil A done (4 ohne-K-08 + monat_black) | 5 | ✅ 4 Edits, 0/7 Drift |
+| Cluster 2 Teil B Sub-Cluster 2B-1 done (5 Default-Produkte) | 5 | ✅ 3 Edits, 0/7 Drift |
+| K-08-Aufnahme done (moxie_mousse, volumen_spray) | 2 | ✅ Vormittag |
+| K-08-Match (Sheet = Header exakt, Status Quo) | 6 | ✅ kein Audit nötig |
+| K-08-Bestätigung mit Sheet-Plus (Cluster 2 Teil B restlich) | 11 | 🟡 K-06 für Plus-Tokens |
+| Ohne K-08-Beleg (Cluster 2 Teil B restlich) | 1 | 🟡 K-06-Vollaudit (super_feuchtigkeitsmaske) |
+| **Gesamt** | **37** | **19 done, 12 pending, 6 Status Quo** |
+
+**Korrektur zur Vormittag-Klassifizierung**: 3 IR-Clinical-Produkte (`ir_clinical_kopfhautserum`, `ir_clinical_shampoo`, `ir_clinical_spuelung`) waren als K-08-Match geführt, sind streng aber K-08-Bestätigung: Sheet hat `duenn,kraftlos`, Header sagt nur „Verdichtend" → K-08 belegt nur `duenn` (Vokabular-Mapping: „Verdichtend"/„Volumen und Dichte" → duenn; „Volumen" → kraftlos sind getrennte Mappings). `kraftlos` braucht K-06-Verifikation. Pending-Anzahl somit 14 → 17.
+
+**Stufe 3 K-06-Vollaudit Cluster 2 Teil B Sub-Cluster 2B-1** (5 Default-Produkte mit haarzustand=`-`: hitzeschutzspray, kopfhaut_peeling, scalp_comfort_behandlung, scalp_comfort_serum, the_champ) — abgeschlossen 2026-06-16 abends. 3 Aufnahme-Edits, 2 unverändert:
+
+| Produkt | Vorher | Nachher | Begründung |
+|---|---|---|---|
+| `hitzeschutzspray` | `-` | `haarbruch` | +haarbruch (WARUM „Schäden und Haarbruch vermeiden" + IDEAL „Stärke und Elastizität verbessern" + SCHON-GEWUSST „Haarbruch" + Test „Stärke und Elastizität"). Glanz-95 %-Test NICHT aufgenommen: IDEAL sagt „Glanz **bewahren**" (vor Hitze-Verlust), nicht „glanzlos heilen" — K-04 strikt, Produkt adressiert nicht glanzlos-Profil |
+| `kopfhaut_peeling` | `-` | `glanzlos` | +glanzlos (WARUM-DU explizit „abgestorbene Hautzellen, Produktablagerungen und Umweltschadstoffe aufzulösen, **die das Haar glanzlos erscheinen lassen**"). Feuchtigkeit-Erwähnung („Angereichert mit REJUVENIQE® spendet es Feuchtigkeit") in Verbund-Aussage zu schwach für trocken — Hauptthema Reinigung |
+| `scalp_comfort_behandlung` | `-` (unverändert) | — | Alle „Trockenheit"-Erwähnungen (Header + 89 %-Test + 96 %-Test + IDEAL) sind explizit **Kopfhaut-Trockenheit**, nicht Haar. K-04-Disziplin: kopfhaut-Probleme gehören in `kopfhaut`-Spalte (dort `trocken,empfindlich,schuppig,gereizt` bereits belegt) |
+| `scalp_comfort_serum` | `-` (unverändert) | — | Identische K-04-Grenzfall-Argumentation wie scalp_comfort_behandlung |
+| `the_champ` | `-` | `kraftlos` | +kraftlos (WARUM „**Verleiht Volumen** und Textur"). Volumen → kraftlos per Vokabular-Mapping. Volumen-Boost ist bekannter Trockenshampoo-Effekt |
+
+**Methodische Lehre — Spalten-Disziplin Kopfhaut vs. Haar**: Scalp-Comfort-Linie ist Lehrbeispiel für K-04 bei mehrdeutigen Begriffen. PDF erwähnt 4× „Trockenheit" + 2× „Feuchtigkeit" — aber alle Belege referenzieren explizit `Kopfhaut`, nicht Haar. Auf Vermutung „trocken hier auch im Haar?" zu setzen wäre genau der K-04-Fehler, den die Konvention verhindern soll. **Spalten-Trennung Sheet-architektonisch zwingend**: haarzustand-Vokabular gilt nur für Wirkungs-Aussagen am Haar, kopfhaut-Probleme gehören in die kopfhaut-Spalte.
+
+**Methodische Lehre — Glanz „bewahren" vs. „heilen"**: hitzeschutzspray adressiert Glanz-Erhalt (Schutz vor Hitze-bedingtem Glanz-Verlust), nicht Glanz-Wiederherstellung am bereits glanzlosen Haar. K-04 strikt: ein Profil-Match „glanzlos" würde das Produkt fälschlich für Anti-glanzlos-Bedarf empfehlen, statt für Hitze-Styling-Schutz. Symptom-Profil ≠ Schutz-Funktion.
+
+Backup: `~/Projekte/myglowmatch/backups/sheets_20260616_220153_pre_block2_stufe3_cluster2b1/produktdatenbank.csv`. **Slot-Disjunktheit verifiziert** (3 Edits in 3 verschiedenen slot_typs: styling_1/kopfhaut/finish), Edit-Modus diff-isoliert. Test-Suite-Vollrun: alle 7 Profile pre↔post **Set-identisch** (0/7 Drift), via direktem API↔API-Vergleich verifiziert (ex408-414 vs ex415-421).
+
+**Stufe 3 noch offen**: K-06-Audit der **12 verbleibenden Produkte** (Cluster 2 Teil B restlich: 11 K-08-Bestätigungen mit Sheet-Plus + 1 ohne K-08-Beleg = `super_feuchtigkeitsmaske`). Geschätzter Aufwand: 1 weitere Session à la Block 1. **Node 12 v3 Reaktivierung von `haarzustand` + `haarstruktur` als zusätzliche Ranking-Stufen erst NACH komplettem K-06-Audit** — sonst riskieren wir ChatGPT-Erbe-Werte ins Routing einzubauen.
 
 ## Scoring-Audit & Node-12-Trace (2026-06-15)
 
