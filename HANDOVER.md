@@ -424,7 +424,21 @@ Backup: `~/Projekte/myglowmatch/backups/sheets_20260616_143526_pre_bondiq_haarzu
 
 **Methodische Lehre**: Drift-Vergleich künftig immer direkt API↔API (Set-Vergleich), nicht gegen Listings in Session-Doku — die Session-Doku vom 2026-06-16 Vormittag listete Bianca und Maria mit zu wenigen Produkten, was beim ersten Vergleich falsche Drift-Treffer produzierte.
 
-**Stufe 3 noch offen**: K-06-Vollaudit der **19 verbleibenden Produkte** (8 K-08-Bestätigungen mit Sheet-Plus + 11 ohne K-08-Beleg; 7 aus Cluster 1 erledigt). Geschätzter Aufwand: 1-2 weitere Sessions à la Block 1. **Node 12 v3 Reaktivierung von `haarzustand` + `haarstruktur` als zusätzliche Ranking-Stufen erst NACH komplettem K-06-Audit** — sonst riskieren wir ChatGPT-Erbe-Werte ins Routing einzubauen.
+**Stufe 3 K-06-Vollaudit Cluster 2 Teil A** (4 ohne-K-08-Beleg: essig_shampoo, essig_spuelung, monat_black, rejuvabeads, rejuveniqe_oel) — abgeschlossen 2026-06-16 abends. 4 Edits, 1 unverändert:
+
+| Produkt | Vorher | Nachher | Begründung |
+|---|---|---|---|
+| `essig_shampoo` | `glanzlos` | `glanzlos` (unverändert) | „glanzlos" explizit in WARUM-DU-Versprechen verankert; keine weiteren Tokens PDF-belegt (Apfelessig-Glanz an geschädigtem Haar = Inhaltsstoff-Mechanik, K-06 raus) |
+| `essig_spuelung` | `glanzlos` | `glanzlos,trocken` | +trocken (WARUM „hydratisiert Haar"; IDEAL „mit Feuchtigkeit versorgt"; WARUM-DU „bewahren die Feuchtigkeit"; 12 %-Test). glanzlos bestätigt (WARUM-DU „Glanz", IDEAL „glänzend macht", 64 %-Test, SCHON-GEWUSST „stumpf und leblos") |
+| `monat_black` | `kraftlos` | `kraftlos,duenn` | +duenn (K-08 Header-Untertitel „Verdichtend" + IDEAL „Die Dichte verbessern und das Haar voller erscheinen lassen"). Exakte Analogie zu moxie_mousse + volumen_spray vom Vormittag. kraftlos bestätigt („voller erscheinen") |
+| `rejuvabeads` | `spliss,trocken,haarbruch` | `spliss,haarbruch,frizz` | **−trocken (K-06: nirgends im PDF erwähnt — weder „trocken" noch „Feuchtigkeit" noch „Trockenheit")**; +frizz (IDEAL „Verknotungen und Frizz … reduzieren möchten"). spliss + haarbruch via K-08 Header und WARUM/IDEAL/Beschreibung verankert |
+| `rejuveniqe_oel` | `trocken,glanzlos` | `trocken,glanzlos,frizz` | +frizz (WARUM „Glättet die Schuppenschicht, um Frizz zu reduzieren", IDEAL „Frizz kontrollieren", ANWENDUNG „Frizz und abstehende Haare zu bändigen"). trocken + glanzlos PDF-verankert |
+
+**Erste K-06-konforme haarzustand-Entfernung außerhalb Bond-IQ-Linie**: `rejuvabeads.trocken` raus. Das Wort „trocken" / „Feuchtigkeit" / „Trockenheit" kommt im rejuvabeads-PDF nirgendwo vor (kein WARUM, IDEAL, VORTEILE, Beschreibung, SCHON-GEWUSST). Cross-Reference auf REJUVENIQE-Inhaltsstoff zählt nicht (K-06 Mechanik-Ausschluss). Vermutlich ChatGPT-Erbe-Wert aus Vor-Audit-Zeit. Symmetrie-Bestätigung: K-06 wirkt nicht nur bei Funktions-Spalten (bond_iq.bonding, smoothing_tiefenbehandlung.feuchtigkeit, renew_spuelung.glanz, curl_creme.elastizitaet …), sondern auch bei Filter-Spalten.
+
+Backup: `~/Projekte/myglowmatch/backups/sheets_20260616_203135_pre_block2_stufe3_cluster2_4ohne_k08/produktdatenbank.csv`. **Slot-Disjunktheits-Befund**: 4 Edits in 4 verschiedenen `slot_typ` (spuelung, shampoo, leave_in, finish). Konflikt-Slot shampoo nur mit Variable monat_black (essig_shampoo unverändert), daher diff-isoliert sicher. Test-Suite-Vollrun: alle 7 Profile pre↔post **Set-identisch** (0/7 Drift), via direktem API↔API-Vergleich verifiziert (ex401-407 vs ex408-414). Pipeline-Latenz erneut ~3 min/Profil, Polling-Cascade-Workaround per API-Direkt-Read.
+
+**Stufe 3 noch offen**: K-06-Vollaudit der **14 verbleibenden Produkte** (Cluster 2 Teil B: 8 K-08-Bestätigungen mit Sheet-Plus + 6 weitere ohne K-08-Beleg; 7 aus Cluster 1 + 5 aus Cluster 2 Teil A erledigt). Geschätzter Aufwand: 1-2 weitere Sessions à la Block 1. **Node 12 v3 Reaktivierung von `haarzustand` + `haarstruktur` als zusätzliche Ranking-Stufen erst NACH komplettem K-06-Audit** — sonst riskieren wir ChatGPT-Erbe-Werte ins Routing einzubauen.
 
 ## Scoring-Audit & Node-12-Trace (2026-06-15)
 
