@@ -378,6 +378,37 @@ if (kopfhaut.includes(p.primary_scalp_state) || kopfhaut.length === 0)
 
 **Ergebnis Cross-Check**: 0 zusätzliche Edits. ir_clinical_kopfhautserum (Edit C, 13.06.) bleibt der einzige übersehene Treffer im Default-Pool. Stufe 1 damit vollständig: 6 non-Default + 1 Cross-Check-Treffer auditiert, 2 Edits (A+C) gefahren, 0/7 Routing-Drift.
 
+**Block 2 Stufe 2a** — `haarstaerke`-Spalte (Pool-Filter, Node 08 Z. 110-113), abgeschlossen 2026-06-16. Audit aller 16 non-default-Produkte: alle K-08-belegt (Header-Untertitel sagt explizit „Feines/Mittleres/Dickes Haar"). Bei 2 smoothing-Produkten mit „Alle Haartypen"-Header gewinnt die konkretere IDEAL-FÜR-Bullet (K-03). Cross-Check der 21 Default-Produkte: 0 übersehene Treffer (curl_*-Anwendungs-Hinweise und FUNKTIONIERT-GUT-MIT-Cross-References zählen nicht als K-03/K-08-Beleg; moxie_mousse explizit „alle Haartypen" im Header + FAQ). **Keine Edits, keine Drift.**
+
+**Block 2 Stufe 2b** — `haarstruktur`-Spalte (TOT in Node 12 v2, Stammdaten-Audit für künftige Reaktivierung), abgeschlossen 2026-06-16. Cross-Audit aller 37 PDFs: nur 4 von 37 differenzieren Locken-Eignung explizit (curl_auffrischer/creme/gelee bereits korrekt im Sheet, plus super_feuchtigkeitsmaske als übersehener Treffer). **1 Edit**: `super_feuchtigkeitsmaske.haarstruktur` = `wellig,lockig,kraus` (Header explizit „Locken, Wellen & Coils / Alle Haartypen / Mittlere bis dicke Haarstruktur"). K-05-Fall: Sheet-Edit ohne Routing-Drift (haarstruktur in Node 12 v2 nicht ausgewertet; Node 17 nutzt `data.normalized.hair_structure` aus Profil, nicht die Produkt-Spalte). Backup: `~/Projekte/myglowmatch/backups/sheets_20260616_100840_pre_haarstruktur_super_maske/produktdatenbank.csv`.
+
+**Block 2 Stufe 3** — `haarzustand`-Spalte (TOT in Node 12 v2), **in Arbeit**. K-08-Header-Audit über 37 PDFs (2026-06-16) ergab 4 Klassen:
+
+| Klasse | Anzahl | Aktion |
+|---|---|---|
+| K-08-Match (Sheet = Header) | 9 | Status Quo ✓ |
+| **K-08-Aufnahme** (Header hat Token, Sheet nicht) | 2 | **2 Edits durchgeführt** |
+| K-08-Bestätigung mit Sheet-Plus (Header bestätigt nur Teil) | 8 | K-06-Audit nötig |
+| Header fehlt / sagt anderes (Bond-IQ-Layout, curl-Linie, essig, monat_black, rejuvabeads/oel) | 18 | K-06-Vollaudit zwingend |
+
+**Edits 2026-06-16** (K-08-Aufnahmen, beide K-05-Fälle):
+- `moxie_mousse.haarzustand` = `kraftlos,frizz` → `kraftlos,frizz,duenn` (Header „Volumen und Dichte" → duenn-Profil)
+- `volumen_spray.haarzustand` = `kraftlos` → `kraftlos,duenn` (Header „Volumen und Dichte" → duenn-Profil)
+
+Vokabular-Mapping Wirkungs-Sprache (PDF-Header) → Profil-Sprache (Sheet/Profil):
+- `Trockenheit` / `Trockenes Haar` → `trocken`
+- `Volumen` → `kraftlos`
+- `Verdichtend` / `Volumen und Dichte` → `duenn`
+- `Frizz` → `frizz`
+- `Schäden` / `Haarbruch` → `haarbruch`
+- `Spliss` → `spliss`
+- `glanzlos` / `stumpf` → `glanzlos`
+- `stark geschädigt` → `stark_geschaedigt`
+
+Backup: `~/Projekte/myglowmatch/backups/sheets_20260616_110844_pre_haarzustand_k08_aufnahmen/produktdatenbank.csv`. Drift-Check via Code-Inspektion (T-02): Node 12 v2 hat keine Referenzen auf `haarzustand`, Node 17 nutzt `rawInput.hair_condition` aus Profil (nicht Produkt-Spalte). **0/7 Routing-Drift möglich, kein Test-Run nötig.**
+
+**Stufe 3 noch offen**: K-06-Vollaudit der 26 unverifizierten Produkte (8 K-08-Bestätigungen mit Sheet-Plus + 18 ohne K-08-Beleg). Geschätzter Aufwand: 2-3 Sessions à la Block 1. **Node 12 v3 Reaktivierung von `haarzustand` + `haarstruktur` als zusätzliche Ranking-Stufen erst NACH komplettem K-06-Audit** — sonst riskieren wir ChatGPT-Erbe-Werte ins Routing einzubauen.
+
 ## Scoring-Audit & Node-12-Trace (2026-06-15)
 
 Anlass: Tomi-Grundsatzfrage zu Sinnhaftigkeit/Determinismus/Skalierbarkeit der Punkteverteilung. Audit zeigte: System A (Node 06 Pflegelevel) ist sheet-getrieben + plausibel (Doku-Schuld bei Punkt-Höhen, kein Logik-Bug); System B (Node 12 Produkt-Slot-Score, 6 Inline-Regeln) hat drei Quirks (haarstruktur-Asymmetrie, Doppelzählung Hauptfunktion+Goal, Tie-Breaking via Sheet-Reihenfolge) plus zwei Architektur-Probleme (Inline-Gewichte, keine Score-Aufschlüsselung im Output). Block-2-Audit ist **pausiert** bis Scoring-Reparatur, weil jeder neue `nebenfunktionen`-Token durch die ungeprüfte Doppelzählungs-Logik läuft.
@@ -451,7 +482,8 @@ Statt Punkte-Scoring jetzt **lexikographische 6-Stufen-Hierarchie**. Erste Krite
 
 | Prio | Aufgabe | Stelle |
 |---|---|---|
-| 🟡 (REAKTIVIERT) | Datenblatt-Provenienz-Audit — **Block 1 abgeschlossen** 2026-06-12; **Block 2 Stufe 1 (`kopfhaut`) abgeschlossen** 2026-06-15 (K-08, 2 Edits, 0 Cross-Check-Funde). **Als nächstes: Block 2 Stufe 2** (`haarstaerke` Pool-Filter, `haarstruktur` jetzt aus Scoring entfernt). Block 2 Stufe 3 (`haarzustand` weiterhin toter Code) + Block 3 Rest + Block 4 danach. | siehe „Datenblatt-Provenienz-Audit" oben |
+| 🟡 (in Arbeit) | Datenblatt-Provenienz-Audit — **Block 1 abgeschlossen** 2026-06-12; **Block 2 Stufe 1 (`kopfhaut`) abgeschlossen** 2026-06-15; **Block 2 Stufe 2a (`haarstaerke`) abgeschlossen** 2026-06-16 (0 Edits, 0 Funde); **Block 2 Stufe 2b (`haarstruktur` für Reaktivierung) abgeschlossen** 2026-06-16 (1 Edit super_feuchtigkeitsmaske, K-05). **Als nächstes: Block 2 Stufe 3 (`haarzustand`) K-06-Vollaudit** — 2 K-08-Aufnahmen gemacht (moxie_mousse, volumen_spray), 26 Produkte brauchen K-06-Audit (~2-3 Sessions Block-1-Stil). Block 3 Rest + Block 4 danach. | siehe „Datenblatt-Provenienz-Audit" oben |
+| 🟡 | **Node 12 v3 Reaktivierung `haarzustand` + `haarstruktur`** als zusätzliche Ranking-Stufen — erst NACH Block 2 Stufe 3 K-06-Vollaudit (sonst ChatGPT-Erbe-Werte im Routing). Vermutlich `haarzustand` als Stufe 1.5 (direkter Profil-Match ohne Mapping nötig, da Sheet-Werte schon in Profil-Sprache), `haarstruktur` als zusätzliche Stufe 4. | Node 12 v2, siehe „Datenblatt-Provenienz-Audit" Stufe 3 oben |
 | 🟢 (erledigt 2026-06-16) | **Scoring-Reparatur Node 12** abgeschlossen. Schritte 1-5 alle fertig: Trace eingebaut → Befunde gesammelt → Ranking-Hierarchie deployed (6 Stufen) → `map_profil_funktion`-Sheet als Mapping behebt das Vokabular-Gap → Sheet-First-Architektur konsistent zu Node 06. 0/7 Routing-Drift, Erklärbarkeit pro Slot, deterministisches Tie-Breaking. | siehe „Scoring-Audit & Node-12-Trace"-Block oben |
 | 🟡 | Sheet auf weitere `ist_bonding`-Misuses als Linien-Proxy prüfen — `ist_bonding` ist seit K-06 reines Wirkungs-Flag, Routing-Logik gehört auf `produktlinie` | Tabs: `map_slot_rules`, `map_conflict_rules`, weitere Filter |
 | 🟢 (geklärt) | `kopfhaut`-Spalte der Produktdatenbank: **Score-Bonus +2 bei scalp-Match, kein Pool-Filter** (Node 12 Z. 26, Code-Zitat im Block-2-Stufe-1-Block). Block-2-Edits wirken als Score-Faktor für künftige Profile mit passendem scalp_status, nicht als Pool-Filter. Cross-Check für `haarstruktur` + `haarzustand` separat noch offen (`haarstaerke` ist verifiziert aktiv als Filter). | Node 12 Z. 26 |
