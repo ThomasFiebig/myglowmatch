@@ -407,7 +407,24 @@ Vokabular-Mapping Wirkungs-Sprache (PDF-Header) → Profil-Sprache (Sheet/Profil
 
 Backup: `~/Projekte/myglowmatch/backups/sheets_20260616_110844_pre_haarzustand_k08_aufnahmen/produktdatenbank.csv`. Drift-Check via Code-Inspektion (T-02): Node 12 v2 hat keine Referenzen auf `haarzustand`, Node 17 nutzt `rawInput.hair_condition` aus Profil (nicht Produkt-Spalte). **0/7 Routing-Drift möglich, kein Test-Run nötig.**
 
-**Stufe 3 noch offen**: K-06-Vollaudit der 26 unverifizierten Produkte (8 K-08-Bestätigungen mit Sheet-Plus + 18 ohne K-08-Beleg). Geschätzter Aufwand: 2-3 Sessions à la Block 1. **Node 12 v3 Reaktivierung von `haarzustand` + `haarstruktur` als zusätzliche Ranking-Stufen erst NACH komplettem K-06-Audit** — sonst riskieren wir ChatGPT-Erbe-Werte ins Routing einzubauen.
+**Stufe 3 K-06-Vollaudit Cluster 1** (Bond-IQ-Linie 4 + Curl-Linie 3) — abgeschlossen 2026-06-16. 4 Edits (alle Bond-IQ), Curl-Linie unverändert:
+
+| Produkt | Vorher | Nachher | Begründung |
+|---|---|---|---|
+| `bond_iq_shampoo` | `stark_geschaedigt,haarbruch,spliss` | `stark_geschaedigt,haarbruch,trocken,frizz` | −spliss (K-06: nur Baobab-Inhaltsstoff, nicht Produktversprechen); +trocken („Spendet Feuchtigkeit" + 89%-Test „trockenem/strapaziertem Haar"); +frizz („Bändigt Frizz") |
+| `bond_iq_spuelung` | `stark_geschaedigt,haarbruch,spliss` | `stark_geschaedigt,haarbruch,trocken,frizz` | −spliss (K-06: nur Baobab-Inhaltsstoff); +trocken („Spendet intensive Feuchtigkeit"); +frizz (89%-Test anchored „glättet die Schuppenschicht") |
+| `bond_iq_leave_in` | `stark_geschaedigt,haarbruch` | `stark_geschaedigt,haarbruch,trocken,frizz` | +trocken („Versorgt trockenes und geschädigtes Haar mit tiefenwirksamer Feuchtigkeit"); +frizz („Glättet Frizz") |
+| `bond_iq_night_day_serum` | `stark_geschaedigt,spliss` | `stark_geschaedigt,spliss,haarbruch,trocken,frizz` | +haarbruch („um Haarbruch vorzubeugen", 2× im Produktversprechen); +trocken („Spendet Feuchtigkeit"); +frizz („bändigt Frizz" + 91%-Test) |
+
+Curl-Linie (`curl_auffrischer`, `curl_creme`, `curl_gelee`) unverändert auf `trocken,frizz` — PDF-Belege ausreichend, keine zusätzlichen Tokens belegt.
+
+**2 Spliss-Entfernungen** (shampoo + spuelung) sind exakte K-06-Analogie zur Bond-IQ-bonding-Entfernung vom 2026-06-11 (Inhaltsstoff-Mechanik zählt nicht als Produktversprechen). Konsistenzprinzip: symmetrisch für Aufnahme/Entfernung.
+
+Backup: `~/Projekte/myglowmatch/backups/sheets_20260616_143526_pre_bondiq_haarzustand_k06/produktdatenbank.csv`. **Slot-Disjunktheit verifiziert** (4 Bond-IQ in 4 verschiedenen slot_typs: shampoo/spuelung/leave_in/nacht_serum), Edit-Modus diff-isoliert (1 Run nach allen 4). Test-Suite-Vollrun: alle 7 Profile pre↔post **Set-identisch** (0/7 Drift), via direktem API↔API-Vergleich verifiziert (ex393-400 vs ex401-407).
+
+**Methodische Lehre**: Drift-Vergleich künftig immer direkt API↔API (Set-Vergleich), nicht gegen Listings in Session-Doku — die Session-Doku vom 2026-06-16 Vormittag listete Bianca und Maria mit zu wenigen Produkten, was beim ersten Vergleich falsche Drift-Treffer produzierte.
+
+**Stufe 3 noch offen**: K-06-Vollaudit der **19 verbleibenden Produkte** (8 K-08-Bestätigungen mit Sheet-Plus + 11 ohne K-08-Beleg; 7 aus Cluster 1 erledigt). Geschätzter Aufwand: 1-2 weitere Sessions à la Block 1. **Node 12 v3 Reaktivierung von `haarzustand` + `haarstruktur` als zusätzliche Ranking-Stufen erst NACH komplettem K-06-Audit** — sonst riskieren wir ChatGPT-Erbe-Werte ins Routing einzubauen.
 
 ## Scoring-Audit & Node-12-Trace (2026-06-15)
 
@@ -482,7 +499,7 @@ Statt Punkte-Scoring jetzt **lexikographische 6-Stufen-Hierarchie**. Erste Krite
 
 | Prio | Aufgabe | Stelle |
 |---|---|---|
-| 🟡 (in Arbeit) | Datenblatt-Provenienz-Audit — **Block 1 abgeschlossen** 2026-06-12; **Block 2 Stufe 1 (`kopfhaut`) abgeschlossen** 2026-06-15; **Block 2 Stufe 2a (`haarstaerke`) abgeschlossen** 2026-06-16 (0 Edits, 0 Funde); **Block 2 Stufe 2b (`haarstruktur` für Reaktivierung) abgeschlossen** 2026-06-16 (1 Edit super_feuchtigkeitsmaske, K-05). **Als nächstes: Block 2 Stufe 3 (`haarzustand`) K-06-Vollaudit** — 2 K-08-Aufnahmen gemacht (moxie_mousse, volumen_spray), 26 Produkte brauchen K-06-Audit (~2-3 Sessions Block-1-Stil). Block 3 Rest + Block 4 danach. | siehe „Datenblatt-Provenienz-Audit" oben |
+| 🟡 (in Arbeit) | Datenblatt-Provenienz-Audit — **Block 1 abgeschlossen** 2026-06-12; **Block 2 Stufe 1 (`kopfhaut`) abgeschlossen** 2026-06-15; **Block 2 Stufe 2a (`haarstaerke`) abgeschlossen** 2026-06-16 (0 Edits, 0 Funde); **Block 2 Stufe 2b (`haarstruktur` für Reaktivierung) abgeschlossen** 2026-06-16 (1 Edit super_feuchtigkeitsmaske, K-05); **Block 2 Stufe 3 K-06-Cluster 1 (Bond-IQ + Curl) abgeschlossen** 2026-06-16 (4 Edits Bond-IQ inkl. 2 Spliss-Entfernungen K-06, 0/7 Drift). **Als nächstes: Stufe 3 K-06-Cluster 2** — die übrigen 19 Produkte (essig, monat_black, rejuvabeads/oel + 8 K-08-Bestätigungen mit Sheet-Plus + 8 weitere ohne K-08-Beleg), ~1-2 Sessions. Block 3 Rest + Block 4 danach. | siehe „Datenblatt-Provenienz-Audit" oben |
 | 🟡 | **Node 12 v3 Reaktivierung `haarzustand` + `haarstruktur`** als zusätzliche Ranking-Stufen — erst NACH Block 2 Stufe 3 K-06-Vollaudit (sonst ChatGPT-Erbe-Werte im Routing). Vermutlich `haarzustand` als Stufe 1.5 (direkter Profil-Match ohne Mapping nötig, da Sheet-Werte schon in Profil-Sprache), `haarstruktur` als zusätzliche Stufe 4. | Node 12 v2, siehe „Datenblatt-Provenienz-Audit" Stufe 3 oben |
 | 🟢 (erledigt 2026-06-16) | **Scoring-Reparatur Node 12** abgeschlossen. Schritte 1-5 alle fertig: Trace eingebaut → Befunde gesammelt → Ranking-Hierarchie deployed (6 Stufen) → `map_profil_funktion`-Sheet als Mapping behebt das Vokabular-Gap → Sheet-First-Architektur konsistent zu Node 06. 0/7 Routing-Drift, Erklärbarkeit pro Slot, deterministisches Tie-Breaking. | siehe „Scoring-Audit & Node-12-Trace"-Block oben |
 | 🟡 | Sheet auf weitere `ist_bonding`-Misuses als Linien-Proxy prüfen — `ist_bonding` ist seit K-06 reines Wirkungs-Flag, Routing-Logik gehört auf `produktlinie` | Tabs: `map_slot_rules`, `map_conflict_rules`, weitere Filter |
