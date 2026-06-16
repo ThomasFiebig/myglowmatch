@@ -33,7 +33,7 @@ Faktische Momentaufnahme des MONAT-Haaranalyse-Systems. Kein Verlauf, keine Disk
 
 **Wichtig:** `MONAT_Produktdatenbank_KOMPLETT` ist der **Sheet-Dokumenten-Name** (Doc-ID `1Osmmkrtk4uu5hz6Xk65-HgVgoLMSAYhe1VXOTjLtx0A`), nicht ein Tab-Name. Tabs werden im Code per Loader-Node mit ihrem exakten Namen referenziert.
 
-### Vom aktuellen Workflow genutzte Tabs (8)
+### Vom aktuellen Workflow genutzte Tabs (9)
 
 | Tab | Spalten / Zweck | Genutzt von |
 |---|---|---|
@@ -42,6 +42,7 @@ Faktische Momentaufnahme des MONAT-Haaranalyse-Systems. Kein Verlauf, keine Disk
 | `map_pflegelevel_scoring` | Punktevergabe-Regeln pro Profilfeld | Node 06a |
 | `map_pflegelevel_overrides` | Floor/Cap-Regeln (PFL-OV-01 bis PFL-OV-04) | Node 06b |
 | `map_max_products` | 2D-Lookup `routine_preference × pflegelevel → max_products` | Node 06c |
+| `map_profil_funktion` (NEU 2026-06-16) | Profil-Sprache → Wirkungs-Sprache (z.B. `hair_condition=trocken → feuchtigkeit`). 9 Mappings für `hair_condition`. Behebt das Vokabular-Gap für Node-12-Stufe-1. | Node 06d → Node 12 |
 | `map_slot_rules` | REQ-Regeln (25 aktive Regeln, Trigger + Filter) | Node 10 |
 | `map_conflict_rules` | CON-Regeln (CON-01 bis CON-12), match_typ + action | Node 13 |
 | `map_pool_filter` | POOL-01 (Bonding) und POOL-03 (Locken-Styling). POOL-02 (Gewicht) bewusste Lücke. | Node 08a |
@@ -61,7 +62,7 @@ Beim Service-Account-Setup am 2026-06-10 sichtbar geworden, am selben Tag auditi
 
 **Dominanter nächster Schritt**: Node 05 (17 Bool-Flag-Heuristiken) — `map_derived_variables` braucht aber erst Format-Umbau (strukturierte Spalten statt Freitext-Doku), bevor Migration möglich. `map_input_normalization`-Migration wurde am 2026-06-10 verworfen: Frontend sendet bereits technische Werte, Node 03 war im Wesentlichen ein No-Op über Tally-Legacy-Maps → komplett entfernt statt migriert.
 
-## Workflow-Nodes (24)
+## Workflow-Nodes (25)
 
 Datenflussreihenfolge (Hauptpfad):
 
@@ -76,21 +77,22 @@ Datenflussreihenfolge (Hauptpfad):
 | 7 | 06a Pflegelevel-Scoring laden | googleSheets | `map_pflegelevel_scoring` |
 | 8 | 06b Pflegelevel-Overrides laden | googleSheets | `map_pflegelevel_overrides` |
 | 9 | 06c Max-Products laden | googleSheets | `map_max_products` |
-| 10 | 06 Pflegelevel berechnen | code | Phase 1+3 (Scoring), Phase 2 (Ziele-Bonus, **noch inline**), Phase 4+5+6 sheet-getrieben |
-| 11 | 07 Produktdatenbank laden | googleSheets | Hauptpool 37 Produkte |
-| 12 | 08a Pool-Filter laden | googleSheets | `map_pool_filter` |
-| 13 | 08 Ausschluss-Filter | code | aktiv/produkt_key-Sanity, `ausschluss_bei`, `haarstaerke`, Pool-Regeln aus 08a, `pflegelevel`-Filter |
-| 14 | 09 Pool validieren | code | Sanity-Check (Pool nicht leer) |
-| 15 | 10 map_slot_rules | googleSheets | REQ-Regeln |
-| 16 | 11 REQ-Regeln auswerten | code | Slot-Trigger-Auswertung, generisch; Z. 163-164 `minimal → optional = []` **noch inline** |
-| 17 | 13 Konfliktregeln laden | googleSheets | `map_conflict_rules` |
-| 18 | 14 Konflikte auflösen | code | match_typ ∈ {produkt_key, produktlinie, key_contains}; `gewicht_eq` entfernt |
-| 19 | 12 Scoring & Slot-Befüllung | code | Score-Gewichte 3/2/1 **noch inline**, generischer Filter (Boolean-Flags + Substring) |
-| 20 | 15 Routine sortieren | code | Finale Routine, Reihenfolge + Pflichtproduktauswahl |
-| 21 | 17 Claude E-Mail formulieren | code | Templating, 517 LOC, CSS inline (mobile + desktop); liest `raw_input` aus `$node["02 Felder extrahieren"]` |
-| 22 | 18 E-Mail senden | emailSend | An Kunde (`info@myglowmatch.de` in Tests) |
-| 23 | 18b Partner-Mail senden | emailSend | An Partner |
-| 24 | 19 Log speichern | googleSheets | Anhang an Log-Tab |
+| 10 | **06d Profil-Funktion-Mapping laden** | googleSheets | **`map_profil_funktion`** (NEU 2026-06-16) — Profil-Sprache → Wirkungs-Sprache |
+| 11 | 06 Pflegelevel berechnen | code | Phase 1+3 (Scoring), Phase 2 (Ziele-Bonus, **noch inline**), Phase 4+5+6 sheet-getrieben |
+| 12 | 07 Produktdatenbank laden | googleSheets | Hauptpool 37 Produkte |
+| 13 | 08a Pool-Filter laden | googleSheets | `map_pool_filter` |
+| 14 | 08 Ausschluss-Filter | code | aktiv/produkt_key-Sanity, `ausschluss_bei`, `haarstaerke`, Pool-Regeln aus 08a, `pflegelevel`-Filter |
+| 15 | 09 Pool validieren | code | Sanity-Check (Pool nicht leer) |
+| 16 | 10 map_slot_rules | googleSheets | REQ-Regeln |
+| 17 | 11 REQ-Regeln auswerten | code | Slot-Trigger-Auswertung, generisch; Z. 163-164 `minimal → optional = []` **noch inline** |
+| 18 | 13 Konfliktregeln laden | googleSheets | `map_conflict_rules` |
+| 19 | 14 Konflikte auflösen | code | match_typ ∈ {produkt_key, produktlinie, key_contains}; `gewicht_eq` entfernt |
+| 20 | 12 Scoring & Slot-Befüllung | code | **Ranking-Hierarchie v2** (deployed 2026-06-16): 6 Stufen lexikographisch, kein Punkte-Scoring mehr. Liest `map_profil_funktion` für hauptfunktion-Mapping. Output enthält `profile`, `decision_stage`, `ranking_top5`. |
+| 21 | 15 Routine sortieren | code | Finale Routine, Reihenfolge + Pflichtproduktauswahl |
+| 22 | 17 Claude E-Mail formulieren | code | Templating, 517 LOC, CSS inline (mobile + desktop); liest `raw_input` aus `$node["02 Felder extrahieren"]` |
+| 23 | 18 E-Mail senden | emailSend | An Kunde (`info@myglowmatch.de` in Tests) |
+| 24 | 18b Partner-Mail senden | emailSend | An Partner |
+| 25 | 19 Log speichern | googleSheets | Anhang an Log-Tab |
 
 Hinweis: ehemals Node `03 Werte normieren` (160 LOC, 14 Tally-Aliase-Maps) am 2026-06-10 entfernt — Frontend liefert technische Werte direkt, Maps waren idempotent / toter Code. Logik-Reste (Defaults `'glatt'`/`'mittel'`, Array-Dedup, `{ normalized, raw_input, partner_id }`-Output) sind in Node 02 zusammengeführt.
 
@@ -106,6 +108,7 @@ Sticky Notes zählen nicht. Mail-Routing zwischen 18 und 18b geht aus Code-Quell
 | #4 | Pflegelevel Phase 6 | `map_max_products` | Node 06 Phase 6 generisch (2D-Lookup) |
 | #5 | Pool-Filter | `map_pool_filter` | Node 08 generisch (Profil- + Produkt-Bedingungen); Inline-Filter Bonding/Gewicht/Locken entfernt; `gewicht_eq`-Case aus Node 14 entfernt |
 | #6 | Node 03 entfernen (statt migrieren) | `map_input_normalization` verwaist | Node 03 gelöscht (Tally-Maps = toter Code); Logik-Reste in Node 02 (Defaults, Dedup, `normalized`-Output); Frontend-Edit `mehr_dichte → verdichtend` (questions.ts) fixt 🟡-Goal-Match |
+| #7 | Node 12 Scoring auf Ranking-Hierarchie | `map_profil_funktion` (NEU) | Node 12 v2 (deployed 2026-06-16): Punkte-Scoring durch lexikographische 6-Stufen-Hierarchie ersetzt. Loader 06d hinzugefügt. Behebt Vokabular-Gap Profil-Sprache↔Wirkungs-Sprache (vorher: SCO-01 toter Code, 25 % Tie-Breaking via Sheet-Reihenfolge). 0/7 Routing-Drift bei 7 Test-Profilen, Erklärbarkeit pro Slot via `decision_stage`-Trace. |
 
 Mini-Syntax in `map_pool_filter` und `map_pflegelevel_overrides`-ähnlichen Tabs:
 - Bedingungen mit `;` getrennt, Liste `feld:operator[:wert]`
@@ -393,18 +396,63 @@ Anlass: Tomi-Grundsatzfrage zu Sinnhaftigkeit/Determinismus/Skalierbarkeit der P
 
 **Beobachtungs-Beispiel** (Maria's shampoo-Slot): Winner revive_shampoo Score=4 (SCO-04 +1 volumen-Match, SCO-05 +1 mid-Match, SCO-06 +2 Curl-Bonus) gegen 3 Konkurrenten mit je Score=3 (feuchtigkeits_shampoo, ir_clinical_shampoo, monat_black). Curl-Bonus ist Slot-entscheidend — fragwürdig bei einem welligen Profil. Für Schritt-2-Diagnose vermerkt.
 
-**Folge-Schritte aus diesem Audit** (siehe „Offene Punkte" unten 🔴):
-- Schritt 2: 7 Test-Profile per Trace durchschauen (Doppelzählungs- und Asymmetrie-Befunde sammeln)
-- Schritt 3: Reparatur auf Basis Befunde (Tie-Breaker, ggf. SCO-03-Symmetrie, ggf. SCO-04-Cap defensiv)
-- Schritt 4: Gewichte in `map_scoring_weights` migrieren (Sheet-First-Konsistenz mit Node 06)
-- Schritt 5: Begründungen pro Punkt-Höhe in Sheet-Spalte `quelle` dokumentieren
+**Schritt 2 abgeschlossen** — 7-Profile-Trace-Analyse 2026-06-15 (Daten: test_results_20260615_220545.json + _223627.json):
+
+- **SCO-01 (hauptfunktion +3) ist toter Code**: 0 von 36 Slots. Grund: `primary_hair_condition` ist Profil-Sprache (`trocken`, `kraftlos`, `stark_geschaedigt`, `keine_probleme`), `hauptfunktion` ist Wirkungs-Sprache (`feuchtigkeit`, `volumen`, `reparatur`, `reinigung`). Substring-Match findet keine Treffer. → **Vokabular-Gap** ist die Wurzel des Problems, nicht die Punkt-Werte.
+- **Echte Hauptlogik ist SCO-04** (Goals, 33/36 Slots = 92 %). Funktioniert nur weil care_goals im Frontend bereits in Wirkungs-Sprache formuliert sind (`reparatur`, `feuchtigkeit`, `volumen`, `glanz`, `verdichtend`, `gesunde_kopfhaut`, `frizz_reduktion`) — glücklicher Zufall, kein Plan.
+- **Doppelzählung-Befund: 0 Treffer**. Da SCO-01 nie feuert, kann es nie mit SCO-04 doppelt zählen. Mein ursprünglicher Audit-Punkt 3 ist nie eingetreten.
+- **SCO-05 (pflegelev) +1 feuert in 100 %** — Konstant-Bias, differenziert nichts.
+- **SCO-06 (Curl-Bonus +2) feuert in 86 %** — Maria's revive_shampoo gewinnt z.B. über monat_black nur wegen Curl-Bonus.
+- **25 % der Slots werden per Sheet-Reihenfolge entschieden** (9 Ties in 36 Slots). Bianca bekommt 3 von 5 ihrer Routine-Produkte faktisch zufällig.
+
+**Schritte 3-5 abgeschlossen** — Node 12 Rewrite auf Ranking-Hierarchie + map_profil_funktion (deployed 2026-06-16):
+
+Statt Punkte-Scoring jetzt **lexikographische 6-Stufen-Hierarchie**. Erste Kriterium-Differenz entscheidet. Keine Punkte mehr addiert.
+
+| Stufe | Kriterium | Wert | Quelle |
+|---|---|---|---|
+| 1 | hauptfunktion-Match | binär (1 wenn `hauptfunktion` enthält gemappten Funktions-Token) | `hauptfunktion` + `map_profil_funktion` (NEU) |
+| 2 | Goal-Coverage | Anzahl exakter `care_goals ↔ funktion`-Matches | `care_goals` + Funktions-Spalten |
+| 3 | Scalp-Match | binär | `kopfhaut`-Spalte |
+| 4 | Curl-Kompatibilität | binär (`needs_curl_care ∧ locken_geeignet`) | `locken_geeignet` + Flags |
+| 5 | Pflegelev-Match | binär | `pflegelev`-Spalte |
+| 6 | Tie-Breaker | `produkt_key` alphabetisch (deterministisch) | letzter Ausweg |
+
+**Architektur-Wechsel**:
+- Mapping-Tabelle `map_profil_funktion` (NEU, 9 Zeilen): `hair_condition`-Werte → Funktions-Tokens. Sheet-getrieben. Behebt das Vokabular-Gap.
+- Loader-Node 06d (NEU): lädt `map_profil_funktion`, eingehängt zwischen 06c → 06.
+- Node 12 v2: Punkte-Scoring entfernt, Ranking-Hierarchie eingebaut. Pro Slot-Winner im Output: `profile` (alle 5 Match-Werte), `decision_stage` (auf welcher Stufe entschieden), `ranking_top5`, `primary_hf_token`.
+- Workflow-Nodes: 24 → **25** (06d hinzugefügt).
+- Goal-Match jetzt **exakt** statt Substring (saubere Determinismus).
+- **haarstruktur fällt als Score-Faktor weg** — war im Punkte-System eine Asymmetrie-Quelle (Default = Match), bringt aktuell keinen Mehrwert.
+
+**Backups**:
+- `~/Projekte/myglowmatch/workflow_backup_20260616_081426_pre_node06d_loader.json` (Pre-Loader)
+- `~/Projekte/myglowmatch/workflow_backup_20260616_085825_pre_node12_v2.json` (Pre-v2-Deploy)
+
+**Regression nach v2**: **0/7 echte Routing-Drift**. Alle 7 Profile produkt_key-identisch zur Pre-Reform-Baseline. Vollrun-Polling-Timeouts (mehrere Profile) sind Test-Suite-Artefakt — direkter Execution-API-Read aller 7 success-Executions (ex393-397, ex399-400) bestätigt: gleiche Routinen.
+
+**Decision-Stage-Verteilung** (39 Slots gesamt):
+
+| Stage | Slots | % | Bedeutung |
+|---|---|---|---|
+| Stufe 1 (hauptfunktion) | 6 | 15.4 % | **NEU**: Mapping wirkt. Maria/Julia/Sarah shampoo+spuelung klar entschieden (vorher tot) |
+| Stufe 6 (alphabetisch tie_breaker) | 10 | 25.6 % | Ersetzt das alte Sheet-Reihenfolge-Tie-Breaking — jetzt deterministisch |
+| alone (Pool = 1) | 23 | 59.0 % | kein Wettbewerb |
+| Stufe 2-5 | 0 | 0 % | in den 7 Profilen nie entscheidend (siehe Anmerkung) |
+
+**Anmerkung Stufe 2-5**: In den 7 Test-Profilen sind die Top-Kandidaten meist in allen 5 Score-Kriterien identisch (Beispiel Bianca-shampoo: 4 Feuchtigkeits-Shampoos haben alle hf=1, goalCount=1, scalpMatch=0, curlMatch=1, plMatch=1 → Stufe 6 entscheidet). Das ist **keine Schwäche der Hierarchie**, sondern eine Aussage über die Produkt-Stammdaten (viele austauschbare Produkte für dasselbe Bedarfsprofil). Falls künftig stärkere Differenzierung gewünscht: eigene Stufe „Produktlinien-Konsistenz" oder neue Spalte „Wirkstärke" — als Folge-Idee notiert, aktuell kein Handlungsbedarf.
+
+**Erklärbarkeits-Ergebnis**: Pro Kundenempfehlung jetzt sagbar — Sarah „Bond-IQ-Shampoo weil Reparatur deine Hauptanforderung ist" (Stufe 1), Bianca „feuchtigkeits_shampoo — 4 gleichwertige Feuchtigkeits-Shampoos verfügbar, deterministisch alphabetisch ausgewählt" (Stufe 6), Anna „MONAT BLACK — einziges Shampoo für deine fettige Kopfhaut" (alone). Keine willkürlichen Punkt-Werte mehr zu verteidigen.
+
+**Block-2-Audit reaktiviert**: das Vokabular-Gap der Score-Engine war der einzige Pause-Grund. Audit kann mit Stufe 2 (`haarstruktur` + `haarstaerke`) fortgesetzt werden.
 
 ## Offene Punkte (priorisiert)
 
 | Prio | Aufgabe | Stelle |
 |---|---|---|
-| 🔴 (PAUSIERT bis Scoring-Reparatur) | Datenblatt-Provenienz-Audit — **Block 1 abgeschlossen** 2026-06-12; **Block 2 Stufe 1 (`kopfhaut`) abgeschlossen** 2026-06-15 (K-08, 2 Edits A+C, 0 Cross-Check-Funde). **Block 2 Stufe 2 + 3 + Block 3 Rest + Block 4** pausiert: Audit pumpt `nebenfunktionen`-Tokens, die durch SCO-04 (care_goal-Substring-Match) ohne Cap im Score landen → erst Scoring reparieren. Code-Check für Block 2 Stufe 2: `haarstaerke` = Pool-Filter (Node 08 Z. 110-113), `haarstruktur` = Score-Bonus +1 mit Default-Asymmetrie (Node 12 Z. 28), `haarzustand` = toter Code in Node 12 (Z. 23 nur deklariert). | siehe „Datenblatt-Provenienz-Audit" + „Scoring-Audit & Node-12-Trace" oben |
-| 🔴 | Scoring-Reparatur Node 12 — Schritt 1 ✅ (Trace deployed). Offen: Schritt 2 (7-Profil-Trace-Analyse → Doppelzählungs-/Asymmetrie-Befunde), Schritt 3 (Reparatur: Tie-Breaker, SCO-03-Symmetrie?, SCO-04-Cap defensiv?), Schritt 4 (Gewichte in `map_scoring_weights` migrieren — analog Node 06 Sheet-First), Schritt 5 (Begründungs-Spalte `quelle` in map_scoring_weights). | Node 12, siehe „Scoring-Audit"-Block oben |
+| 🟡 (REAKTIVIERT) | Datenblatt-Provenienz-Audit — **Block 1 abgeschlossen** 2026-06-12; **Block 2 Stufe 1 (`kopfhaut`) abgeschlossen** 2026-06-15 (K-08, 2 Edits, 0 Cross-Check-Funde). **Als nächstes: Block 2 Stufe 2** (`haarstaerke` Pool-Filter, `haarstruktur` jetzt aus Scoring entfernt). Block 2 Stufe 3 (`haarzustand` weiterhin toter Code) + Block 3 Rest + Block 4 danach. | siehe „Datenblatt-Provenienz-Audit" oben |
+| 🟢 (erledigt 2026-06-16) | **Scoring-Reparatur Node 12** abgeschlossen. Schritte 1-5 alle fertig: Trace eingebaut → Befunde gesammelt → Ranking-Hierarchie deployed (6 Stufen) → `map_profil_funktion`-Sheet als Mapping behebt das Vokabular-Gap → Sheet-First-Architektur konsistent zu Node 06. 0/7 Routing-Drift, Erklärbarkeit pro Slot, deterministisches Tie-Breaking. | siehe „Scoring-Audit & Node-12-Trace"-Block oben |
 | 🟡 | Sheet auf weitere `ist_bonding`-Misuses als Linien-Proxy prüfen — `ist_bonding` ist seit K-06 reines Wirkungs-Flag, Routing-Logik gehört auf `produktlinie` | Tabs: `map_slot_rules`, `map_conflict_rules`, weitere Filter |
 | 🟢 (geklärt) | `kopfhaut`-Spalte der Produktdatenbank: **Score-Bonus +2 bei scalp-Match, kein Pool-Filter** (Node 12 Z. 26, Code-Zitat im Block-2-Stufe-1-Block). Block-2-Edits wirken als Score-Faktor für künftige Profile mit passendem scalp_status, nicht als Pool-Filter. Cross-Check für `haarstruktur` + `haarzustand` separat noch offen (`haarstaerke` ist verifiziert aktiv als Filter). | Node 12 Z. 26 |
 | 🟢 (geklärt 2026-06-13) | **anna/bianca scalp_status-Diskrepanz** war reine HANDOVER-Doku-Unvollständigkeit, kein Bug. test_suite.py ist autoritativ und korrekt: anna `scalp_status=['fettig']` + hair_condition `['keine_probleme']`, bianca `scalp_status=['juckend_empfindlich']` + hair_condition `['trocken']`. HANDOVER-Eingabe-Kurzform (Z. 333 ff.) listete nur hair_*-Felder, nicht scalp_status — daraus entstanden Fehlinterpretation als Test-Profil-Bug. Node 02 macht keine `keine_probleme → fettig`-Normalisierung (Z. 13: nur `dedupArr`). Anna's monat_black-Routine ist funktional korrekt (scalp=fettig + care_goal=gesunde_kopfhaut); bianca's scalp_comfort_behandlung wird durch REQ-05 + CON-02 (beide trigger auf juckend_empfindlich) ausgelöst. **Fix in dieser Session**: Baseline-Tabelle Z. 335-341 um explizite `scalp_status`-Spalte erweitert + Vermerk dass „trocken" bei bianca hair_condition ist. **Lehre**: T-02 (System-State-Belegpflicht) erweitert um Daten-Aussagen — HANDOVER ist abgeleitete Doku, nicht autoritative Quelle. | erledigt |
