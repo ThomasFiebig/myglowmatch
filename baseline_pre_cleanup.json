@@ -1,0 +1,101 @@
+[
+  {
+    "exec_id": "472",
+    "node": "15 Routine sortieren",
+    "first_name": "Anna-TEST",
+    "produkt_keys": [
+      "monat_black"
+    ],
+    "started_at": "2026-06-23T10:47:59.750Z",
+    "status": "success"
+  },
+  {
+    "exec_id": "473",
+    "node": "15 Routine sortieren",
+    "first_name": "Maria-TEST",
+    "produkt_keys": [
+      "kopfhaut_peeling",
+      "revive_shampoo",
+      "revitalize_spuelung",
+      "entwirrungsspray",
+      "curl_creme"
+    ],
+    "started_at": "2026-06-23T10:49:30.991Z",
+    "status": "success"
+  },
+  {
+    "exec_id": "474",
+    "node": "15 Routine sortieren",
+    "first_name": "Lena-TEST",
+    "produkt_keys": [
+      "renew_shampoo",
+      "super_feuchtigkeitsmaske",
+      "renew_spuelung",
+      "entwirrungsspray",
+      "hitzeschutzspray",
+      "curl_gelee",
+      "rejuveniqe_oel"
+    ],
+    "started_at": "2026-06-23T10:51:01.487Z",
+    "status": "success"
+  },
+  {
+    "exec_id": "475",
+    "node": "15 Routine sortieren",
+    "first_name": "Julia-TEST",
+    "produkt_keys": [
+      "revive_shampoo",
+      "revitalize_spuelung",
+      "entwirrungsspray",
+      "volumen_spray"
+    ],
+    "started_at": "2026-06-23T10:52:32.387Z",
+    "status": "success"
+  },
+  {
+    "exec_id": "476",
+    "node": "15 Routine sortieren",
+    "first_name": "Bianca-TEST",
+    "produkt_keys": [
+      "scalp_comfort_behandlung",
+      "renew_shampoo",
+      "super_feuchtigkeitsmaske",
+      "renew_spuelung",
+      "curl_creme"
+    ],
+    "started_at": "2026-06-23T10:54:03.658Z",
+    "status": "success"
+  },
+  {
+    "exec_id": "477",
+    "node": "15 Routine sortieren",
+    "first_name": "Vivien-TEST",
+    "produkt_keys": [
+      "renew_shampoo",
+      "super_feuchtigkeitsmaske",
+      "renew_spuelung",
+      "restore_leave_in",
+      "hitzeschutzspray",
+      "curl_gelee",
+      "the_champ"
+    ],
+    "started_at": "2026-06-23T10:55:34.579Z",
+    "status": "success"
+  },
+  {
+    "exec_id": "478",
+    "node": "15 Routine sortieren",
+    "first_name": "Sarah-TEST",
+    "produkt_keys": [
+      "bond_iq_shampoo",
+      "bond_iq_spuelung",
+      "entwirrungsspray",
+      "bond_iq_leave_in",
+      "bond_iq_night_day_serum",
+      "hitzeschutzspray",
+      "curl_gelee"
+    ],
+    "started_at": "2026-06-23T10:57:05.489Z",
+    "status": "success"
+  }
+]
