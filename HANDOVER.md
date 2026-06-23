@@ -1,4 +1,4 @@
-# HANDOVER — Stand 2026-06-10
+# HANDOVER — Stand 2026-06-23
 
 Faktische Momentaufnahme des MONAT-Haaranalyse-Systems. Kein Verlauf, keine Diskussion.
 
@@ -33,7 +33,7 @@ Faktische Momentaufnahme des MONAT-Haaranalyse-Systems. Kein Verlauf, keine Disk
 
 **Wichtig:** `MONAT_Produktdatenbank_KOMPLETT` ist der **Sheet-Dokumenten-Name** (Doc-ID `1Osmmkrtk4uu5hz6Xk65-HgVgoLMSAYhe1VXOTjLtx0A`), nicht ein Tab-Name. Tabs werden im Code per Loader-Node mit ihrem exakten Namen referenziert.
 
-### Vom aktuellen Workflow genutzte Tabs (9)
+### Vom aktuellen Workflow genutzte Tabs (10)
 
 | Tab | Spalten / Zweck | Genutzt von |
 |---|---|---|
@@ -46,23 +46,23 @@ Faktische Momentaufnahme des MONAT-Haaranalyse-Systems. Kein Verlauf, keine Disk
 | `map_slot_rules` | REQ-Regeln (25 aktive Regeln, Trigger + Filter) | Node 10 |
 | `map_conflict_rules` | CON-Regeln (CON-01 bis CON-12), match_typ + action | Node 13 |
 | `map_pool_filter` | POOL-01 (Bonding) und POOL-03 (Locken-Styling). POOL-02 (Gewicht) bewusste Lücke. | Node 08a |
+| `map_derived_variables` (umgebaut 2026-06-23) | 17 JSON-Regeln für Bool-/Enum-Flags (`variable \| typ \| regel_json \| erlaubte_werte \| konsumenten \| doku`). Phase 1 R02-R14 nur `normalized.*`-Refs, Phase 2 R15-R18 mit `flags.*`-Refs auf vorherige Zeilen. Sheet-Reihenfolge = Auswertungs-Reihenfolge. | Node 05a → Node 05 |
 | `beratungs_log` | Run-Log (1196 Zeilen Stand 2026-06-10) | Node 19 |
 
-### Nicht vom Workflow geladene Tabs (5) — Audit 2026-06-10
+### Nicht vom Workflow geladene Tabs (4) — Audit 2026-06-10, `map_derived_variables` entfernt 2026-06-23 (jetzt live)
 
 Beim Service-Account-Setup am 2026-06-10 sichtbar geworden, am selben Tag auditiert. **Alle 5 sind 0-Hit im Workflow-JSON** (Grep im neuesten Backup, Sanity-Check via Loader-Tabs 4–10 Hits). Inhalts-Status pro Tab:
 
 | Tab | Zeilen | Header | Status | Folge-Aktion |
 |---|---|---|---|---|
 | `map_input_normalization` | 10 | `feld \| rohwert \| technischer_wert \| hinweis` | **verwaist (Migration entfallen)** — Tally-Pfad ist tot; Frontend liefert technische Werte direkt. Node 03 am 2026-06-10 entfernt statt migriert. | Bei nächster Bereinigung archivieren/löschen |
-| `map_derived_variables` | 13 | `variable \| berechnungslogik \| erlaubte_werte \| verwendung` | **halbfertig, Format ungeeignet** — `berechnungslogik`-Spalte ist Freitext-Doku, nicht parsbar; 13 vs. 17 Bool-Flags in Node 05 | Format-Umbau (strukturierte Spalten) nötig bevor Node-05-Migration möglich |
 | `map_requirement_rules` | 19 | `regel_id \| bedingung \| action \| slot_typ \| filter \| beschreibung` | **verwaist (Vorgänger)** — gleiche Struktur wie Live-`map_slot_rules` (25 Regeln), aber älter/kürzer | Bei nächster Bereinigung archivieren/löschen |
 | `map_priority_resolution` | 15 | `feld \| rang \| wert \| beschreibung` | **verwaist (Vorgänger)** — 4-Spalten-Variante; Live-`map_priorities` hat 6 Spalten | Bei nächster Bereinigung archivieren/löschen |
 | `map_system_dictionary` | 25 | `feld \| technischer_wert \| anzeige_text \| kategorie` | **verwaist, latent nützlich** — Reverse-Lookup technisch→deutsch (z.B. `juckend_empfindlich → "juckend / empfindlich"`) | Liegenlassen (K-05). Für Output-Lokalisierung oder Frontend-Anzeige reaktivierbar |
 
-**Dominanter nächster Schritt**: Node 05 (17 Bool-Flag-Heuristiken) — `map_derived_variables` braucht aber erst Format-Umbau (strukturierte Spalten statt Freitext-Doku), bevor Migration möglich. `map_input_normalization`-Migration wurde am 2026-06-10 verworfen: Frontend sendet bereits technische Werte, Node 03 war im Wesentlichen ein No-Op über Tally-Legacy-Maps → komplett entfernt statt migriert.
+**Migration #9 abgeschlossen 2026-06-23**: Node 05 (17 Bool-/Enum-Flags) auf `map_derived_variables` umgestellt. Sheet-Format-Umbau auf 6 Spalten + JSON.parse-bares `regel_json` vorab erledigt, Node 05 jsCode auf generischen Evaluator umgebaut, 0/36 Slot-Drift bestätigt. `map_input_normalization`-Migration wurde am 2026-06-10 verworfen: Frontend sendet bereits technische Werte, Node 03 war im Wesentlichen ein No-Op über Tally-Legacy-Maps → komplett entfernt statt migriert.
 
-## Workflow-Nodes (25)
+## Workflow-Nodes (26)
 
 Datenflussreihenfolge (Hauptpfad):
 
@@ -73,26 +73,27 @@ Datenflussreihenfolge (Hauptpfad):
 | 3 | 02 Felder extrahieren | code | Body in flache Felder, Defaults (`'glatt'`/`'mittel'` u.a.), Array-Dedup; Output `{ normalized, raw_input, partner_id }`. Frontend liefert bereits technische Werte. |
 | 4 | 04a Prioritäten laden | googleSheets | `map_priorities` |
 | 5 | 04 Prioritäten auflösen | code | scalp_primary/secondary, condition_primary/secondary, generischer Auswerter; liest aus `$node["02 Felder extrahieren"]` |
-| 6 | 05 Bool-Flags berechnen | code | **18 Heuristik-Flags** (needs_repair_focus, needs_lightweight_logic …, `wants_intense_care` NEU 2026-06-18), 76 LOC, **noch inline** |
-| 7 | 06a Pflegelevel-Scoring laden | googleSheets | `map_pflegelevel_scoring` |
-| 8 | 06b Pflegelevel-Overrides laden | googleSheets | `map_pflegelevel_overrides` |
-| 9 | 06c Max-Products laden | googleSheets | `map_max_products` |
-| 10 | **06d Profil-Funktion-Mapping laden** | googleSheets | **`map_profil_funktion`** (NEU 2026-06-16) — Profil-Sprache → Wirkungs-Sprache |
-| 11 | 06 Pflegelevel berechnen | code | Phase 1+3 (Scoring), Phase 2 (Ziele-Bonus, **noch inline**), Phase 4+5+6 sheet-getrieben |
-| 12 | 07 Produktdatenbank laden | googleSheets | Hauptpool 37 Produkte |
-| 13 | 08a Pool-Filter laden | googleSheets | `map_pool_filter` |
-| 14 | 08 Ausschluss-Filter | code | aktiv/produkt_key-Sanity, `ausschluss_bei`, `haarstaerke`, Pool-Regeln aus 08a, `pflegelevel`-Filter |
-| 15 | 09 Pool validieren | code | Sanity-Check (Pool nicht leer) |
-| 16 | 10 map_slot_rules | googleSheets | REQ-Regeln |
-| 17 | 11 REQ-Regeln auswerten | code | Slot-Trigger-Auswertung, generisch; Z. 163-164 `minimal → optional = []` **noch inline** |
-| 18 | 13 Konfliktregeln laden | googleSheets | `map_conflict_rules` |
-| 19 | 14 Konflikte auflösen | code | match_typ ∈ {produkt_key, produktlinie, key_contains}; `gewicht_eq` entfernt |
-| 20 | 12 Scoring & Slot-Befüllung | code | **Ranking-Hierarchie v4** (deployed 2026-06-18): 11 Stufen lexikographisch + alphabetischer Determinismus-Fallback. Liest `map_profil_funktion` (hauptfunktion-Mapping) + Sheet-Spalte `intensitaet`. Profil-Heuristik `flags.wants_intense_care` aus Node 05. Output enthält `profile` (11 Match-Felder), `decision_stage`, `wants_intense`, `ranking_top5`. v3 (2026-06-17): +haarzustand_primary/coverage, +haarstruktur_exakt, +haarstaerke_exakt, +wildcard_alle (10 Stufen). v4: +Stufe 11 intensitaet. |
-| 21 | 15 Routine sortieren | code | Finale Routine, Reihenfolge + Pflichtproduktauswahl |
-| 22 | 17 Claude E-Mail formulieren | code | Templating, 517 LOC, CSS inline (mobile + desktop); liest `raw_input` aus `$node["02 Felder extrahieren"]` |
-| 23 | 18 E-Mail senden | emailSend | An Kunde (`info@myglowmatch.de` in Tests) |
-| 24 | 18b Partner-Mail senden | emailSend | An Partner |
-| 25 | 19 Log speichern | googleSheets | Anhang an Log-Tab |
+| 6 | **05a map_derived_variables laden** (NEU 2026-06-23) | googleSheets | **`map_derived_variables`** — 17 JSON-Regeln |
+| 7 | 05 Bool-Flags berechnen | code | **Generischer JSON-Regel-Evaluator** (Migration #9, deployed 2026-06-23): 90 LOC. Liest `map_derived_variables` via `$items("05a …")`, evaluiert `regel_json` pro Zeile in Sheet-Reihenfolge, baut `flags`-Objekt. Output-Shape unverändert `{ normalized, priorities, flags }`. 17 Flags: 12 Basis (heat_use, oil_need, needs_repair_focus, needs_scalp_focus, needs_lightweight_logic, needs_curl_care, needs_detangling, detangling_need, needs_dry_shampoo, …), 5 Styling-Goals (volumen/glanz/definition/natuerlich/halt), plus `wants_intense_care` (Node 12 v4 Stufe 11). `volume_sensitivity` eliminiert (0 Konsumenten). |
+| 8 | 06a Pflegelevel-Scoring laden | googleSheets | `map_pflegelevel_scoring` |
+| 9 | 06b Pflegelevel-Overrides laden | googleSheets | `map_pflegelevel_overrides` |
+| 10 | 06c Max-Products laden | googleSheets | `map_max_products` |
+| 11 | **06d Profil-Funktion-Mapping laden** | googleSheets | **`map_profil_funktion`** (NEU 2026-06-16) — Profil-Sprache → Wirkungs-Sprache |
+| 12 | 06 Pflegelevel berechnen | code | Phase 1+3 (Scoring), Phase 2 (Ziele-Bonus, **noch inline**), Phase 4+5+6 sheet-getrieben |
+| 13 | 07 Produktdatenbank laden | googleSheets | Hauptpool 37 Produkte |
+| 14 | 08a Pool-Filter laden | googleSheets | `map_pool_filter` |
+| 15 | 08 Ausschluss-Filter | code | aktiv/produkt_key-Sanity, `ausschluss_bei`, `haarstaerke`, Pool-Regeln aus 08a, `pflegelevel`-Filter |
+| 16 | 09 Pool validieren | code | Sanity-Check (Pool nicht leer) |
+| 17 | 10 map_slot_rules | googleSheets | REQ-Regeln |
+| 18 | 11 REQ-Regeln auswerten | code | Slot-Trigger-Auswertung, generisch; Z. 163-164 `minimal → optional = []` **noch inline** |
+| 19 | 13 Konfliktregeln laden | googleSheets | `map_conflict_rules` |
+| 20 | 14 Konflikte auflösen | code | match_typ ∈ {produkt_key, produktlinie, key_contains}; `gewicht_eq` entfernt |
+| 21 | 12 Scoring & Slot-Befüllung | code | **Ranking-Hierarchie v4** (deployed 2026-06-18): 11 Stufen lexikographisch + alphabetischer Determinismus-Fallback. Liest `map_profil_funktion` (hauptfunktion-Mapping) + Sheet-Spalte `intensitaet`. Profil-Heuristik `flags.wants_intense_care` aus Node 05. Output enthält `profile` (11 Match-Felder), `decision_stage`, `wants_intense`, `ranking_top5`. v3 (2026-06-17): +haarzustand_primary/coverage, +haarstruktur_exakt, +haarstaerke_exakt, +wildcard_alle (10 Stufen). v4: +Stufe 11 intensitaet. |
+| 22 | 15 Routine sortieren | code | Finale Routine, Reihenfolge + Pflichtproduktauswahl |
+| 23 | 17 Claude E-Mail formulieren | code | Templating, 517 LOC, CSS inline (mobile + desktop); liest `raw_input` aus `$node["02 Felder extrahieren"]` |
+| 24 | 18 E-Mail senden | emailSend | An Kunde (`info@myglowmatch.de` in Tests) |
+| 25 | 18b Partner-Mail senden | emailSend | An Partner |
+| 26 | 19 Log speichern | googleSheets | Anhang an Log-Tab |
 
 Hinweis: ehemals Node `03 Werte normieren` (160 LOC, 14 Tally-Aliase-Maps) am 2026-06-10 entfernt — Frontend liefert technische Werte direkt, Maps waren idempotent / toter Code. Logik-Reste (Defaults `'glatt'`/`'mittel'`, Array-Dedup, `{ normalized, raw_input, partner_id }`-Output) sind in Node 02 zusammengeführt.
 
@@ -110,6 +111,7 @@ Sticky Notes zählen nicht. Mail-Routing zwischen 18 und 18b geht aus Code-Quell
 | #6 | Node 03 entfernen (statt migrieren) | `map_input_normalization` verwaist | Node 03 gelöscht (Tally-Maps = toter Code); Logik-Reste in Node 02 (Defaults, Dedup, `normalized`-Output); Frontend-Edit `mehr_dichte → verdichtend` (questions.ts) fixt 🟡-Goal-Match |
 | #7 | Node 12 Scoring auf Ranking-Hierarchie | `map_profil_funktion` (NEU) | Node 12 v2 (deployed 2026-06-16): Punkte-Scoring durch lexikographische 6-Stufen-Hierarchie ersetzt. Loader 06d hinzugefügt. Behebt Vokabular-Gap Profil-Sprache↔Wirkungs-Sprache (vorher: SCO-01 toter Code, 25 % Tie-Breaking via Sheet-Reihenfolge). 0/7 Routing-Drift bei 7 Test-Profilen, Erklärbarkeit pro Slot via `decision_stage`-Trace. |
 | #8 | Node 12 v3+v4 — Filter-Spalten als Ranking-Stufen, Pflege-Intensitäts-Tiebreaker | Sheet-Spalte `intensitaet` (NEU 2026-06-18 in `produktdatenbank`) | **Node 12 v3** (deployed 2026-06-17): 6 → 10 Stufen. Reaktiviert haarzustand+haarstruktur+haarstaerke als eigene Ranking-Stufen (vorher scoring-tot per K-05). Reihenfolge: 1 hauptfunktion → 2 haarzustand_primary → 3 goal_coverage → 4 scalp_match → 5 curl_compat → 6 haarstruktur_exakt → 7 pflegelev_match → 8 haarstaerke_exakt → 9 haarzustand_coverage → 10 wildcard_alle. Drift 4/7 (Lena/Bianca/Vivien maske replenish→super_feuchtigkeitsmaske via Stufe 6; Julia styling_1 moxie_mousse→volumen_spray via Stufe 8). Alphabetischer Fallback 10/39 → 5/39 (halbiert). **Node 12 v4** (deployed 2026-06-18): +Stufe 11 `intensitaet`. Profil-Heuristik `wants_intense_care = needs_repair_focus \|\| (!needs_lightweight_logic && hair_treatments ∈ {gefaerbt, blondiert})` in Node 05. Sheet-Werte `leicht`/`intensiv`/`alle` (Default), PDF-belegt per K-08 für 8 Tie-Produkte: feuchtigkeits_shampoo/erweiterte_feuchtigkeit_spuelung/entwirrungsspray/kopfhaut_peeling=`leicht`; renew_shampoo/renew_spuelung/rejuvabeads/scalp_comfort_behandlung=`intensiv`. Drift v3→v4: 1/7 (Bianca shampoo+spuelung feuchtigkeits→renew, fachlich richtig wegen gefaerbt). **Alphabetischer Fallback 5/39 → 0/39** — jede Slot-Entscheidung ist jetzt fachlich begründet. |
+| #9 | **Node 05 Bool-Flags Sheet-getrieben** (deployed 2026-06-23) | `map_derived_variables` (Schema-Umbau 4→6 Spalten, 13→17 Einträge, parsbares JSON-Regel-Format) + neuer Loader-Node `05a` | **Node 05 v2** (deployed 2026-06-23): 76 LOC inline → 90 LOC JSON-Regel-Evaluator. Liest `map_derived_variables` via `$items("05a …")`, evaluiert `regel_json` pro Zeile in Sheet-Reihenfolge (Phase 1 R02-R14 nur normalized-Refs, Phase 2 R15-R18 mit flags.*-Refs). 8 Operatoren: `eq`/`neq`/`in`/`nin`/`includes`/`intersects`/`truthy`/`and`/`or`/`not`/`cases`. Pfad-Syntax `normalized.x`/`flags.x`/`priorities.x`. Output-Shape `{ normalized, priorities, flags }` unverändert. `volume_sensitivity` eliminiert (0 Konsumenten, byte-identisches Duplikat zu `needs_lightweight_logic`). 3 Cleanup-Kandidaten markiert (`needs_detangling`, `styling_goal_natuerlich`, `needs_protection_focus` — 0 aktive Konsumenten). Engine-Selbstkontrolle in Python vor Deploy. **0/36 Slot-Drift** (Executions 472-478 vs. Pre-Patch 464-470 vom 2026-06-22). Backup vor Schema-Umbau: `backups/sheets_20260623_pre_node05_schema/map_derived_variables.csv`; vor Workflow-Patch: `workflow_live_20260623.json`. |
 
 Mini-Syntax in `map_pool_filter` und `map_pflegelevel_overrides`-ähnlichen Tabs:
 - Bedingungen mit `;` getrennt, Liste `feld:operator[:wert]`
@@ -598,7 +600,9 @@ Statt Punkte-Scoring jetzt **lexikographische 6-Stufen-Hierarchie**. Erste Krite
 | 🟢 (geklärt) | `kopfhaut`-Spalte der Produktdatenbank: **Score-Bonus +2 bei scalp-Match, kein Pool-Filter** (Node 12 Z. 26, Code-Zitat im Block-2-Stufe-1-Block). Block-2-Edits wirken als Score-Faktor für künftige Profile mit passendem scalp_status, nicht als Pool-Filter. Cross-Check für `haarstruktur` + `haarzustand` separat noch offen (`haarstaerke` ist verifiziert aktiv als Filter). | Node 12 Z. 26 |
 | 🟢 (geklärt 2026-06-13) | **anna/bianca scalp_status-Diskrepanz** war reine HANDOVER-Doku-Unvollständigkeit, kein Bug. test_suite.py ist autoritativ und korrekt: anna `scalp_status=['fettig']` + hair_condition `['keine_probleme']`, bianca `scalp_status=['juckend_empfindlich']` + hair_condition `['trocken']`. HANDOVER-Eingabe-Kurzform (Z. 333 ff.) listete nur hair_*-Felder, nicht scalp_status — daraus entstanden Fehlinterpretation als Test-Profil-Bug. Node 02 macht keine `keine_probleme → fettig`-Normalisierung (Z. 13: nur `dedupArr`). Anna's monat_black-Routine ist funktional korrekt (scalp=fettig + care_goal=gesunde_kopfhaut); bianca's scalp_comfort_behandlung wird durch REQ-05 + CON-02 (beide trigger auf juckend_empfindlich) ausgelöst. **Fix in dieser Session**: Baseline-Tabelle Z. 335-341 um explizite `scalp_status`-Spalte erweitert + Vermerk dass „trocken" bei bianca hair_condition ist. **Lehre**: T-02 (System-State-Belegpflicht) erweitert um Daten-Aussagen — HANDOVER ist abgeleitete Doku, nicht autoritative Quelle. | erledigt |
 | 🟡 | Node 06 Phase 2 migrieren (Ziele-Bonus, max +2 Pkt) | Node 06 inline |
-| 🟡 | Node 05 migrieren (17 Bool-Flag-Heuristiken) | Node 05 inline, 69 LOC; bei Gelegenheit `needs_lightweight_logic` mitentfernen (seit #5 ungenutzt) |
+| 🟢 (erledigt 2026-06-23) | **Node 05 migriert — siehe Migration #9.** 76 LOC inline → 90 LOC JSON-Regel-Evaluator. `volume_sensitivity` als 0-Konsumenten-Duplikat eliminiert. 0/36 Slot-Drift. | Migration #9 |
+| 🟢 | Cleanup-Welle für 3 unbenutzte Flags (`needs_detangling`, `styling_goal_natuerlich`, `needs_protection_focus`) aus `map_derived_variables` + Output-Shape — derzeit als „Cleanup-Kandidat" markiert | Sheet + ggf. Konsumenten-Re-Check |
+| 🟢 | T-03-Workaround in `test_suite.py` formalisieren — Polling auf Direct-API-Routine-Vergleich umstellen (Pattern in mehreren Sessions etabliert, bisherige `test_results_*.json` haben alle `output=None` weil Polling timed out) | `test_suite.py` |
 | 🟢 | Node 11 Z. 163-164: `minimal → optional = []` als REQ-Regel ins Sheet | Node 11 inline |
 | ↑ | (Node 12 Score-Gewichte ⇒ siehe 🔴 Scoring-Reparatur oben) | Node 12 inline |
 | 🟢 | `extract_routine_output()`-Workaround in Test-Suite aufräumen | `test_suite.py` (CONFLICT_NODE-Merge seit Pass-Through in Node 12 überflüssig) |
@@ -636,7 +640,7 @@ Härtungsstand (seit Session 3):
 - `TERMINAL_STATUSES = ("success",)` — Error-Executions nicht mehr als gültig akzeptiert
 - `first_name`-Verifikation in `fetch_latest_execution()` — kein Profil-Mix-Up bei Latenz
 
-Pipeline-Latenz aktuell ~38–47 s pro Profil (5 Sheet-Loader: 04a, 06a, 06b, 06c, 08a).
+Pipeline-Latenz ~3–5 Min pro Profil (Cold-Start + 6 Sheet-Loader: 04a, 05a NEU 2026-06-23, 06a, 06b, 06c, 06d, 08a). Polling-Default 90s reicht durchgängig nicht mehr — siehe T-03 für Direct-API-Workaround.
 
 ## n8n REST API — Operationsregeln
 
