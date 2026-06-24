@@ -36,8 +36,11 @@ SIGNATURE = None  # gefüllt aus .env (N8N_WEBHOOK_SECRET) in main()
 TARGET_NODE = "15 Routine sortieren"
 CONFLICT_NODE = "14 Konflikte auflösen"  # propagiert applied_conflict_rules
 TIMEOUT = 30
-DEFAULT_MAX_WAIT = 90
-POLL_INTERVAL = 0.8
+SINGLE_PROFILE_WAIT = 360       # 6 Min — reale Pipeline-Latenz (6 Sheet-Loader + Cold-Start)
+BULK_TOTAL_WAIT = 900           # 15 Min — Trigger-Phase (7×90s) + letzte Pipeline (4 Min)
+BULK_TRIGGER_GAP = 90           # 90 s — Pause zwischen sequenziellen Webhook-POSTs, vermeidet Google-Sheets-Rate-Limit
+POLL_INTERVAL_SINGLE = 0.8      # schneller Poll für Single-Profile (lokale Sicht auf 1 ID)
+POLL_INTERVAL_BULK = 15.0       # bulk-Polling alle 15 s — schont API, reicht für 3-5 Min-Pipelines
 TERMINAL_STATUSES = ("success",)
 
 # ─── ANSI-Farben ────────────────────────────────────────────────
@@ -297,7 +300,7 @@ def _extract_first_name_from_detail(detail: dict):
 
 
 def fetch_latest_execution(base_url: str, api_key: str, baseline_id: int = 0,
-                            max_wait: float = DEFAULT_MAX_WAIT,
+                            max_wait: float = SINGLE_PROFILE_WAIT,
                             expected_first_name: str = None):
     """Polling: wartet, bis eine Execution mit ID > baseline_id existiert, success
     ist UND optional zum erwarteten first_name passt.
@@ -340,8 +343,45 @@ def fetch_latest_execution(base_url: str, api_key: str, baseline_id: int = 0,
                     continue
             ex["_polls"] = polls
             return ex
-        time.sleep(POLL_INTERVAL)
+        time.sleep(POLL_INTERVAL_SINGLE)
     return None
+
+
+def fetch_new_success_executions(base_url: str, api_key: str, baseline_id: int,
+                                  expected_count: int, max_wait: float):
+    """Bulk-Polling: wartet, bis `expected_count` neue success-Executions
+    (ID > baseline_id) für den Workflow existieren. Pollt mit
+    POLL_INTERVAL_BULK. Return: Liste der Executions, aufsteigend nach ID.
+    Bei Timeout: was bis dahin da war (partial).
+    """
+    deadline = time.time() + max_wait
+    last_found = -1
+    while time.time() < deadline:
+        data = n8n_api_get(
+            base_url,
+            f"/executions?workflowId={WORKFLOW_ID}&status=success&limit=20",
+            api_key,
+        )
+        items = data.get("data", data) if isinstance(data, dict) else data
+        new = [e for e in items if _as_int_id(e.get("id")) > baseline_id]
+        new.sort(key=lambda e: _as_int_id(e.get("id")))
+        if len(new) != last_found:
+            elapsed = int(time.time() - (deadline - max_wait))
+            print(f"{C.DIM}  t+{elapsed:3d}s: {len(new)}/{expected_count} success-Executions seit Baseline {baseline_id}{C.R}")
+            last_found = len(new)
+        if len(new) >= expected_count:
+            return new[:expected_count] if len(new) > expected_count else new
+        time.sleep(POLL_INTERVAL_BULK)
+    # Timeout: was bis dahin da ist
+    data = n8n_api_get(
+        base_url,
+        f"/executions?workflowId={WORKFLOW_ID}&status=success&limit=20",
+        api_key,
+    )
+    items = data.get("data", data) if isinstance(data, dict) else data
+    new = [e for e in items if _as_int_id(e.get("id")) > baseline_id]
+    new.sort(key=lambda e: _as_int_id(e.get("id")))
+    return new
 
 
 def fetch_execution_details(base_url: str, api_key: str, exec_id) -> dict:
@@ -503,9 +543,134 @@ def print_overview(results: dict):
         )
 
 
+# ─── Run-Modi ──────────────────────────────────────────────────
+def run_single(base_url: str, api_key: str, name: str, profile: dict,
+                max_wait: float, verbose: bool) -> dict:
+    """Single-Profile-Run: Trigger + Polling auf 1 success-Execution."""
+    try:
+        baseline_id = get_current_max_execution_id(base_url, api_key)
+        print(f"\n{C.DIM}→ Trigger Webhook für '{name}' (Baseline-ID: {baseline_id})…{C.R}")
+        trigger_resp = trigger_webhook(profile)
+        print(f"{C.DIM}  Webhook-Response: {trigger_resp}{C.R}")
+
+        expected_fn = profile.get("first_name")
+        print(f"{C.DIM}  Polle auf Execution > {baseline_id} mit first_name={expected_fn} (max {max_wait:.0f}s)…{C.R}")
+        execution = fetch_latest_execution(
+            base_url, api_key,
+            baseline_id=baseline_id,
+            max_wait=max_wait,
+            expected_first_name=expected_fn,
+        )
+        if not execution:
+            raise RuntimeError(
+                f"Keine passende Execution > {baseline_id} (first_name={expected_fn}) innerhalb {max_wait:.0f}s"
+            )
+
+        exec_id = execution.get("id")
+        polls = execution.get("_polls", "?")
+        print(f"{C.DIM}  Execution-ID: {exec_id}, status: {execution.get('status', '?')} (nach {polls} Poll(s)){C.R}")
+
+        detail = fetch_execution_details(base_url, api_key, exec_id)
+        output = extract_routine_output(detail)
+        if not output:
+            print(f"{C.YELLOW}  ⚠ Konnte Output von '{TARGET_NODE}' nicht extrahieren{C.R}")
+
+        anomalies = check_anomalies(profile, output)
+        result = {"output": output, "anomalies": anomalies, "execution_id": exec_id}
+
+        if verbose:
+            print(json.dumps(output, indent=2, ensure_ascii=False))
+        else:
+            print_profile_report(name, profile, output, anomalies)
+        return result
+    except urllib.error.HTTPError as e:
+        print(f"{C.RED}✗ HTTP-Fehler bei {name}: {e.code} {e.reason}{C.R}")
+        try:
+            print(f"{C.DIM}  Body: {e.read().decode('utf-8', errors='replace')[:300]}{C.R}")
+        except Exception:
+            pass
+        return {"output": None, "anomalies": [f"HTTP {e.code}"], "execution_id": None}
+    except Exception as e:
+        print(f"{C.RED}✗ Fehler bei {name}: {e}{C.R}")
+        return {"output": None, "anomalies": [str(e)], "execution_id": None}
+
+
+def run_bulk(base_url: str, api_key: str, to_test: list, gap: float,
+              max_wait: float, verbose: bool) -> dict:
+    """Bulk-Modus: alle Profile sequenziell triggern (Gap dazwischen), dann
+    auf alle Executions warten und in einem Rutsch auswerten. Behebt T-03:
+    Per-Profile-Polling timed bei 90s out — hier wartet die Suite einmal
+    auf alle Executions gleichzeitig, statt nach jedem Trigger.
+
+    Profile-Zuordnung erfolgt nachträglich per `first_name` aus dem Node
+    `15 Routine sortieren`. Wer keine Execution bekommt (Timeout oder
+    fehlgeschlagene Pipeline), landet mit output=None im Result.
+    """
+    baseline_id = get_current_max_execution_id(base_url, api_key)
+    print(f"\n{C.DIM}Bulk-Modus: Baseline-ID {baseline_id}, Trigger-Gap {gap:.0f}s, Wait-Limit {max_wait:.0f}s{C.R}")
+
+    # ── Phase 1: sequenziell triggern ─────────────────────────
+    for i, name in enumerate(to_test):
+        profile = PROFILES[name]
+        try:
+            t0 = time.time()
+            resp = trigger_webhook(profile)
+            elapsed = time.time() - t0
+            print(f"{C.DIM}  [{i+1}/{len(to_test)}] {name:8s} → {resp.get('message', resp)} ({elapsed:.1f}s){C.R}")
+        except Exception as e:
+            print(f"{C.RED}  [{i+1}/{len(to_test)}] {name:8s} → FAIL: {e}{C.R}", file=sys.stderr)
+        if i < len(to_test) - 1:
+            time.sleep(gap)
+
+    # ── Phase 2: warten bis alle Executions success ───────────
+    print(f"\n{C.DIM}Warte auf {len(to_test)} neue success-Executions…{C.R}")
+    new_executions = fetch_new_success_executions(
+        base_url, api_key, baseline_id, len(to_test), max_wait
+    )
+    if len(new_executions) < len(to_test):
+        print(f"{C.YELLOW}⚠ Nur {len(new_executions)}/{len(to_test)} Executions success innerhalb {max_wait:.0f}s — Rest mit output=None{C.R}")
+
+    # ── Phase 3: per first_name den Profilen zuordnen ─────────
+    fn_to_exec = {}
+    for ex in new_executions:
+        exec_id = ex.get("id")
+        try:
+            detail = fetch_execution_details(base_url, api_key, exec_id)
+        except Exception as e:
+            print(f"{C.YELLOW}  ⚠ Detail-Fetch Execution {exec_id} failed: {e}{C.R}")
+            continue
+        fn = _extract_first_name_from_detail(detail)
+        if not fn:
+            print(f"{C.YELLOW}  ⚠ Execution {exec_id}: kein first_name extrahiert{C.R}")
+            continue
+        fn_to_exec[fn] = (ex, detail)
+
+    # ── Phase 4: Reports pro Profil ──────────────────────────
+    results = {}
+    for name in to_test:
+        profile = PROFILES[name]
+        expected_fn = profile.get("first_name")
+        match = fn_to_exec.get(expected_fn)
+        if not match:
+            print(f"{C.RED}\n✗ {name}: keine passende Execution (first_name={expected_fn}) gefunden{C.R}")
+            results[name] = {"output": None, "anomalies": ["keine passende Execution"], "execution_id": None}
+            continue
+        ex, detail = match
+        exec_id = ex.get("id")
+        output = extract_routine_output(detail)
+        anomalies = check_anomalies(profile, output)
+        results[name] = {"output": output, "anomalies": anomalies, "execution_id": exec_id}
+        if verbose:
+            print(f"\n{C.BOLD}{name}: Execution {exec_id}{C.R}")
+            print(json.dumps(output, indent=2, ensure_ascii=False))
+        else:
+            print_profile_report(name, profile, output, anomalies)
+    return results
+
+
 # ─── Main ──────────────────────────────────────────────────────
 def main():
-    parser = argparse.ArgumentParser(description="MONAT System Test-Suite v2")
+    parser = argparse.ArgumentParser(description="MONAT System Test-Suite v3 (T-03)")
     parser.add_argument("--profile", "-p",
         choices=list(PROFILES.keys()) + ["all"], default="all",
         help="Welches Profil testen")
@@ -513,8 +678,10 @@ def main():
         help="Zeige vollen JSON-Output statt Summary")
     parser.add_argument("--save", action="store_true",
         help="Speichere Ergebnisse in test_results_<ts>.json")
-    parser.add_argument("--wait", type=float, default=DEFAULT_MAX_WAIT,
-        help=f"Max. Wartezeit (Sek.) auf neue Execution nach Trigger (default: {DEFAULT_MAX_WAIT})")
+    parser.add_argument("--wait", type=float, default=None,
+        help=f"Max. Wartezeit (Sek.). Single-Profile-Default {SINGLE_PROFILE_WAIT}s, Bulk-Default {BULK_TOTAL_WAIT}s.")
+    parser.add_argument("--gap", type=float, default=BULK_TRIGGER_GAP,
+        help=f"Gap (Sek.) zwischen Bulk-Triggern (default: {BULK_TRIGGER_GAP}s). Schützt vor Google-Sheets-Rate-Limit.")
     args = parser.parse_args()
 
     env = load_env(Path(__file__).parent / ".env")
@@ -533,68 +700,23 @@ def main():
     SIGNATURE = secret
 
     to_test = list(PROFILES.keys()) if args.profile == "all" else [args.profile]
+    bulk_mode = len(to_test) > 1
+    max_wait = args.wait if args.wait is not None else (BULK_TOTAL_WAIT if bulk_mode else SINGLE_PROFILE_WAIT)
 
-    print(f"{C.BOLD}{C.BLUE}MONAT Test-Suite v2 (Execution-API){C.R}")
+    print(f"{C.BOLD}{C.BLUE}MONAT Test-Suite v3 (T-03 Direct-API){C.R}")
     print(f"{C.DIM}Webhook:    {WEBHOOK_URL}{C.R}")
     print(f"{C.DIM}n8n Base:   {base_url}{C.R}")
     print(f"{C.DIM}Workflow:   {WORKFLOW_ID}{C.R}")
     print(f"{C.DIM}Target:     {TARGET_NODE}{C.R}")
     print(f"{C.DIM}Zeit:       {datetime.now().isoformat()}{C.R}")
-    print(f"{C.DIM}Profile:    {', '.join(to_test)} (Max-Wait: {args.wait}s, Poll: {POLL_INTERVAL}s){C.R}")
+    print(f"{C.DIM}Mode:       {'bulk' if bulk_mode else 'single'} ({', '.join(to_test)}), Wait {max_wait:.0f}s{C.R}")
 
-    results = {}
-    for name in to_test:
-        profile = PROFILES[name]
-        try:
-            baseline_id = get_current_max_execution_id(base_url, api_key)
-            print(f"\n{C.DIM}→ Trigger Webhook für '{name}' (Baseline-ID: {baseline_id})…{C.R}")
-            trigger_resp = trigger_webhook(profile)
-            print(f"{C.DIM}  Webhook-Response: {trigger_resp}{C.R}")
-
-            expected_fn = profile.get("first_name")
-            print(f"{C.DIM}  Polle auf Execution > {baseline_id} mit first_name={expected_fn} (max {args.wait}s)…{C.R}")
-            execution = fetch_latest_execution(
-                base_url, api_key,
-                baseline_id=baseline_id,
-                max_wait=args.wait,
-                expected_first_name=expected_fn,
-            )
-            if not execution:
-                raise RuntimeError(
-                    f"Keine passende Execution > {baseline_id} (first_name={expected_fn}) innerhalb {args.wait}s"
-                )
-
-            exec_id = execution.get("id")
-            polls = execution.get("_polls", "?")
-            print(f"{C.DIM}  Execution-ID: {exec_id}, status: {execution.get('status', '?')} (nach {polls} Poll(s)){C.R}")
-
-            detail = fetch_execution_details(base_url, api_key, exec_id)
-            output = extract_routine_output(detail)
-
-            if not output:
-                print(f"{C.YELLOW}  ⚠ Konnte Output von '{TARGET_NODE}' nicht extrahieren{C.R}")
-
-            anomalies = check_anomalies(profile, output)
-            results[name] = {"output": output, "anomalies": anomalies, "execution_id": exec_id}
-
-            if args.verbose:
-                print(json.dumps(output, indent=2, ensure_ascii=False))
-            else:
-                print_profile_report(name, profile, output, anomalies)
-
-        except urllib.error.HTTPError as e:
-            print(f"{C.RED}✗ HTTP-Fehler bei {name}: {e.code} {e.reason}{C.R}")
-            try:
-                print(f"{C.DIM}  Body: {e.read().decode('utf-8', errors='replace')[:300]}{C.R}")
-            except Exception:
-                pass
-            results[name] = {"output": None, "anomalies": [f"HTTP {e.code}"], "execution_id": None}
-        except Exception as e:
-            print(f"{C.RED}✗ Fehler bei {name}: {e}{C.R}")
-            results[name] = {"output": None, "anomalies": [str(e)], "execution_id": None}
-
-    if len(to_test) > 1:
+    if bulk_mode:
+        results = run_bulk(base_url, api_key, to_test, args.gap, max_wait, args.verbose)
         print_overview(results)
+    else:
+        name = to_test[0]
+        results = {name: run_single(base_url, api_key, name, PROFILES[name], max_wait, args.verbose)}
 
     if args.save:
         fname = f"test_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"

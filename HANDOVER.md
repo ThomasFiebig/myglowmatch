@@ -602,7 +602,7 @@ Statt Punkte-Scoring jetzt **lexikographische 6-Stufen-Hierarchie**. Erste Krite
 | 🟡 | Node 06 Phase 2 migrieren (Ziele-Bonus, max +2 Pkt) | Node 06 inline |
 | 🟢 (erledigt 2026-06-23) | **Node 05 migriert — siehe Migration #9.** 76 LOC inline → 90 LOC JSON-Regel-Evaluator. `volume_sensitivity` als 0-Konsumenten-Duplikat eliminiert. 0/36 Slot-Drift. | Migration #9 |
 | 🟢 (erledigt 2026-06-24) | **Cleanup-Welle für 3 unbenutzte Flags abgeschlossen** (`needs_detangling`, `styling_goal_natuerlich`, `needs_protection_focus`). Konsumenten-Verifikation: 0 jsCode-Refs im Live-Workflow (frischer n8n-API-GET in `workflow_live_now.json`), 0 Cross-Refs im 15-Tab-Vollscan (`produktdatenbank`/`map_*`/`beratungs_log`). `heat_use.konsumenten` mitbereinigt (stale Verweis auf `flags.needs_protection_focus` raus). 17→14 Sheet-Zeilen, Phase-Order erhalten. **Drift Pre↔Post (Executions 493-499 vs. Baseline 472-478): 0/36** via Direct-API-Diff (T-03-Pattern). Trigger-Erkenntnis: parallele Webhooks (7 in <1s) ratelimit-en Google-Sheets-API mit „too many requests" — sequenzieller Trigger mit 90s-Gap erforderlich. Backup: `backups/sheets_20260623_pre_node05_cleanup/map_derived_variables.csv`. Skripte: `cleanup_node05_sheet.py`, `validate_cleanup.py`. | Sheet `map_derived_variables` |
-| 🟢 | T-03-Workaround in `test_suite.py` formalisieren — Polling auf Direct-API-Routine-Vergleich umstellen (Pattern in mehreren Sessions etabliert, bisherige `test_results_*.json` haben alle `output=None` weil Polling timed out) | `test_suite.py` |
+| 🟢 (erledigt 2026-06-24) | **T-03-Formalisierung in `test_suite.py` abgeschlossen.** Test-Suite v3 mit zwei Modi: (a) **single** (`--profile <name>`): Trigger + Polling auf 1 success-Execution mit `first_name`-Verifikation, Default-Timeout 360s; (b) **bulk** (`--profile all` / mehrere Profile): sequenzieller Trigger mit 90s-Gap (vermeidet Google-Sheets-Rate-Limit), dann Bulk-Polling alle 15s auf success-Count, dann Detail-Fetch + first_name-Zuordnung pro Profil. Default-Timeout 900s. Verifikations-Lauf 2026-06-24: 7/7 Profile success in ~4 Min (Trigger-Phase ~9 Min sequenziell, Polling-Phase ~4 Min auf letzte Execution). `test_results_*.json` enthält jetzt echte Outputs statt None. Slot-Belegung 36/36 byte-identisch zur Cleanup-Welle-Baseline. Code-Pfade: `run_single()` + `run_bulk()` + `fetch_new_success_executions()`. Konfigurierbar via `--wait` / `--gap`. | `test_suite.py` |
 | 🟢 | Node 11 Z. 163-164: `minimal → optional = []` als REQ-Regel ins Sheet | Node 11 inline |
 | ↑ | (Node 12 Score-Gewichte ⇒ siehe 🔴 Scoring-Reparatur oben) | Node 12 inline |
 | 🟢 | `extract_routine_output()`-Workaround in Test-Suite aufräumen | `test_suite.py` (CONFLICT_NODE-Merge seit Pass-Through in Node 12 überflüssig) |
@@ -630,17 +630,23 @@ Sollwerte stand 2026-06-10-Full-Run nach Node-03-Removal. Vorherige Werte (julia
 ## Test-Suite
 
 Aufrufe:
-- `python3 test_suite.py --profile anna` — Einzelprofil
-- `python3 test_suite.py` — alle 7 Profile sequenziell
+- `python3 test_suite.py --profile anna` — Einzelprofil (single-Modus, ~4 Min Polling-Limit)
+- `python3 test_suite.py` — alle 7 Profile (bulk-Modus, ~13–14 Min: sequenzieller Trigger 9 Min + letzte Pipeline 4 Min)
 - `python3 test_suite.py --save` — zusätzlich Ergebnis als `test_results_<ts>.json`
-- `python3 test_suite.py --verbose` — mehr Details
+- `python3 test_suite.py --verbose` — voller JSON-Output statt formatierter Report
+- `--wait N` — Wartezeit (Sek.) explizit setzen; Default single 360, bulk 900
+- `--gap N` — Trigger-Gap (Sek.) im bulk-Modus; Default 90 (Google-Sheets-Rate-Limit-Schutz)
 
-Härtungsstand (seit Session 3):
-- `DEFAULT_MAX_WAIT = 90` (90 s Polling-Limit pro Profil)
-- `TERMINAL_STATUSES = ("success",)` — Error-Executions nicht mehr als gültig akzeptiert
-- `first_name`-Verifikation in `fetch_latest_execution()` — kein Profil-Mix-Up bei Latenz
+**v3 (2026-06-24, T-03-Formalisierung)** — siehe Folge-Punkte-Tabelle. Zwei Pfade:
+- `run_single()`: Trigger + Polling auf eine success-Execution mit `first_name`-Verifikation (`POLL_INTERVAL_SINGLE=0.8s`)
+- `run_bulk()`: sequenzieller Trigger (90s-Gap), dann Bulk-Polling (`POLL_INTERVAL_BULK=15s`) bis N success-Executions, dann Detail-Fetch + Profil-Zuordnung per `first_name`
 
-Pipeline-Latenz ~3–5 Min pro Profil (Cold-Start + 6 Sheet-Loader: 04a, 05a NEU 2026-06-23, 06a, 06b, 06c, 06d, 08a). Polling-Default 90s reicht durchgängig nicht mehr — siehe T-03 für Direct-API-Workaround.
+Härtungsstand:
+- `SINGLE_PROFILE_WAIT = 360`, `BULK_TOTAL_WAIT = 900`, `BULK_TRIGGER_GAP = 90`
+- `TERMINAL_STATUSES = ("success",)` — Error-Executions nicht als gültig akzeptiert
+- `first_name`-Verifikation verhindert Profil-Mix-Up bei Latenz und Bulk-Reihenfolge-Drift
+
+Pipeline-Latenz ~3–5 Min pro Profil (Cold-Start + 6 Sheet-Loader: 04a, 05a, 06a, 06b, 06c, 06d, 08a). Bulk-Modus läuft Pipelines parallel, daher `BULK_TOTAL_WAIT=900` ≈ Trigger-Phase + letzte Pipeline, nicht Σ aller Pipelines.
 
 ## n8n REST API — Operationsregeln
 
