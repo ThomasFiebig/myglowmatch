@@ -609,8 +609,8 @@ Statt Punkte-Scoring jetzt **lexikographische 6-Stufen-Hierarchie**. Erste Krite
 | 🟢 (erledigt 2026-06-24) | **T-03-Formalisierung in `test_suite.py` abgeschlossen.** Test-Suite v3 mit zwei Modi: (a) **single** (`--profile <name>`): Trigger + Polling auf 1 success-Execution mit `first_name`-Verifikation, Default-Timeout 360s; (b) **bulk** (`--profile all` / mehrere Profile): sequenzieller Trigger mit 90s-Gap (vermeidet Google-Sheets-Rate-Limit), dann Bulk-Polling alle 15s auf success-Count, dann Detail-Fetch + first_name-Zuordnung pro Profil. Default-Timeout 900s. Verifikations-Lauf 2026-06-24: 7/7 Profile success in ~4 Min (Trigger-Phase ~9 Min sequenziell, Polling-Phase ~4 Min auf letzte Execution). `test_results_*.json` enthält jetzt echte Outputs statt None. Slot-Belegung 36/36 byte-identisch zur Cleanup-Welle-Baseline. Code-Pfade: `run_single()` + `run_bulk()` + `fetch_new_success_executions()`. Konfigurierbar via `--wait` / `--gap`. | `test_suite.py` |
 | 🟢 (erledigt 2026-06-24) | **Node 11 Suppress-Regel Sheet-getrieben — siehe Migration #11.** Inline-Block (4 LOC `if minimal → optional=[]`) ersetzt durch Sheet-Regel `REQ-MIN-NO-OPT` mit neuer `prioritaet`-Klasse `suppress_optional`. Phase 5 in Node 11 wertet Side-Effect-Regeln aus. Damit alle Routing-Pfad-Inline-Heuristiken eliminiert. **0/36 Slot-Drift**. | Migration #11 |
 | ↑ | (Node 12 Score-Gewichte ⇒ siehe 🔴 Scoring-Reparatur oben) | Node 12 inline |
-| 🟢 | `extract_routine_output()`-Workaround in Test-Suite aufräumen | `test_suite.py` (CONFLICT_NODE-Merge seit Pass-Through in Node 12 überflüssig) |
-| 🟢 | Sheet-Spalte `gewicht` in Produktdatenbank löschen | (vermutlich bereits leer/weg — Google-Sheets-API liefert sie nicht mehr aus) |
+| 🟢 (erledigt 2026-06-24) | **`extract_routine_output()`-CONFLICT_NODE-Merge entfernt.** Verifiziert per Execution-Detail-Vergleich: Node 15 propagiert `applied_conflict_rules` byte-identisch via `...data`-Spread aus Node 14. Funktion ist jetzt 1-Liner. `CONFLICT_NODE`-Konstante + `_conflict_source`-Annotation gestrichen. | erledigt |
+| 🟢 (erledigt — vor 2026-06-24) | **Sheet-Spalte `gewicht` ist bereits weg.** Verifiziert 2026-06-24: produktdatenbank hat 24 Spalten ohne `gewicht`. Code-Grep findet nur false-positives (deutsches Wort „Gewicht" in Node 17-Templates). Punkt erledigt — siehe „Bewusste Lücken" für Doku. | erledigt |
 | 🟢 | Sheet-Loader 06a/06b/06c parallelisieren | Performance-Tuning, nur falls Live-Latenz spürbar |
 
 ## Referenzprofile (Soll-Werte für Regression)
@@ -689,6 +689,6 @@ Code-Node-Zugriffspattern wenn Loader zwischen Producer und Consumer liegt:
 ## Bewusste Lücken
 
 - `POOL-02` in `map_pool_filter` fehlt absichtlich (Gewicht-Regel war Bauchgefühl ohne Datenblatt-Beleg, bei Migration #5 entfernt)
-- Spalte `gewicht` in Produktdatenbank — entweder leer oder bereits gelöscht (Sheets-API liefert sie nicht aus)
+- Spalte `gewicht` in Produktdatenbank — 2026-06-24 verifiziert: ist bereits weg (24 Spalten ohne `gewicht`)
 - Spalte `produkt_url` in `produktdatenbank` — 37/37 leer, 0 Workflow-Konsumenten (Node 17 nutzt nur `mailto:`/WhatsApp/Impressum-Links). Produkt-Link-Integration wurde als Anfangsidee angetestet und verworfen (saubere Einbindung gelang nicht). **Nicht als Audit-Lücke behandeln.**
 - `needs_lightweight_logic` in Node 05 wird **seit Migration #8** wieder gelesen — `wants_intense_care` (NEU 2026-06-18) leitet sich daraus + `hair_treatments`+`needs_repair_focus` ab. Zwischen Migration #5 und Migration #8 ungenutzt; seit Node 12 v4 ist es wieder Live-Konsument.

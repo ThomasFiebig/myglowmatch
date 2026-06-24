@@ -34,7 +34,6 @@ WEBHOOK_URL = "https://veradex.app.n8n.cloud/webhook/glowmatch-haaranalyse"
 WORKFLOW_ID = "pwSWA5NatKiLhueB"
 SIGNATURE = None  # gefüllt aus .env (N8N_WEBHOOK_SECRET) in main()
 TARGET_NODE = "15 Routine sortieren"
-CONFLICT_NODE = "14 Konflikte auflösen"  # propagiert applied_conflict_rules
 TIMEOUT = 30
 SINGLE_PROFILE_WAIT = 360       # 6 Min — reale Pipeline-Latenz (6 Sheet-Loader + Cold-Start)
 BULK_TOTAL_WAIT = 900           # 15 Min — Trigger-Phase (7×90s) + letzte Pipeline (4 Min)
@@ -404,17 +403,10 @@ def extract_node_json(detail: dict, node_name: str) -> dict:
 
 
 def extract_routine_output(detail: dict) -> dict:
-    """Holt Routine-Output aus Node 15. Mergt `applied_conflict_rules` aus
-    Node 14 ein, weil Node 15 das Feld nicht propagiert (Workflow-Bug)."""
-    output = dict(extract_node_json(detail, TARGET_NODE))
-    if not output:
-        return output
-
-    rules_from_14 = extract_node_json(detail, CONFLICT_NODE).get("applied_conflict_rules", [])
-    if rules_from_14 and not output.get("applied_conflict_rules"):
-        output["applied_conflict_rules"] = rules_from_14
-        output["_conflict_source"] = CONFLICT_NODE
-    return output
+    """Holt Routine-Output aus Node 15. Seit Node-12-Pass-Through (siehe
+    Workflow) propagiert Node 15 `applied_conflict_rules` automatisch via
+    `...data`-Spread aus Node 14 — kein Merge mehr nötig."""
+    return dict(extract_node_json(detail, TARGET_NODE))
 
 
 # ─── Anomalie-Heuristik ─────────────────────────────────────────
