@@ -9,9 +9,27 @@
 
 import { NextResponse } from "next/server";
 
+// Defensiv: wenn jemand die ganze .env-Zeile (`NAME=value`) ins
+// Value-Feld der Deployment-ENV kopiert hat, automatisch das Präfix
+// entfernen. 2026-06-24: genau dieser Bug hat alle Webhook-Calls
+// stumm im n8n-Signature-IF-Branch enden lassen (Execution 550).
+function sanitizeEnv(name: string, raw: string | undefined): string | undefined {
+  if (!raw) return raw;
+  const prefix = `${name}=`;
+  if (raw.startsWith(prefix)) {
+    console.warn(
+      `[env] ${name} ist falsch gesetzt: Wert beginnt mit ${prefix} — ` +
+      `vermutlich wurde die ganze .env-Zeile ins Value-Feld kopiert. ` +
+      `Trimme automatisch, aber bitte ENV-Variable im Deployment-Dashboard korrigieren.`,
+    );
+    return raw.slice(prefix.length);
+  }
+  return raw;
+}
+
 export async function POST(request: Request) {
-  const webhookUrl = process.env.N8N_WEBHOOK_URL;
-  const webhookSecret = process.env.N8N_WEBHOOK_SECRET;
+  const webhookUrl = sanitizeEnv("N8N_WEBHOOK_URL", process.env.N8N_WEBHOOK_URL);
+  const webhookSecret = sanitizeEnv("N8N_WEBHOOK_SECRET", process.env.N8N_WEBHOOK_SECRET);
 
   // Sicherheitsnetz: Sind URL und Secret konfiguriert?
   if (!webhookUrl || !webhookSecret) {
