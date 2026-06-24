@@ -223,9 +223,15 @@ def main():
         load_conns[0].append({"node": NODE05_NAME, "type": "main", "index": 0})
         print(f"05a → 05 verkabelt")
 
-    # 4) n8n-API-Felder, die beim PUT/Import stören könnten, entfernen
+    # 4) n8n-API-Felder, die beim PUT/Import stören könnten, entfernen.
+    # activeVersion-Familie ergänzt 2026-06-24: n8n-Cloud liefert beim GET einen
+    # Snapshot-Subtree mit dem Pre-Patch-State zurück; ohne pop bleibt der alte
+    # jsCode im lokalen Output-File und verwirrt späteren Lokal-Grep
+    # (siehe Session-Doku 2026-06-24 Teil 1 Erkenntnis 1).
     for k in ("id", "createdAt", "updatedAt", "versionId", "triggerCount", "tags", "shared",
-              "active", "meta", "isArchived", "homeProject", "scopes", "pinData"):
+              "active", "meta", "isArchived", "homeProject", "scopes", "pinData",
+              "activeVersion", "activeVersionId", "sourceWorkflowId", "nodeGroups",
+              "versionCounter", "description", "staticData"):
         wf.pop(k, None)
 
     OUT_PATH.write_text(json.dumps(wf, indent=2, ensure_ascii=False))
