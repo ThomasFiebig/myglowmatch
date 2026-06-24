@@ -1,0 +1,109 @@
+[
+  {
+    "exec_id": 522,
+    "first_name": "Anna-TEST",
+    "produkt_keys": [
+      "monat_black"
+    ],
+    "applied_conflict_ids": [
+      "CON-07"
+    ]
+  },
+  {
+    "exec_id": 523,
+    "first_name": "Maria-TEST",
+    "produkt_keys": [
+      "kopfhaut_peeling",
+      "revive_shampoo",
+      "revitalize_spuelung",
+      "entwirrungsspray",
+      "curl_creme"
+    ],
+    "applied_conflict_ids": [
+      "CON-09",
+      "CON-11",
+      "CON-12"
+    ]
+  },
+  {
+    "exec_id": 524,
+    "first_name": "Lena-TEST",
+    "produkt_keys": [
+      "renew_shampoo",
+      "super_feuchtigkeitsmaske",
+      "renew_spuelung",
+      "entwirrungsspray",
+      "hitzeschutzspray",
+      "curl_gelee",
+      "rejuveniqe_oel"
+    ],
+    "applied_conflict_ids": [
+      "CON-09",
+      "CON-11"
+    ]
+  },
+  {
+    "exec_id": 525,
+    "first_name": "Julia-TEST",
+    "produkt_keys": [
+      "revive_shampoo",
+      "revitalize_spuelung",
+      "entwirrungsspray",
+      "volumen_spray"
+    ],
+    "applied_conflict_ids": [
+      "CON-07",
+      "CON-12"
+    ]
+  },
+  {
+    "exec_id": 526,
+    "first_name": "Bianca-TEST",
+    "produkt_keys": [
+      "scalp_comfort_behandlung",
+      "renew_shampoo",
+      "super_feuchtigkeitsmaske",
+      "renew_spuelung",
+      "curl_creme"
+    ],
+    "applied_conflict_ids": [
+      "CON-02",
+      "CON-09"
+    ]
+  },
+  {
+    "exec_id": 527,
+    "first_name": "Vivien-TEST",
+    "produkt_keys": [
+      "renew_shampoo",
+      "super_feuchtigkeitsmaske",
+      "renew_spuelung",
+      "restore_leave_in",
+      "hitzeschutzspray",
+      "curl_gelee",
+      "the_champ"
+    ],
+    "applied_conflict_ids": [
+      "CON-09",
+      "CON-11",
+      "CON-12"
+    ]
+  },
+  {
+    "exec_id": 528,
+    "first_name": "Sarah-TEST",
+    "produkt_keys": [
+      "bond_iq_shampoo",
+      "bond_iq_spuelung",
+      "entwirrungsspray",
+      "bond_iq_leave_in",
+      "bond_iq_night_day_serum",
+      "hitzeschutzspray",
+      "curl_gelee"
+    ],
+    "applied_conflict_ids": [
+      "CON-09",
+      "CON-11"
+    ]
+  }
+]
