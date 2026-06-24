@@ -1,0 +1,142 @@
+[
+  {
+    "exec_id": "536",
+    "first_name": "Anna-TEST",
+    "produkt_keys": [
+      "monat_black"
+    ],
+    "pflegelevel_raw": 0,
+    "pflegelevel_final": "LOW",
+    "fired_pfl_rules": []
+  },
+  {
+    "exec_id": "537",
+    "first_name": "Maria-TEST",
+    "produkt_keys": [
+      "kopfhaut_peeling",
+      "revive_shampoo",
+      "revitalize_spuelung",
+      "entwirrungsspray",
+      "curl_creme"
+    ],
+    "pflegelevel_raw": 7,
+    "pflegelevel_final": "MID",
+    "fired_pfl_rules": [
+      "PFL-05",
+      "PFL-08",
+      "PFL-10",
+      "PFL-14",
+      "PFL-21",
+      "PFL-23"
+    ]
+  },
+  {
+    "exec_id": "538",
+    "first_name": "Lena-TEST",
+    "produkt_keys": [
+      "renew_shampoo",
+      "super_feuchtigkeitsmaske",
+      "renew_spuelung",
+      "entwirrungsspray",
+      "hitzeschutzspray",
+      "curl_gelee",
+      "rejuveniqe_oel"
+    ],
+    "pflegelevel_raw": 15,
+    "pflegelevel_final": "HIGH",
+    "fired_pfl_rules": [
+      "PFL-04",
+      "PFL-06",
+      "PFL-12",
+      "PFL-14",
+      "PFL-15",
+      "PFL-19",
+      "PFL-22",
+      "PFL-23"
+    ]
+  },
+  {
+    "exec_id": "539",
+    "first_name": "Julia-TEST",
+    "produkt_keys": [
+      "revive_shampoo",
+      "revitalize_spuelung",
+      "entwirrungsspray",
+      "volumen_spray"
+    ],
+    "pflegelevel_raw": 4,
+    "pflegelevel_final": "MID",
+    "fired_pfl_rules": [
+      "PFL-08",
+      "PFL-17",
+      "PFL-21",
+      "PFL-23"
+    ]
+  },
+  {
+    "exec_id": "540",
+    "first_name": "Bianca-TEST",
+    "produkt_keys": [
+      "scalp_comfort_behandlung",
+      "renew_shampoo",
+      "super_feuchtigkeitsmaske",
+      "renew_spuelung",
+      "curl_creme"
+    ],
+    "pflegelevel_raw": 7,
+    "pflegelevel_final": "MID",
+    "fired_pfl_rules": [
+      "PFL-04",
+      "PFL-10",
+      "PFL-14",
+      "PFL-17",
+      "PFL-21",
+      "PFL-23"
+    ]
+  },
+  {
+    "exec_id": "541",
+    "first_name": "Vivien-TEST",
+    "produkt_keys": [
+      "renew_shampoo",
+      "super_feuchtigkeitsmaske",
+      "renew_spuelung",
+      "restore_leave_in",
+      "hitzeschutzspray",
+      "curl_gelee",
+      "the_champ"
+    ],
+    "pflegelevel_raw": 4,
+    "pflegelevel_final": "MID",
+    "fired_pfl_rules": [
+      "PFL-10",
+      "PFL-14",
+      "PFL-15"
+    ]
+  },
+  {
+    "exec_id": "542",
+    "first_name": "Sarah-TEST",
+    "produkt_keys": [
+      "bond_iq_shampoo",
+      "bond_iq_spuelung",
+      "entwirrungsspray",
+      "bond_iq_leave_in",
+      "bond_iq_night_day_serum",
+      "hitzeschutzspray",
+      "curl_gelee"
+    ],
+    "pflegelevel_raw": 18,
+    "pflegelevel_final": "HIGH",
+    "fired_pfl_rules": [
+      "PFL-01",
+      "PFL-04",
+      "PFL-11",
+      "PFL-13",
+      "PFL-15",
+      "PFL-19",
+      "PFL-22",
+      "PFL-23"
+    ]
+  }
+]
