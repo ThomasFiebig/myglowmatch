@@ -169,41 +169,21 @@ export const formSteps: Step[] = [
 
   // -----------------------------------------------------------------
   // Frage 6 – Hitze-Styling (Einfachauswahl)
+  // Präzisiert auf Glätteisen/Lockenstab nach Migration #16
+  // (2026-06-25). Föhn ist laut MONAT-PDFs keine Hitzeschäden-Quelle
+  // ("Reduziere den Einsatz von Hitzestyling-Tools wie Glätteisen
+  // und Lockenstäben") und wird daher nicht mehr abgefragt.
   // -----------------------------------------------------------------
   {
     id: "heat_frequency",
     type: "single",
     field: "heat_frequency",
-    title: "Wie häufig nutzt du Hitze-Styling?",
+    title: "Wie häufig nutzt du Glätteisen oder Lockenstab?",
     options: [
       { value: "nie_selten", label: "nie / sehr selten" },
       { value: "gelegentlich", label: "gelegentlich" },
       { value: "regelmaessig", label: "regelmäßig" },
       { value: "sehr_haeufig", label: "sehr häufig" },
-    ],
-  },
-
-  // -----------------------------------------------------------------
-  // Frage 6b – Hitze-Tools (CONDITIONAL, Mehrfachauswahl)
-  // Erscheint, wenn heat_frequency "gelegentlich", "regelmaessig"
-  // oder "sehr_haeufig" ist. Nur bei "nie_selten" wird übersprungen.
-  // -----------------------------------------------------------------
-  {
-    id: "heat_tools",
-    type: "multi",
-    field: "heat_tools",
-    title: "Welche Hitze-Tools nutzt du?",
-    minSelect: 1,
-    maxSelect: 3,
-    conditional: {
-      field: "heat_frequency",
-      operator: "in",
-      value: ["gelegentlich", "regelmaessig", "sehr_haeufig"],
-    },
-    options: [
-      { value: "fohn", label: "Föhn" },
-      { value: "glaetteisen", label: "Glätteisen" },
-      { value: "lockenstab", label: "Lockenstab" },
     ],
   },
 
