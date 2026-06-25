@@ -84,7 +84,8 @@ export const formSteps: Step[] = [
     options: [
       { value: "mehr_definition", label: "mehr Definition" },
       { value: "mehr_volumen", label: "mehr Volumen" },
-      { value: "beides", label: "beides" },
+      { value: "beides", label: "Volumen & Definition" },
+      { value: "glatt", label: "lieber glatt tragen" },
     ],
   },
 

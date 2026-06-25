@@ -1,0 +1,99 @@
+[
+  {
+    "exec_id": 553,
+    "first_name": "Anna-TEST",
+    "produkt_keys": [
+      "monat_black"
+    ],
+    "cons": [
+      "CON-07"
+    ]
+  },
+  {
+    "exec_id": 554,
+    "first_name": "Maria-TEST",
+    "produkt_keys": [
+      "kopfhaut_peeling",
+      "revive_shampoo",
+      "revitalize_spuelung",
+      "entwirrungsspray",
+      "curl_creme"
+    ],
+    "cons": [
+      "CON-11"
+    ]
+  },
+  {
+    "exec_id": 555,
+    "first_name": "Lena-TEST",
+    "produkt_keys": [
+      "renew_shampoo",
+      "super_feuchtigkeitsmaske",
+      "renew_spuelung",
+      "entwirrungsspray",
+      "hitzeschutzspray",
+      "curl_gelee",
+      "rejuveniqe_oel"
+    ],
+    "cons": [
+      "CON-11"
+    ]
+  },
+  {
+    "exec_id": 556,
+    "first_name": "Julia-TEST",
+    "produkt_keys": [
+      "revive_shampoo",
+      "revitalize_spuelung",
+      "entwirrungsspray",
+      "volumen_spray"
+    ],
+    "cons": [
+      "CON-07"
+    ]
+  },
+  {
+    "exec_id": 557,
+    "first_name": "Bianca-TEST",
+    "produkt_keys": [
+      "scalp_comfort_behandlung",
+      "renew_shampoo",
+      "super_feuchtigkeitsmaske",
+      "renew_spuelung",
+      "curl_creme"
+    ],
+    "cons": []
+  },
+  {
+    "exec_id": 558,
+    "first_name": "Vivien-TEST",
+    "produkt_keys": [
+      "renew_shampoo",
+      "super_feuchtigkeitsmaske",
+      "renew_spuelung",
+      "restore_leave_in",
+      "hitzeschutzspray",
+      "curl_gelee",
+      "the_champ"
+    ],
+    "cons": [
+      "CON-11"
+    ]
+  },
+  {
+    "exec_id": 559,
+    "first_name": "Sarah-TEST",
+    "produkt_keys": [
+      "bond_iq_shampoo",
+      "bond_iq_spuelung",
+      "entwirrungsspray",
+      "bond_iq_leave_in",
+      "bond_iq_night_day_serum",
+      "hitzeschutzspray",
+      "curl_gelee"
+    ],
+    "cons": [
+      "CON-11"
+    ]
+  }
+]

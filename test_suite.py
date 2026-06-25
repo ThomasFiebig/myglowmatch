@@ -210,6 +210,32 @@ PROFILES = {
         "consent_recommendation": True,
         "consent_marketing": False,
     },
+    # Sina — Locken-Vollprofil mit curl_priority='beides' (Migration #15 Test).
+    # Erwartung: curl_creme (styling_1) + curl_gelee (styling_2) +
+    # curl_auffrischer (styling_3), kein smoothing_fohn_spray (Frizz+Locken),
+    # kein hitzeschutzspray (durch wants_full_curl_line), nur ein Scalp-Comfort-Produkt.
+    "sina": {
+        "partner_id": "desiree",
+        "first_name": "Sina-TEST",
+        "email": "info@myglowmatch.de",
+        "phone": "01500000008",
+        "scalp_status": ["juckend_empfindlich", "schuppig"],
+        "hair_structure": "kraus",
+        "hair_thickness": "dick",
+        "hair_condition": ["trocken", "frizz"],
+        "hair_treatments": "blondiert",
+        "heat_frequency": "regelmaessig",
+        "heat_tools": ["fohn"],
+        "wash_frequency": "1x_pro_woche",
+        "styling_effort": "aufwendiges_styling",
+        "curl_priority": "beides",
+        "ends_condition": "deutlich_trocken",
+        "care_goals": ["feuchtigkeit", "reparatur"],
+        "routine_preference": "bestmoeglich",
+        "time_commitment": "bewusst_regelmaessig",
+        "consent_recommendation": True,
+        "consent_marketing": False,
+    },
 }
 
 
@@ -418,6 +444,17 @@ def check_anomalies(profile: dict, output: dict) -> list:
     if profile["hair_structure"] in ("wellig", "lockig", "kraus"):
         if "fohncreme" in product_keys:
             warnings.append("Föhncreme empfohlen trotz Locken/Wellen (glättet aktiv)")
+        # Migration #15 — Locken-Profile sollten mind. 1 Curl-Produkt erhalten,
+        # AUSSER curl_priority='glatt' (User trägt Locken bewusst geglättet).
+        if profile.get("curl_priority") != "glatt":
+            curl_products = {"curl_creme", "curl_gelee", "curl_auffrischer"}
+            if not (set(product_keys) & curl_products):
+                warnings.append("Locken-Profil ohne einziges Curl-Produkt")
+        # Smoothing-Föhn-Spray darf bei Locken + Frizz nicht im Slot landen
+        # (CON-13, Migration #14): Curl-Creme behandelt Frizz besser.
+        if "frizz" in profile.get("hair_condition", []):
+            if "smoothing_fohn_spray" in product_keys:
+                warnings.append("Smoothing Föhn-Spray empfohlen trotz Locken+Frizz (CON-13 hätte greifen müssen)")
 
     has_fettig = "fettig" in profile.get("scalp_status", [])
     if not has_fettig:
