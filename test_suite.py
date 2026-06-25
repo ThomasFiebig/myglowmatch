@@ -210,6 +210,31 @@ PROFILES = {
         "consent_recommendation": True,
         "consent_marketing": False,
     },
+    # Silvia — Locken-Profil das glatt getragen wird (Migration #16 Test).
+    # Erwartung: smoothing_fohn_spray (REQ-04b) statt curl_creme/hitzeschutzspray,
+    # keine Curl-Produkte, Hitzeschutz greift.
+    "silvia": {
+        "partner_id": "desiree",
+        "first_name": "Silvia-TEST",
+        "email": "info@myglowmatch.de",
+        "phone": "01500000009",
+        "scalp_status": ["normal"],
+        "hair_structure": "wellig",
+        "hair_thickness": "mittel",
+        "hair_condition": ["trocken", "frizz"],
+        "hair_treatments": "gefaerbt",
+        "heat_frequency": "regelmaessig",
+        "heat_tools": ["glaetteisen"],
+        "wash_frequency": "alle_2_3_tage",
+        "styling_effort": "regelmaessiges_styling",
+        "curl_priority": "glatt",
+        "ends_condition": "leicht_trocken",
+        "care_goals": ["glanz", "feuchtigkeit"],
+        "routine_preference": "ausgewogen",
+        "time_commitment": "mittel",
+        "consent_recommendation": True,
+        "consent_marketing": False,
+    },
     # Sina — Locken-Vollprofil mit curl_priority='beides' (Migration #15 Test).
     # Erwartung: curl_creme (styling_1) + curl_gelee (styling_2) +
     # curl_auffrischer (styling_3), kein smoothing_fohn_spray (Frizz+Locken),
@@ -452,9 +477,21 @@ def check_anomalies(profile: dict, output: dict) -> list:
                 warnings.append("Locken-Profil ohne einziges Curl-Produkt")
         # Smoothing-Föhn-Spray darf bei Locken + Frizz nicht im Slot landen
         # (CON-13, Migration #14): Curl-Creme behandelt Frizz besser.
-        if "frizz" in profile.get("hair_condition", []):
+        # AUSNAHME: curl_priority='glatt' → smoothing_fohn_spray ist explizit gewollt (REQ-04b, Migration #16)
+        if "frizz" in profile.get("hair_condition", []) and profile.get("curl_priority") != "glatt":
             if "smoothing_fohn_spray" in product_keys:
                 warnings.append("Smoothing Föhn-Spray empfohlen trotz Locken+Frizz (CON-13 hätte greifen müssen)")
+    # Migration #16 — bei curl_priority='glatt' (prefers_straight): kein Curl-Produkt,
+    # aber Hitzeschutz bei heat_use=yes muss da sein
+    if profile.get("curl_priority") == "glatt":
+        curl_products = {"curl_creme", "curl_gelee", "curl_auffrischer"}
+        leaked = set(product_keys) & curl_products
+        if leaked:
+            warnings.append(f"Curl-Produkt(e) trotz 'glatt'-Wunsch empfohlen: {sorted(leaked)}")
+        if profile.get("heat_frequency") in ("regelmaessig", "sehr_haeufig"):
+            hitze_produkte = {"hitzeschutzspray", "smoothing_fohn_spray", "fohncreme"}
+            if not (set(product_keys) & hitze_produkte):
+                warnings.append("'glatt' + Hitzestyling, aber kein Hitzeschutz-Produkt empfohlen")
 
     has_fettig = "fettig" in profile.get("scalp_status", [])
     if not has_fettig:
