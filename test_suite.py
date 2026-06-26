@@ -210,6 +210,30 @@ PROFILES = {
         "consent_recommendation": True,
         "consent_marketing": False,
     },
+    # Eva — fettige Kopfhaut + nicht-täglich-Wäsche (Migration #17 the_champ-Test).
+    # Erwartung: the_champ (REQ-14) im finish-Slot, sonst monat_black-Routine.
+    "eva": {
+        "partner_id": "desiree",
+        "first_name": "Eva-TEST",
+        "email": "info@myglowmatch.de",
+        "phone": "01500000010",
+        "scalp_status": ["fettig"],
+        "hair_structure": "glatt",
+        "hair_thickness": "mittel",
+        "hair_condition": ["keine_probleme"],
+        "hair_treatments": "nein",
+        "heat_frequency": "nie_selten",
+        "heat_tools": [],
+        "wash_frequency": "alle_2_3_tage",
+        "styling_effort": "leichtes_styling",
+        "curl_priority": None,
+        "ends_condition": None,
+        "care_goals": ["gesunde_kopfhaut", "frizz_reduktion"],
+        "routine_preference": "bestmoeglich",
+        "time_commitment": "mittel",
+        "consent_recommendation": True,
+        "consent_marketing": False,
+    },
     # Silvia — Locken-Profil das glatt getragen wird (Migration #16 Test).
     # Erwartung: smoothing_fohn_spray (REQ-04b) statt curl_creme/hitzeschutzspray,
     # keine Curl-Produkte, Hitzeschutz greift.
