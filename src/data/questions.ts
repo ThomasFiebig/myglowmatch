@@ -183,7 +183,6 @@ export const formSteps: Step[] = [
       { value: "nie_selten", label: "nie / sehr selten" },
       { value: "gelegentlich", label: "gelegentlich" },
       { value: "regelmaessig", label: "regelmäßig" },
-      { value: "sehr_haeufig", label: "sehr häufig" },
     ],
   },
 
