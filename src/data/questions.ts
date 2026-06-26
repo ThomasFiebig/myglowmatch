@@ -196,8 +196,7 @@ export const formSteps: Step[] = [
     title: "Wie oft wäschst du deine Haare?",
     options: [
       { value: "taeglich", label: "täglich" },
-      { value: "alle_2_3_tage", label: "alle 2–3 Tage" },
-      { value: "1x_pro_woche", label: "1x pro Woche oder seltener" },
+      { value: "nicht_taeglich", label: "nicht täglich" },
     ],
   },
 
