@@ -210,6 +210,30 @@ PROFILES = {
         "consent_recommendation": True,
         "consent_marketing": False,
     },
+    # Nina — Locken + mehr_volumen-Wunsch (Migration #20 moxie_mousse-Test).
+    # Erwartung: curl_creme (REQ-11) + moxie_mousse (REQ-16b styling_3).
+    "nina": {
+        "partner_id": "desiree",
+        "first_name": "Nina-TEST",
+        "email": "info@myglowmatch.de",
+        "phone": "01500000011",
+        "scalp_status": ["normal"],
+        "hair_structure": "lockig",
+        "hair_thickness": "fein",
+        "hair_condition": ["kraftlos"],
+        "hair_treatments": "nein",
+        "heat_frequency": "nie_selten",
+        "heat_tools": [],
+        "wash_frequency": "nicht_taeglich",
+        "styling_effort": "leichtes_styling",
+        "curl_priority": "mehr_volumen",
+        "ends_condition": None,
+        "care_goals": ["volumen", "feuchtigkeit"],
+        "routine_preference": "ausgewogen",
+        "time_commitment": "mittel",
+        "consent_recommendation": True,
+        "consent_marketing": False,
+    },
     # Eva — fettige Kopfhaut + nicht-täglich-Wäsche (Migration #17 the_champ-Test).
     # Erwartung: the_champ (REQ-14) im finish-Slot, sonst monat_black-Routine.
     "eva": {
@@ -505,6 +529,10 @@ def check_anomalies(profile: dict, output: dict) -> list:
         if "frizz" in profile.get("hair_condition", []) and profile.get("curl_priority") != "glatt":
             if "smoothing_fohn_spray" in product_keys:
                 warnings.append("Smoothing Föhn-Spray empfohlen trotz Locken+Frizz (CON-13 hätte greifen müssen)")
+    # Migration #20 — bei curl_priority='mehr_volumen' + Locken: moxie_mousse erwartet
+    if profile.get("curl_priority") == "mehr_volumen" and profile["hair_structure"] in ("wellig", "lockig", "kraus"):
+        if "moxie_mousse" not in product_keys:
+            warnings.append("Locken + mehr_volumen-Wunsch, aber kein moxie_mousse empfohlen (REQ-16b hätte feuern müssen)")
     # Migration #16 — bei curl_priority='glatt' (prefers_straight): kein Curl-Produkt,
     # aber Hitzeschutz bei heat_use=yes muss da sein
     if profile.get("curl_priority") == "glatt":
