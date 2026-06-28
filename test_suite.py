@@ -283,6 +283,57 @@ PROFILES = {
         "consent_recommendation": True,
         "consent_marketing": False,
     },
+    # Tina — Locken + gelegentliche Hitze (heat_use=maybe) (Migration #21 V5-Coverage).
+    # Vor #21: REQ-11 greift nicht (heat_use!=no), Hitzeschutz statt curl_creme.
+    # Nach #21: REQ-11c (heat_use=maybe) → curl_creme styling_1, kein hitzeschutzspray
+    # (REQ-04 weicht via requires_not).
+    "tina": {
+        "partner_id": "desiree",
+        "first_name": "Tina-TEST",
+        "email": "info@myglowmatch.de",
+        "phone": "01500000012",
+        "scalp_status": ["normal"],
+        "hair_structure": "wellig",
+        "hair_thickness": "fein",
+        "hair_condition": ["trocken"],
+        "hair_treatments": "gefaerbt",
+        "heat_frequency": "gelegentlich",
+        "heat_tools": [],
+        "wash_frequency": "nicht_taeglich",
+        "styling_effort": "regelmaessiges_styling",
+        "curl_priority": "mehr_definition",
+        "ends_condition": "leicht_trocken",
+        "care_goals": ["feuchtigkeit"],
+        "routine_preference": "ausgewogen",
+        "time_commitment": "mittel",
+        "consent_recommendation": True,
+        "consent_marketing": False,
+    },
+    # Tom — Glattes mittleres Haar mit Volumen-Ziel (Migration #21 V6-Coverage).
+    # Vor #21: REQ-19 greift nicht (hair_thickness!=fein), kein Volumen-Styling.
+    # Nach #21: REQ-19b (hair_thickness=mittel) → moxie_mousse|volumen_spray styling_1.
+    "tom": {
+        "partner_id": "desiree",
+        "first_name": "Tom-TEST",
+        "email": "info@myglowmatch.de",
+        "phone": "01500000013",
+        "scalp_status": ["normal"],
+        "hair_structure": "glatt",
+        "hair_thickness": "mittel",
+        "hair_condition": ["keine_probleme"],
+        "hair_treatments": "unbehandelt",
+        "heat_frequency": "nie_selten",
+        "heat_tools": [],
+        "wash_frequency": "nicht_taeglich",
+        "styling_effort": "regelmaessiges_styling",
+        "curl_priority": None,
+        "ends_condition": None,
+        "care_goals": ["volumen"],
+        "routine_preference": "ausgewogen",
+        "time_commitment": "mittel",
+        "consent_recommendation": True,
+        "consent_marketing": False,
+    },
     # Sina — Locken-Vollprofil mit curl_priority='beides' (Migration #15 Test).
     # Erwartung: curl_creme (styling_1) + curl_gelee (styling_2) +
     # curl_auffrischer (styling_3), kein smoothing_fohn_spray (Frizz+Locken),
