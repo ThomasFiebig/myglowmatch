@@ -67,6 +67,16 @@ export default function ImpressumPage() {
               >
                 info@veradex.de
               </a>
+              <br />
+              Website:{" "}
+              <a
+                href="https://veradex.de"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-4 hover:text-rosegold-dark"
+              >
+                veradex.de
+              </a>
             </p>
           </section>
 
