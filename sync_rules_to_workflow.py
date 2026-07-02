@@ -76,6 +76,29 @@ SYNCS = [
             (r"\s*\.map\(it => it\.json\)", ""),
         ],
     },
+    {
+        "tab": "map_pflegelevel_overrides",
+        "node": "06 Pflegelevel berechnen",
+        "var": "overrideRules",
+        "emit_style": "expr",
+        # Muster wie Node 04: `$items(…)\n.map(it => it.json)`. `.filter(aktiv==TRUE)` bleibt.
+        "init_pattern": r'\$items\("06b Pflegelevel-Overrides laden"\)\s*\n\s*\.map\(it => it\.json\)',
+    },
+    {
+        "tab": "map_max_products",
+        "node": "06 Pflegelevel berechnen",
+        "var": "maxRules",
+        "emit_style": "expr",
+        "init_pattern": r'\$items\("06c Max-Products laden"\)\s*\n\s*\.map\(it => it\.json\)',
+    },
+    {
+        "tab": "map_pool_filter",
+        "node": "08 Ausschluss-Filter",
+        "var": "poolRules",
+        "emit_style": "expr",
+        # Nach der Region kommt noch `.filter(aktiv==TRUE).sort(prioritaet)` — bleibt intakt.
+        "init_pattern": r'\$items\("08a Pool-Filter laden"\)\s*\n\s*\.map\(it => it\.json\)',
+    },
 ]
 
 
