@@ -99,6 +99,39 @@ SYNCS = [
         # Nach der Region kommt noch `.filter(aktiv==TRUE).sort(prioritaet)` — bleibt intakt.
         "init_pattern": r'\$items\("08a Pool-Filter laden"\)\s*\n\s*\.map\(it => it\.json\)',
     },
+    {
+        "tab": "map_derived_variables",
+        "node": "05 Bool-Flags berechnen",
+        "var": "sheetRows",
+        "emit_style": "expr",
+        # Nach der Region bleibt `.filter(r => r.variable && r.regel_json)` intakt
+        # (redundant zum sheet-reader-Filter, aber schützt gegen Zeilen mit leerem regel_json).
+        "init_pattern": r'\$items\("05a map_derived_variables laden"\)\s*\n\s*\.map\(it => it\.json\)',
+    },
+    {
+        "tab": "map_pflegelevel_scoring",
+        "node": "06 Pflegelevel berechnen",
+        "var": "scoringRules",
+        "emit_style": "expr",
+        # `.filter(aktiv==TRUE)` bleibt intakt.
+        "init_pattern": r'\$items\("06a Pflegelevel-Scoring laden"\)\s*\n\s*\.map\(it => it\.json\)',
+    },
+    {
+        "tab": "map_profil_funktion",
+        "node": "12 Scoring & Slot-Befüllung",
+        "var": "profilMapping",
+        "emit_style": "expr",
+        # `.filter(aktiv==TRUE)` bleibt intakt.
+        "init_pattern": r'\$items\("06d Profil-Funktion-Mapping laden"\)\s*\n\s*\.map\(it => it\.json\)',
+    },
+    {
+        "tab": "produktdatenbank",
+        "node": "08 Ausschluss-Filter",
+        "var": "allProducts",
+        "emit_style": "stmt",
+        # Komplette Deklaration ersetzen (analog Node 14). Kein `.filter/.sort` dahinter.
+        "init_pattern": r'const allProducts = \$items\("07 Produktdatenbank laden"\)\.map\(it => it\.json\);',
+    },
 ]
 
 
