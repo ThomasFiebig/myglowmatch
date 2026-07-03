@@ -145,6 +145,14 @@ Sticky Notes zählen nicht. Mail-Routing zwischen 18 und 18b geht aus Code-Quell
 
 **Stand 2026-07-03**: Sync-Fortschritt 6/10 Sheets, Bulk-Ampel weiterhin 2/13 aber Erklärung klar — verwaiste Loader (Nodes 04a, 06b, 06c, 08a, 10, 13) laufen weiter und dominieren die Quota-Wellen. Ampel-Kipp auf grün braucht Loader-Cleanup, nicht weitere Syncs. Verbleibende Schritte: (a) 4 Sheets syncen (`map_derived_variables` → 05, `map_pflegelevel_scoring` → 06a-Rest, `map_profil_funktion` → 12, `produktdatenbank` → 07 als letzten Payload-Test); (b) Loader-Cleanup — alle 10 googleSheets-Read-Nodes entfernen, Verkabelung anpassen. Sync-Skript-Konfiguration: `SYNCS`-Liste in `sync_rules_to_workflow.py` erweitern, jeweils Dry-Run + Anna-Single-Test pro Schritt.
 
+## Backlog — Mail-Text-Verbesserungen (nicht dringend, aber vor Vermarktung)
+
+Beide Punkte sind in Node 17 (`17 Claude E-Mail formulieren`) verortet. Kein Kundinnen-Schaden bei Standardfall, aber sichtbare Peinlichkeiten in Grenzfällen (Männer, ungewöhnliche Profile).
+
+- **Node 17 `readable`-Map ergänzen** (bemerkt 2026-07-02, Marcel-Case): `keine_probleme` fehlt als Übersetzung → Rohwert erscheint in Beraterin-Mail. Fix: 1 Zeile in die Map (Z. ~205), plus 10-Min-Frontend-Audit `src/data/questions.ts` gegen die Node-17-Map auf weitere blinde Flecken. Deploy via Micro-Patch-Skript, konsistent mit Migrations-Konvention. Details in Memory `project_node17_readable_map_fix`.
+
+- **Mails gendern** (bemerkt 2026-07-03, Marcel-Case): Beraterin- und Kundinnen-Mail-Text durchgängig weiblich formuliert („liebe X", „du bist begeistert", flektierte Empfehlungssätze). Männer werden als Frauen angesprochen — für Sinas Mann Marcel als potenzielle-Käufer-Test ein direktes „Nicht-für-mich"-Signal. Design-Entscheidung offen: (A) Frontend um `gender`-Feld erweitern + flektiertes Template, (B) geschlechtsneutral formulieren („Hallo X", passive Empfehlungssätze), (C) Vornamen-Heuristik (fragil, nicht empfohlen). Umsetzung nicht 1-Zeilen-Fix — Node 17 jsCode komplett auf geschlechtsspezifische Formulierungen durchgehen (~15-30 Stellen). Details in Memory `project_email_gender_neutral`.
+
 Mini-Syntax in `map_pool_filter` und `map_pflegelevel_overrides`-ähnlichen Tabs:
 - Bedingungen mit `;` getrennt, Liste `feld:operator[:wert]`
 - Operatoren: `=`, `!=`, `is_true`, `is_false`, `in`, `not_in`
