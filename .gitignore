@@ -56,3 +56,7 @@ backups/
 next-env.d.ts
 produktdatenblaetter/
 node17_current.js
+
+# private/persönliche Bilder in demo/
+demo/sina-hero.png
+demo/myglowmatch-hero.jpg

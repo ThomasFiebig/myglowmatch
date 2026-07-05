@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Zoom-Briefing · 3. Juli 2026 · myglowmatch</title>
+<style>
+  @page {
+    size: A4;
+    margin: 14mm 14mm 14mm 14mm;
+  }
+  :root{
+    --bg:#fbf6f0;
+    --blush:#f6e6e1;
+    --ink:#2d2a26;
+    --ink-soft:#5c5651;
+    --muted:#8c857f;
+    --line:#efe5dc;
+    --accent:#e0b1a8;
+    --accent-dark:#c98f84;
+    --accent-deep:#d4a593;
+    --chip-bg:#f5e6dc;
+    --chip-text:#7a5641;
+    --kupfer:#a07560;
+    --card:#ffffff;
+    --ok:#3f7d4a;
+    --warn:#b17a2c;
+  }
+  *{box-sizing:border-box;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Helvetica,Arial,sans-serif;font-size:10.5pt;line-height:1.5}
+  h1,h2,h3,h4,.serif{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:var(--ink);margin:0}
+
+  .page{padding:0}
+  .cover{
+    background:linear-gradient(180deg,var(--blush) 0%,var(--bg) 65%);
+    padding:40mm 12mm 30mm;
+    min-height:250mm;
+    page-break-after:always;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .cover-brand{display:flex;align-items:center;gap:12px}
+  .brand-dot{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-deep))}
+  .brand-name{font-family:Georgia,serif;font-size:22pt;letter-spacing:.03em}
+  .cover-eyebrow{font-size:9pt;letter-spacing:.22em;color:var(--kupfer);font-weight:600;text-transform:uppercase;margin-bottom:14px}
+  .cover-title{font-family:Georgia,serif;font-size:36pt;line-height:1.15;font-weight:500;color:var(--ink);margin-bottom:16px;max-width:130mm}
+  .cover-sub{font-size:14pt;color:var(--ink-soft);max-width:130mm;line-height:1.55}
+  .cover-meta{display:grid;grid-template-columns:auto 1fr;gap:8px 20px;font-size:10.5pt;margin-top:24px}
+  .cover-meta b{color:var(--kupfer);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:9pt;font-family:Helvetica,Arial,sans-serif}
+  .cover-portraits{display:flex;gap:14px;align-items:center;margin-top:20px}
+  .cover-portrait{width:52px;height:52px;border-radius:50%;background:var(--accent-deep);color:#fff;font-family:Georgia,serif;font-size:18pt;display:flex;align-items:center;justify-content:center;font-weight:500}
+  .cover-portrait.you{background:var(--accent)}
+  .cover-portrait-block{display:flex;flex-direction:column;align-items:center;font-size:9pt;color:var(--ink-soft)}
+
+  .cover-footer{font-size:9pt;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin-top:auto}
+
+  /* Content Pages */
+  .content{padding:2mm 8mm 6mm}
+  h1.section{
+    font-size:20pt;
+    margin-top:0;
+    margin-bottom:4px;
+    line-height:1.2;
+  }
+  .section-eyebrow{font-size:8.5pt;letter-spacing:.22em;color:var(--kupfer);font-weight:600;text-transform:uppercase;margin-bottom:8px}
+  h2{font-size:13pt;margin:16px 0 6px;line-height:1.3}
+  h3{font-size:11.5pt;margin:12px 0 5px;line-height:1.35}
+  p{margin:0 0 8px}
+
+  ul{margin:0 0 10px 20px;padding:0}
+  li{margin-bottom:4px}
+
+  .agenda-item{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:7px;
+    page-break-inside:avoid;
+    break-inside:avoid;
+  }
+  .agenda-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+  .agenda-num{
+    display:inline-block;
+    background:var(--chip-bg);color:var(--chip-text);
+    font-size:8pt;letter-spacing:.14em;font-weight:700;
+    padding:2px 8px;border-radius:14px;text-transform:uppercase
+  }
+  .agenda-time{font-size:8.5pt;color:var(--muted)}
+  .agenda-title{font-family:Georgia,serif;font-size:12pt;font-weight:500;color:var(--ink);margin:2px 0 4px}
+  .agenda-body{font-size:10pt;color:var(--ink)}
+  .agenda-body ul{margin-top:4px;margin-bottom:2px}
+  .agenda-body li{margin-bottom:2px}
+
+  .callout{
+    background:var(--card);
+    border-left:4px solid var(--accent);
+    border-radius:0 10px 10px 0;
+    padding:10px 14px;
+    margin:10px 0;
+    font-size:10pt;
+    page-break-inside:avoid;
+    break-inside:avoid;
+  }
+  .callout b{color:var(--kupfer)}
+  .callout ul{margin-bottom:2px}
+
+  .quote-box{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:9px;
+    padding:10px 14px;
+    margin:7px 0;
+    font-size:9.5pt;
+    line-height:1.55;
+    page-break-inside:avoid;
+    break-inside:avoid;
+  }
+  .quote-box .para{
+    color:var(--kupfer);
+    font-weight:600;
+    letter-spacing:.06em;
+    font-size:9pt;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:5px;
+  }
+  .quote-box em{font-style:italic;color:var(--ink)}
+
+  table{width:100%;border-collapse:collapse;font-size:9.5pt;margin:6px 0 10px;page-break-inside:avoid;break-inside:avoid}
+  th,td{padding:6px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  tr{page-break-inside:avoid;break-inside:avoid}
+  th{
+    background:var(--blush);color:var(--kupfer);
+    font-size:8.5pt;letter-spacing:.1em;font-weight:700;text-transform:uppercase;
+    border-bottom:1px solid var(--accent-deep);
+  }
+  td b{color:var(--ink)}
+  .price-highlight{background:#fefbf8}
+  .price-highlight td{border-top:2px solid var(--accent)}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+
+  .kpi-box{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    page-break-inside:avoid;
+  }
+  .kpi-box .card-title{font-size:9pt;text-transform:uppercase;letter-spacing:.12em;color:var(--kupfer);font-weight:600;margin-bottom:6px}
+  .kpi-box .kpi{font-family:Georgia,serif;font-size:22pt;color:var(--ink);line-height:1;margin-bottom:4px}
+  .kpi-box .kpi-sub{color:var(--ink-soft);font-size:9pt}
+
+  .roadmap{border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+  .roadmap th{background:var(--blush)}
+
+  .note-box{
+    background:var(--blush);
+    border-radius:12px;
+    padding:16px 20px;
+    margin:12px 0;
+    page-break-inside:avoid;
+  }
+  .note-box h3{margin-top:0;color:var(--chip-text)}
+
+  .footer-tip{
+    display:flex;gap:10px;align-items:flex-start;
+    background:#fff;border:1px solid var(--line);border-radius:9px;
+    padding:9px 14px;margin-bottom:6px;font-size:9.5pt;
+    page-break-inside:avoid;break-inside:avoid;
+  }
+  .footer-tip .tip-icon{
+    flex-shrink:0;width:22px;height:22px;border-radius:50%;
+    background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;
+    font-family:Georgia,serif;font-size:11pt;font-weight:600;line-height:1
+  }
+  .footer-tip b{color:var(--chip-text)}
+
+  .page-break{page-break-before:always;padding-top:8px}
+
+  .after-zoom{
+    background:linear-gradient(180deg,var(--card) 0%,var(--blush) 100%);
+    border-radius:12px;
+    padding:14px 18px;
+    margin-top:14px;
+    page-break-inside:avoid;
+    break-inside:avoid;
+  }
+  .after-zoom h3{margin-top:0;margin-bottom:4px}
+  .after-zoom ol{padding-left:20px;margin:6px 0 2px;font-size:10pt}
+  .after-zoom li{margin-bottom:3px}
+
+  .badge{
+    display:inline-block;padding:2px 10px;border-radius:20px;
+    font-size:8pt;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+  }
+  .badge.warn{background:#fbf1de;color:var(--warn)}
+  .badge.ok{background:#eaf2ec;color:var(--ok)}
+  .badge.rose{background:var(--chip-bg);color:var(--chip-text)}
+</style>
+</head>
+<body>
+
+<!-- =============== COVER =============== -->
+<section class="cover">
+  <div>
+    <div class="cover-brand">
+      <div class="brand-dot"></div>
+      <div class="brand-name">myglowmatch</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cover-eyebrow">Zoom-Briefing</div>
+    <div class="cover-title">Systemvorstellung, Compliance-Realität &amp; gemeinsame Roadmap</div>
+    <div class="cover-sub">Vorbereitung für den Termin mit Sina Hildmann und Marcel — heute Abend.</div>
+
+    <div class="cover-portraits">
+      <div class="cover-portrait-block">
+        <div class="cover-portrait you">DF</div>
+        <div style="margin-top:6px">Desiree</div>
+      </div>
+      <div style="color:var(--muted);font-size:12pt;padding:0 4px">×</div>
+      <div class="cover-portrait-block">
+        <div class="cover-portrait">SH</div>
+        <div style="margin-top:6px">Sina</div>
+      </div>
+      <div class="cover-portrait-block">
+        <div class="cover-portrait">M</div>
+        <div style="margin-top:6px">Marcel</div>
+      </div>
+    </div>
+
+    <div class="cover-meta">
+      <b>Datum</b><span>3. Juli 2026, abends</span>
+      <b>Anbieter</b><span>VERADEX (Thomas Fiebig) — nicht Desiree persönlich</span>
+      <b>Ziel</b><span>Systemvorstellung, Sinas Rolle als Botschafterin klären, Compliance transparent, gemeinsame Roadmap zur MONAT-Genehmigung. <b style="color:var(--warn);font-family:Helvetica,Arial,sans-serif;text-transform:none;letter-spacing:0;font-size:10.5pt">Kein Vertrag mit Sina.</b></span>
+      <b>Sinas Rolle</b><span>Test-Nutzerin &amp; Botschafterin — kostenloser, unbefristeter Zugang. Ihre Downlines buchen bei VERADEX direkt.</span>
+      <b>Dauer</b><span>ca. 50 Minuten</span>
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    myglowmatch Partnerbereich · Vorbereitendes Briefing · VERADEX · veradex.de
+  </div>
+</section>
+
+<!-- =============== ABLAUF =============== -->
+<section class="content page-break">
+  <div class="section-eyebrow">Ablauf des Zoom-Calls</div>
+  <h1 class="section">Wie wir den Termin führen</h1>
+  <p style="color:var(--ink-soft);margin-bottom:16px">Ungefähre Zeiten. Wenn der Compliance-Teil länger dauert, ist das gut — genau dort entstehen die belastbaren Absprachen.</p>
+
+  <div class="agenda-item">
+    <div class="agenda-head"><span class="agenda-num">Block 1</span><span class="agenda-time">5 Min</span></div>
+    <div class="agenda-title">Begrüßung &amp; Kontext</div>
+    <div class="agenda-body">Kurz erzählen, warum das System entstanden ist (eigene Beratungsprozess-Skalierung). Sina danken für ihr Interesse in dieser Woche, Marcel danken für seine Buchhaltungs- und Vertragssicht.</div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-head"><span class="agenda-num">Block 2</span><span class="agenda-time">10 Min</span></div>
+    <div class="agenda-title">System-Demo (Endkundinnen- + Partner-Sicht)</div>
+    <div class="agenda-body">
+      <ul>
+        <li>Fragebogen kurz durchklicken auf <b>myglowmatch.de/sina</b></li>
+        <li>Ergebnis-Mail auf dem Handy zeigen (echter Test-Durchlauf)</li>
+        <li>Partner-Sicht: <b>demo/partner-portal.html</b> im Browser — Login, Dashboard, Kundinnen, Beratung starten, Branding mit Portrait und Farbwahl, Einstellungen mit Abo</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-head"><span class="agenda-num">Block 3</span><span class="agenda-time">5 Min</span></div>
+    <div class="agenda-title">Was das System kann</div>
+    <div class="agenda-body">
+      <ul>
+        <li>37 MONAT-Produkte in individuelle Empfehlungen übersetzen</li>
+        <li>~15-sekündige Beratung mit Mail an Kundin <b>und</b> Beraterin</li>
+        <li>Multi-Tenant: eigener Link <b>myglowmatch.de/[name]</b>, eigenes Portrait, eigene Farbe</li>
+        <li>Datenblatt-strikt: jede Aussage 1:1 aus offiziellen MONAT-PDFs</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="agenda-item" style="border-left:4px solid var(--accent);background:#fffdfa">
+    <div class="agenda-head"><span class="agenda-num" style="background:var(--warn);color:#fff">Block 4</span><span class="agenda-time">10 Min · Kernthema</span></div>
+    <div class="agenda-title">Compliance-Realität</div>
+    <div class="agenda-body">Zitate aus MONAT-Policies vorlesen und einordnen. Klarmachen: <b>Verkauf ohne schriftliche Genehmigung ist keine Option.</b> Details auf der nächsten Seite.</div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-head"><span class="agenda-num">Block 5</span><span class="agenda-time">5 Min</span></div>
+    <div class="agenda-title">Warum das für Sina ein Win ist</div>
+    <div class="agenda-body">Sina bekommt geniales Tool geschenkt für die eigene Beratung. Ihr 645-Board (boards.com) berät besser → mehr MONAT-Umsatz im Team → mehr Sinas Provision aus MONAT. Kein Cash-Fluss zwischen Sina und VERADEX, keine Provisions-Struktur. Sauberer, MONAT-konformer Kreislauf ohne Nebenstruktur.</div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-head"><span class="agenda-num">Block 6</span><span class="agenda-time">10 Min</span></div>
+    <div class="agenda-title">Roadmap zur MONAT-Genehmigung</div>
+    <div class="agenda-body">Wer macht was bis wann. Tabelle auf Seite 4.</div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-head"><span class="agenda-num">Block 7</span><span class="agenda-time">5 Min</span></div>
+    <div class="agenda-title">Preise für Board-Mitglieder (nach Genehmigung)</div>
+    <div class="agenda-body">Was Board-Mitglieder zahlen, wenn Sina das Tool vorstellt. Nicht Sinas Preis — sie bekommt kostenlos. Details auf Seite 5.</div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-head"><span class="agenda-num">Block 8</span><span class="agenda-time">5 Min</span></div>
+    <div class="agenda-title">Nächste Schritte &amp; Verabschiedung</div>
+    <div class="agenda-body">Klar absprechen: bis MONAT-Genehmigung vorliegt, stellt Sina das Tool im Board nicht als Kauf-Angebot vor. Nur informelle Erwähnung „ich teste gerade was Spannendes".</div>
+  </div>
+</section>
+
+<!-- =============== COMPLIANCE =============== -->
+<section class="content page-break">
+  <div class="section-eyebrow">Der wichtigste Teil des Calls</div>
+  <h1 class="section">Compliance-Realität</h1>
+  <p style="color:var(--ink-soft);margin-bottom:16px">Fünf MONAT-Policy-Klauseln, die direkt betreffen, was wir vorhaben. Vorlesen, einordnen — nicht drüber hinweg­reden.</p>
+
+  <div class="quote-box" style="border-left:4px solid var(--warn);padding-left:14px">
+    <span class="para">§ 3.2.1 · der eigentliche Bruchpunkt</span>
+    <em>Market Partner dürfen keine eigenen Verkaufshilfen, Geschäftsinstrumente oder Websites erstellen, die MONAT-Geschäftsaktivitäten gewidmet sind, es sei denn ausdrücklich vom Unternehmen aufgefordert.</em>
+    <div style="margin-top:6px;color:var(--ink-soft);font-size:9.5pt">→ Ein MONAT-Empfehlungstool fällt exakt in diese Kategorie. <b>Diese Klausel ist der Grund, warum die Genehmigung zwingend ist</b> — sie greift auch dann, wenn wir alle Marken sauber behandeln.</div>
+  </div>
+
+  <div class="quote-box">
+    <span class="para">§ 3.2.5 · differenziert</span>
+    <em>MONAT wird die Verwendung seiner Handelsnamen, Marken, Designs oder Symbole ohne vorherige schriftliche Genehmigung nicht gestatten.</em>
+    <div style="margin-top:6px;color:var(--ink-soft);font-size:9.5pt">→ <b>Kritisch</b> bei MONAT-Logos, offiziellen Produktbildern, MONAT-typischem Branding. <b>Vertretbar</b> bei reiner Text-Nennung von Produktnamen in einer 1:1-Empfehlungs-Mail (die Partnerin dürfte diese Namen auch per WhatsApp nennen — nominative Nennung, keine Markenusurpation). Unser Design nutzt keine Logos/Bilder/offizielle Farbwelt → deutlich weniger angreifbar.</div>
+  </div>
+
+  <div class="quote-box">
+    <span class="para">§ 3.6.1</span>
+    <em>Produktclaims nur aus offizieller MONAT-Literatur (kein Interpretations-Raum).</em>
+    <div style="margin-top:6px;color:var(--ink-soft);font-size:9.5pt">→ Deckt sich mit unserer PDF-strikten Empfehlungslogik, aber Wortlaut muss 1:1 sein.</div>
+  </div>
+
+  <div class="quote-box">
+    <span class="para">§ 3.6.3</span>
+    <em>Keine Einkommens-Claims („mit meinem Tool mehr Umsatz").</em>
+    <div style="margin-top:6px;color:var(--ink-soft);font-size:9.5pt">→ Betrifft auch das Sales-Material an andere Partnerinnen.</div>
+  </div>
+
+  <div class="quote-box">
+    <span class="para">§ 3.9.1</span>
+    <em>Kein direktes oder indirektes Anwerben anderer Partner für andere Direktvertriebe.</em>
+    <div style="margin-top:6px;color:var(--ink-soft);font-size:9.5pt">→ VERADEX/myglowmatch ist aus MONAT-Sicht ein Nebenbusiness. Deshalb Vorsicht bei jeder Sales-Struktur. <b style="color:var(--ok)">Entschärfend:</b> Sinas 645-Board (boards.com) ist ihre eigene Downline — kein Cross-Line-Risiko innerhalb dieses Kanals.</div>
+  </div>
+
+  <div class="callout" style="border-left-color:var(--warn)">
+    <b>Was das für uns heißt — zwei getrennte Haftungsstränge.</b>
+    <ul style="margin-top:8px;margin-bottom:4px">
+      <li><b>MONAT-Vertragshaftung (§ 3.6)</b> — trifft nur uns Partnerinnen. Kontosperrung, Downline-Verlust, Vertragsstrafe, ausstehende Boni, Karriere-Titel. Sina und Desiree stehen hier persönlich in der Haftung.</li>
+      <li><b>Markenrechtliche Haftung</b> — trifft VERADEX. Nutzung von MONAT-Namen/-Marken/-Bildern ohne Genehmigung = Abmahnung, Unterlassungsklage, Schadensersatz. Thomas haftet als Einzelunternehmer mit VERADEX <b>persönlich</b>.</li>
+    </ul>
+    Beide Stränge werden durch die MONAT-Genehmigung entschärft. Ohne sie stehen beide Seiten im Feuer. Der Weg „wir prüfen und starten dann" trägt nicht.
+  </div>
+
+  <div class="callout" style="border-left-color:var(--ok)">
+    <b>Bewusste Design-Entscheidungen, die uns absichern.</b>
+    <ul style="margin-top:8px;margin-bottom:4px">
+      <li>Kein Team-Abo, keine Provisions-Struktur, kein Bundle — verhindert dass myglowmatch als zweite MLM-Ebene gelesen werden kann (§ 3.9.1)</li>
+      <li><b>Kein Vertrag zwischen Sina und VERADEX</b> — sie ist Botschafterin, keine Wiederverkäuferin. Kein Cash-Fluss, keine Umsatzbeteiligung, kein Recruiting-Anreiz.</li>
+      <li>VERADEX ist Anbieter für alle Board-Mitglieder — nicht Desiree persönlich (trennt Markenpartnerin-Rolle vom SaaS-Verkauf)</li>
+      <li>UI in Rosé/Champagne, klar von MONAT-Lila differenziert — keine visuelle Verwechslungsgefahr</li>
+      <li>Produkt-Aussagen wortwörtlich aus offizieller MONAT-Literatur (PDF-strikt)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- =============== ROADMAP =============== -->
+<section class="content page-break">
+  <div class="section-eyebrow">Der Weg nach vorn</div>
+  <h1 class="section">Roadmap zur MONAT-Genehmigung</h1>
+  <p style="color:var(--ink-soft);margin-bottom:16px">Sina ist als Teamchefin die geeignete Türöffnerin für den Corporate-Kontakt. VERADEX schreibt den Antrag, Desiree ist Fürsprecher-Partnerin.</p>
+
+  <table class="roadmap">
+    <thead>
+      <tr><th style="width:44%">Schritt</th><th style="width:32%">Wer</th><th style="width:24%">Bis wann</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Volltext-Policies-PDF beschaffen und verifizieren</b><br><span style="color:var(--ink-soft)">Damit wir aus dem Volltext zitieren, nicht aus der Web-Zusammenfassung.</span></td>
+        <td>Sina (Corporate-Zugriff?)</td>
+        <td>3 Tage</td>
+      </tr>
+      <tr>
+        <td><b>Antrag an MONAT DACH formulieren</b><br><span style="color:var(--ink-soft)">VERADEX als Anbieter, Sina + Desiree als Fürsprecher-Partnerinnen.</span></td>
+        <td>Desiree + Thomas, Review Sina/Marcel</td>
+        <td>1 Woche</td>
+      </tr>
+      <tr>
+        <td><b>Antrag einreichen, Ansprechperson bei MONAT DACH klären</b></td>
+        <td>Sina (höhere Karriere-Ebene, bessere Corporate-Kontakte)</td>
+        <td>2 Wochen</td>
+      </tr>
+      <tr>
+        <td><b>Warten, ggf. Rückfragen beantworten</b></td>
+        <td>offen</td>
+        <td>4–8 Wochen</td>
+      </tr>
+      <tr class="price-highlight">
+        <td><b>Bei Genehmigung:</b> Vertragsstart mit Sinas Team</td>
+        <td>alle</td>
+        <td>anschließend</td>
+      </tr>
+      <tr>
+        <td><b>Bei Ablehnung:</b> Konsequenzen bewerten (Rebrand als Nicht-MONAT-Tool? Aufgeben?)</td>
+        <td>alle</td>
+        <td>anschließend</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <b>Wichtiger Zoom-Moment:</b> wenn Sina sagt „ich kenne bei MONAT DACH jemanden" — genau darauf zielen. Ihr Kontakt-Netzwerk ist das eigentliche Asset dieses Calls.
+  </div>
+</section>
+
+<!-- =============== PREISE =============== -->
+<section class="content page-break">
+  <div class="section-eyebrow">Für die 645 Board-Mitglieder · nach MONAT-Genehmigung</div>
+  <h1 class="section">Preise (nicht für Sina)</h1>
+  <p style="color:var(--ink-soft);margin-bottom:16px"><b>Sina zahlt nichts</b> — sie bekommt das Tool kostenlos und unbefristet als Botschafterin. Das hier ist der Preis für Board-Mitglieder, die über Sinas Empfehlung kommen. Alle Preise brutto (inkl. 19&nbsp;% USt). Rechnungsstellung durch VERADEX direkt an das jeweilige Board-Mitglied.</p>
+
+  <table>
+    <thead>
+      <tr><th>Variante</th><th>Setup</th><th>Laufender Preis</th><th>Vertrag</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Monatsabo</b></td>
+        <td>49 € einmalig</td>
+        <td><b>29 €/Monat</b></td>
+        <td>monatlich kündbar</td>
+      </tr>
+      <tr class="price-highlight">
+        <td><b>Jahresabo</b> <span class="badge rose">empfohlen</span></td>
+        <td><s>49 €</s> <b style="color:var(--ok)">entfällt</b></td>
+        <td><b>290 €/Jahr</b></td>
+        <td>12 Monate, autom. Verlängerung, Kündigung 1 Mo vor Ende</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <b>Jahresabo-Vorteil.</b> 12 Monate für den Preis von 10 (2 Monate gratis) plus Setup geschenkt = <b>107 € Ersparnis</b> gegenüber Monatsabo im ersten Jahr.
+  </div>
+
+  <h2>Rechnung für Marcel — MwSt-Realität</h2>
+  <table>
+    <thead>
+      <tr><th>Position</th><th>Brutto</th><th>Netto</th><th>USt (19 %)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Setup einmalig</td><td>49,00 €</td><td>41,18 €</td><td>7,82 €</td></tr>
+      <tr><td>Monatsabo</td><td>29,00 €</td><td>24,37 €</td><td>4,63 €</td></tr>
+      <tr><td>Jahresabo</td><td>290,00 €</td><td>243,70 €</td><td>46,30 €</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:9.5pt;color:var(--muted);margin-top:-4px">Zahlung via SEPA-Lastschrift oder PayPal. Jahresabo einmal jährlich, Monatsabo monatlich. VERADEX führt USt ans Finanzamt ab.</p>
+
+  <h2>Umsatzprognose Sinas Board (Illustration)</h2>
+  <p style="margin-bottom:8px">Annahme: 130 Abos aus Sinas 645-Personen-Board (~20&nbsp;% Konversion, WhatsApp-Gruppe ist Teilmenge). 60 % wählen Jahresabo, 40 % Monatsabo.</p>
+  <table>
+    <thead>
+      <tr><th>Position</th><th>Anzahl</th><th>Betrag brutto</th><th>Summe brutto</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Monatsabo (Setup)</td><td>52</td><td>49 €</td><td>2.548 €</td></tr>
+      <tr><td>Monatsabo (12 Monate)</td><td>52</td><td>29 × 12</td><td>18.096 €</td></tr>
+      <tr><td>Jahresabo</td><td>78</td><td>290 €</td><td>22.620 €</td></tr>
+      <tr class="price-highlight">
+        <td colspan="3"><b>Summe Jahr 1</b></td>
+        <td><b>~43.264 € brutto / ~36.356 € netto</b></td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:9.5pt;color:var(--muted);margin-top:-4px">Ab Jahr 2 fallen Setup-Einnahmen weg, dafür wiederkehrend ~36.516 € brutto / ~30.686 € netto aus 130 aktiven Abos.</p>
+
+  <div class="callout" style="border-left-color:var(--ok)">
+    <b>Sinas Deal.</b> Kostenloser, unbefristeter Zugang zum Tool. Kein Cash-Fluss, keine Provision, keine Umsatzbeteiligung. Reines Ambassador-Modell. Ihr Gewinn: das Tool selbst nutzen + ihr Board berät besser → mehr Team-Umsatz → höhere Sinas-Provision aus MONAT (der saubere, MONAT-konforme Kreislauf).
+  </div>
+</section>
+
+<!-- =============== NOTIZEN FÜR DICH =============== -->
+<section class="content page-break">
+  <div class="section-eyebrow">Für dich, nicht zum Vorlesen</div>
+  <h1 class="section">Notizen &amp; Zoom-Regeln</h1>
+  <p style="color:var(--ink-soft);margin-bottom:14px">Sechs Punkte, die im Kopf helfen, wenn der Call ins Rutschen kommt.</p>
+
+  <div class="footer-tip">
+    <div class="tip-icon">1</div>
+    <div><b>Nicht drüberreden, wenn Marcel Compliance-Fragen stellt.</b> Marcel ist Buchhalter — er hört Zahlen und Recht besser als Marketing. Wenn er skeptisch wird, ist das ein Feature. Er schützt euch beide.</div>
+  </div>
+
+  <div class="footer-tip">
+    <div class="tip-icon">2</div>
+    <div><b>Keine Aussagen wie „die anderen machen das doch auch".</b> Falls andere Tools in eurem Ecosystem kursieren, ist deren Compliance-Status irrelevant. Es zählt nur, was MONAT dir vorwerfen kann.</div>
+  </div>
+
+  <div class="footer-tip">
+    <div class="tip-icon">3</div>
+    <div><b>Sinas MONAT-Kontakte + ihr 645-Board sind das eigentliche Asset.</b> Wenn sie sagt „ich kenne bei MONAT DACH jemanden" — genau darauf zielen, konkret werden.</div>
+  </div>
+
+  <div class="footer-tip">
+    <div class="tip-icon">4</div>
+    <div><b>Sina bekommt kein Angebot heute — sie bekommt eine Rolle.</b> Botschafterin, kostenloses Tool. Wenn Marcel nach „Konditionen" fragt: es gibt keine — Sina zahlt nichts, keine Verpflichtung außer „ehrliche Weiterempfehlung nach MONAT-Genehmigung".</div>
+  </div>
+
+  <div class="footer-tip">
+    <div class="tip-icon">5</div>
+    <div><b>Wenn Marcel die Board-Preise knapp findet:</b> „Wir bauen bewusst für neue Downline-Partnerinnen — die verdienen anfangs 30–100 € im Monat. Bei 29 € reicht eine einzige zusätzliche Kundinnen-Beratung, um das Abo zurückzuverdienen."</div>
+  </div>
+
+  <div class="footer-tip">
+    <div class="tip-icon">6</div>
+    <div><b>Wenn Sina fragt, warum sie kostenlos bekommt:</b> „Weil du unsere Botschafterin bist. Wir wollen dich nicht als Kundin, wir wollen dich als Test-Nutzerin und Empfehlung ins Board. Wenn dein Board berät, wächst deine MONAT-Provision — das ist dein Gewinn, sauber, ohne Nebenstruktur."</div>
+  </div>
+
+  <div class="after-zoom">
+    <h3 style="font-family:Georgia,serif;font-size:14pt">Nach dem Zoom bitte an Thomas / Claude zurückspielen</h3>
+    <p style="margin-top:6px;color:var(--ink-soft);font-size:10pt">Damit ich das in Memory eintrage und wir für die nächsten Schritte gut aufgestellt sind.</p>
+    <ol>
+      <li>Sinas Reaktion auf die Compliance-Realität — überrascht? wusste sie schon?</li>
+      <li>Nimmt Sina die Botschafter-Rolle an? Und wenn ja, wie sichtbar (aktive Vorstellung im Board vs. nur „ich nutze das gerade")</li>
+      <li>Marcels Fragen zu Buchhaltung / rechtlicher Konstruktion</li>
+      <li>Sinas MONAT-Corporate-Kontakte (Name/Position, wenn genannt)</li>
+      <li>Was Sina konkret bereit ist zu tun für den MONAT-Antrag (Antrag mit-formulieren? nur einreichen? nur Kontakt öffnen?)</li>
+      <li>Preis-Reaktion auf die 29 €/290 € für Board-Mitglieder — fair, zu niedrig, zu hoch?</li>
+      <li>Nächster Termin</li>
+    </ol>
+  </div>
+
+  <div style="text-align:center;color:var(--muted);font-size:9pt;margin-top:32px;border-top:1px solid var(--line);padding-top:12px">
+    myglowmatch · Zoom-Briefing · 3. Juli 2026 · VERADEX
+  </div>
+</section>
+
+</body>
+</html>
