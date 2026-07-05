@@ -91,7 +91,7 @@ Sina ist als Teamchefin die geeignete Türöffnerin für den Corporate-Kontakt. 
 | Schritt | Wer | Bis wann |
 |---|---|---|
 | Volltext-Policies-PDF beschaffen und verifizieren | Sina (Corporate-Zugriff?) | 3 Tage |
-| Antrag an MONAT DACH formulieren (VERADEX als Anbieter, Sina + Desiree als Fürsprecher-Partnerinnen) | Desiree + Thomas, Review Sina/Marcel | 1 Woche |
+| Antrag an MONAT DACH formulieren (VERADEX als Anbieter, Sina + Desi als Fürsprecher-Partnerinnen) | Desi formuliert, VERADEX (Thomas) als rechtlicher Absender, Review Sina/Marcel | 1 Woche |
 | Antrag einreichen, Ansprechperson bei MONAT DACH klären | Sina (höhere Karriere-Ebene, bessere Corporate-Kontakte) | 2 Wochen |
 | Warten, ggf. Rückfragen beantworten | offen | 4–8 Wochen |
 | Bei Genehmigung: Vertragsstart mit Sinas Team | alle | anschließend |

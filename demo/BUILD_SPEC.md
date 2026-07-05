@@ -255,7 +255,7 @@ Detail in Chat-Session vom 2026-07-03 besprochen. Grobe Jahres-Rechnung bei 130 
 - Nach USt (19 %), Stripe (~1 %), Hosting-Fixkosten (~4,2 k €), Einmal-Rechtskosten Jahr 1 (~1,8 k €), Gewerbesteuer über Freibetrag, ESt persönlich
 - ≈ **18-20 k € Netto-Netto in Familienkasse Jahr 1**
 
-Konkretisierung mit Thomas nach Zoom (aktuelle n8n-Rechnung, Steuerberater-Pauschale, Berufshaftpflicht-Angebot einholen).
+Konkretisierung nach Zoom durch Desi (aktuelle n8n-Rechnung, Steuerberater-Pauschale aus VERADEX-Buchhaltung, Berufshaftpflicht-Angebot einholen).
 
 ## 14. Migration bestehender Systemzustand → SaaS-Bereit
 

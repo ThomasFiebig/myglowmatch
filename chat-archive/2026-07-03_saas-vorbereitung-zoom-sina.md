@@ -1,6 +1,6 @@
 # Session 2026-07-03 abends · SaaS-Vorbereitung Zoom Sina + Marcel
 
-**Andere Session als `2026-07-03_session.md`** — die war Thomas' Migration-#27-Fortschritt. Diese hier ist Desirees strategische Vorbereitung des SaaS-Vertriebs.
+**Andere Session als `2026-07-03_session.md`** — die war Desis Migration-#27-Fortschritt (technische Arbeit am Live-Workflow). Diese hier ist Desis strategische Vorbereitung des SaaS-Vertriebs. Beides von Desi — sie baut und betreut myglowmatch selbst, siehe [[user-desiree]].
 
 ## Wiedereinstieg-Prompt für nächste Session
 
@@ -106,7 +106,7 @@ Multi-Tenancy bereits im bestehenden Frontend angelegt (`src/app/[partner]/page.
 
 ## Was noch offen ist
 
-**Vom Zoom-Feedback abhängig — Desiree soll folgende Punkte an Thomas/Claude zurückspielen:**
+**Vom Zoom-Feedback abhängig — Desi soll folgende Punkte in einer nächsten Session an Claude zurückspielen (damit Memory aktualisiert wird):**
 1. Sinas Reaktion auf Compliance-Realität (überrascht? wusste sie schon?)
 2. Nimmt Sina die Botschafter-Rolle an? Wie sichtbar?
 3. Marcels Fragen zu Buchhaltung / rechtlicher Konstruktion
