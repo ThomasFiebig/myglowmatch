@@ -1,4 +1,4 @@
-# HANDOVER — Stand 2026-07-03
+# HANDOVER — Stand 2026-07-05
 
 Faktische Momentaufnahme des MONAT-Haaranalyse-Systems. Kein Verlauf, keine Diskussion.
 
@@ -143,15 +143,21 @@ Sticky Notes zählen nicht. Mail-Routing zwischen 18 und 18b geht aus Code-Quell
 
 **Nachteil / neue Konvention**: Sheet-Edits ohne Sync-Aufruf werden nicht sichtbar — analog zur bisherigen Migrations-Skript-Konvention, aber strenger.
 
-**Stand 2026-07-03 nachmittags**: Sync-Fortschritt **10/10 Sheets** + **Loader-Cleanup deployed**. Bulk-Ampel **13/13 grün** bei gap=30s. Live-Workflow: 27 → 17 Nodes, keine Read-Quota mehr (Node 19 Log-Write als einziger Sheets-Call). Nächste Meilensteine: (a) Skalierungs-Simulation mit gap=5–10s als eigentlicher Belastungstest fürs Abo-Modell — Erwartung 13/13 grün auch bei Bursts; (b) Node-17-`readable`-Map-Fix + Mails gendern (Backlog vor Vermarktung); (c) Sync v2 Follow-ups (Divergenz-Check auf Sheet↔embedded JSON umstellen).
+**Stand 2026-07-03 nachmittags**: Sync-Fortschritt **10/10 Sheets** + **Loader-Cleanup deployed**. Bulk-Ampel **13/13 grün** bei gap=30s. Live-Workflow: 27 → 17 Nodes, keine Read-Quota mehr (Node 19 Log-Write als einziger Sheets-Call).
+
+**Stand 2026-07-05**: Zwei Node-17-Mail-Text-Backlog-Punkte erledigt (readable-Map + key-aware) — siehe Backlog-Sektion unten. Verbleibende Meilensteine: (a) **Mails gendern** (der große Rest-Backlog vor Vermarktung, braucht Design-Entscheidung A/B/C); (b) Skalierungs-Simulation mit gap=5–10s als eigentlicher Belastungstest fürs Abo-Modell — Erwartung 13/13 grün auch bei Bursts; (c) Sync v2 Follow-ups (Divergenz-Check auf Sheet↔embedded JSON umstellen).
 
 ## Backlog — Mail-Text-Verbesserungen (nicht dringend, aber vor Vermarktung)
 
-Beide Punkte sind in Node 17 (`17 Claude E-Mail formulieren`) verortet. Kein Kundinnen-Schaden bei Standardfall, aber sichtbare Peinlichkeiten in Grenzfällen (Männer, ungewöhnliche Profile).
+Bewusst in Node 17 (`17 Claude E-Mail formulieren`) verortet. Kein Kundinnen-Schaden bei Standardfall, aber sichtbare Peinlichkeiten in Grenzfällen (Männer, ungewöhnliche Profile).
 
-- **Node 17 `readable`-Map ergänzen** (bemerkt 2026-07-02, Marcel-Case): `keine_probleme` fehlt als Übersetzung → Rohwert erscheint in Beraterin-Mail. Fix: 1 Zeile in die Map (Z. ~205), plus 10-Min-Frontend-Audit `src/data/questions.ts` gegen die Node-17-Map auf weitere blinde Flecken. Deploy via Micro-Patch-Skript, konsistent mit Migrations-Konvention. Details in Memory `project_node17_readable_map_fix`.
+- **Node 17 `readable`-Map ergänzen** — ✅ erledigt 2026-07-05 via `patch_node17_readable_map.py`. Frontend-Audit `src/data/questions.ts` gegen die Live-Map lief mit; einziger fehlender Wert war `keine_probleme` (jetzt „keine besonderen Probleme"). Anna Exec 811 (`hair_condition=['keine_probleme']`) rendert korrekt „Haarzustand: keine besonderen Probleme" in `partner_email_body_html`. Semantik unverändert.
 
-- **Mails gendern** (bemerkt 2026-07-03, Marcel-Case): Beraterin- und Kundinnen-Mail-Text durchgängig weiblich formuliert („liebe X", „du bist begeistert", flektierte Empfehlungssätze). Männer werden als Frauen angesprochen — für Sinas Mann Marcel als potenzielle-Käufer-Test ein direktes „Nicht-für-mich"-Signal. Design-Entscheidung offen: (A) Frontend um `gender`-Feld erweitern + flektiertes Template, (B) geschlechtsneutral formulieren („Hallo X", passive Empfehlungssätze), (C) Vornamen-Heuristik (fragil, nicht empfohlen). Umsetzung nicht 1-Zeilen-Fix — Node 17 jsCode komplett auf geschlechtsspezifische Formulierungen durchgehen (~15-30 Stellen). Details in Memory `project_email_gender_neutral`.
+- **Node 17 `readable()` key-aware** — ✅ erledigt 2026-07-05 via `patch_node17_curl_priority_label.py`. `readable(key, value)` hatte den `key`-Parameter, nutzte ihn aber nicht, deshalb kollidierte `curl_priority=glatt` mit `hair_structure=glatt` (beide → „glatt"). Fix: `perKey`-Overlay `{ curl_priority: { glatt: 'lieber glatt tragen' } }` mit Priorität vor der globalen Map. Aufrufstelle für Locken-Wunsch übergibt jetzt Key `'curl_priority'` (statt leerem String). Ad-hoc-Trigger CurlKeyTest (Exec 812) rendert „Locken-Wunsch: lieber glatt tragen". Alle anderen `readable('', …)`-Aufrufe unverändert (12 Aufrufstellen, keine weiteren Kollisionen im Audit gefunden).
+
+- **Mails gendern** (bemerkt 2026-07-03, Marcel-Case) — 🟡 offen: Beraterin- und Kundinnen-Mail-Text durchgängig weiblich formuliert („liebe X", „du bist begeistert", flektierte Empfehlungssätze). Männer werden als Frauen angesprochen — für Sinas Mann Marcel als potenzielle-Käufer-Test ein direktes „Nicht-für-mich"-Signal. Design-Entscheidung offen: (A) Frontend um `gender`-Feld erweitern + flektiertes Template, (B) geschlechtsneutral formulieren („Hallo X", passive Empfehlungssätze), (C) Vornamen-Heuristik (fragil, nicht empfohlen). Umsetzung nicht 1-Zeilen-Fix — Node 17 jsCode komplett auf geschlechtsspezifische Formulierungen durchgehen (~15-30 Stellen). Details in Memory `project_email_gender_neutral`.
+
+**Ops-Konvention neu (K-18)**: Micro-Patches auf den Live-Workflow prüfen vor dem PUT einmal die aktuelle `updatedAt` gegen den Snapshot aus dem eigenen GET. Weicht der Live-Wert ab, wurde parallel deployed (anderer Chat-Tab, Manuel-Edit im n8n-UI) → Abbruch, kein PUT. Kollisions-Guard-Muster ist in `patch_node17_readable_map.py` und `patch_node17_curl_priority_label.py` etabliert; ab jetzt Standard für alle direct-workflow-Patch-Skripte.
 
 Mini-Syntax in `map_pool_filter` und `map_pflegelevel_overrides`-ähnlichen Tabs:
 - Bedingungen mit `;` getrennt, Liste `feld:operator[:wert]`
