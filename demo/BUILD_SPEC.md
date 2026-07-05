@@ -26,15 +26,15 @@
 
 | Variante | Setup | Laufend | Vertrag |
 |---|---|---|---|
-| Monatsabo | 49 € einmalig | **29 €/Monat** | monatlich kündbar zum Monatsende |
-| **Jahresabo (empfohlen)** | entfällt | **290 €/Jahr** | 12 Monate, autom. Verlängerung, Kündigung 1 Mo vor Ende |
+| Monatsabo | 49,90 € einmalig | **14,90 €/Monat** | monatlich kündbar zum Monatsende |
+| **Jahresabo (empfohlen)** | entfällt | **149 €/Jahr** | 12 Monate, autom. Verlängerung, Kündigung 1 Mo vor Ende |
 
 **Pro-Tier**
 
 | Variante | Setup | Laufend | Vertrag |
 |---|---|---|---|
-| Monatsabo | 49 € einmalig | **49 €/Monat** | monatlich kündbar |
-| **Jahresabo (empfohlen)** | entfällt | **490 €/Jahr** | 12 Monate, autom. Verlängerung |
+| Monatsabo | 49,90 € einmalig | **29,90 €/Monat** | monatlich kündbar |
+| **Jahresabo (empfohlen)** | entfällt | **299 €/Jahr** | 12 Monate, autom. Verlängerung |
 
 **Was Basic kann:** Fragebogen-Link, Kundinnen-Verwaltung, Empfehlungs-Mail an Kundinnen, Follow-up-Chips, Statistiken, Portrait/Signatur-Personalisierung.
 

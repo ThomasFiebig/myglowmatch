@@ -103,37 +103,52 @@ Sina ist als Teamchefin die geeignete Türöffnerin für den Corporate-Kontakt. 
 
 ## Preise — für Downlines, nicht für Sina
 
-**Sina zahlt nichts** — sie bekommt das Tool kostenlos und unbefristet als Botschafterin. Das hier ist der Preis für Downline-Partnerinnen, die über Sinas Empfehlung kommen. Alle Preise brutto (inkl. 19 % USt). Rechnungsstellung durch VERADEX direkt an das jeweilige Downline-Mitglied.
+**Sina zahlt nichts** — sie bekommt das Tool (Pro-Tier) kostenlos und unbefristet als Botschafterin. Das hier ist der Preis für Downline-Partnerinnen, die über Sinas Empfehlung kommen. Alle Preise brutto (inkl. 19 % USt). Rechnungsstellung durch VERADEX direkt.
+
+**Zwei Tiers.** Basic ist die Standard-Empfehlung. Pro ergänzt für die Beraterin (nicht die Kundin!) eine „warum wurde welches Produkt gewählt"-Erklärung im Portal — echter Beraterin-Nutzen, Compliance-günstig.
+
+**Basic-Tier**
 
 | Variante | Setup | Laufender Preis | Vertrag |
 |---|---|---|---|
-| Monatsabo | 49 € einmalig | **29 €/Monat** | monatlich kündbar |
-| **Jahresabo (empfohlen)** | ~~49 €~~ **entfällt** | **290 €/Jahr** | 12 Monate, autom. Verlängerung, Kündigung 1 Mo vor Ende |
+| Monatsabo | 49,90 € einmalig | **14,90 €/Monat** | monatlich kündbar |
+| **Jahresabo (empfohlen)** | ~~49,90 €~~ **entfällt** | **149 €/Jahr** | 12 Monate, autom. Verlängerung |
 
-**Jahresabo-Vorteil.** 12 Monate für den Preis von 10 (2 Monate gratis) plus Setup geschenkt = **107 € Ersparnis** gegenüber Monatsabo im ersten Jahr.
+**Pro-Tier**
+
+| Variante | Setup | Laufender Preis | Vertrag |
+|---|---|---|---|
+| Monatsabo | 49,90 € einmalig | **29,90 €/Monat** | monatlich kündbar |
+| **Jahresabo (empfohlen)** | ~~49,90 €~~ **entfällt** | **299 €/Jahr** | 12 Monate, autom. Verlängerung |
+
+**Jahresabo-Vorteil.** 2 Monate gratis („10 zahlen, 12 nutzen") plus Setup geschenkt = **79,70 € Ersparnis** beim Basic bzw. **109,70 € Ersparnis** beim Pro im ersten Jahr.
 
 ### Rechnung für Marcel — MwSt-Realität
 
 | Position | Brutto | Netto (VERADEX) | USt (19 %) |
 |---|---|---|---|
-| Setup einmalig | 49,00 € | 41,18 € | 7,82 € |
-| Monatsabo | 29,00 € | 24,37 € | 4,63 € |
-| Jahresabo | 290,00 € | 243,70 € | 46,30 € |
+| Setup einmalig | 49,90 € | 41,93 € | 7,97 € |
+| Basic Monatsabo | 14,90 € | 12,52 € | 2,38 € |
+| Basic Jahresabo | 149,00 € | 125,21 € | 23,79 € |
+| Pro Monatsabo | 29,90 € | 25,13 € | 4,77 € |
+| Pro Jahresabo | 299,00 € | 251,26 € | 47,74 € |
 
 Zahlung via SEPA-Lastschrift oder PayPal. Jahresabo einmal jährlich, Monatsabo monatlich. VERADEX führt USt ans Finanzamt ab.
 
 ### Umsatzprognose Sinas Downline (Illustration)
 
-Annahme: 130 Abos aus Sinas 645-Personen-Downline (~20 % Konversion, WhatsApp-Gruppe ist Teilmenge). 60 % wählen Jahresabo, 40 % Monatsabo.
+Annahme: 130 Abos aus Sinas 645-Personen-Downline (~20 % Konversion). Mix: 60 % Jahresabo / 40 % Monatsabo, 70 % Basic / 30 % Pro.
 
 | Position | Anzahl | Betrag brutto | Summe brutto |
 |---|---|---|---|
-| Monatsabo (Setup) | 52 | 49 € | 2.548 € |
-| Monatsabo (12 Monate) | 52 | 29 × 12 | 18.096 € |
-| Jahresabo | 78 | 290 € | 22.620 € |
-| **Summe Jahr 1** | | | **~43.264 € brutto / ~36.356 € netto** |
+| Setup (nur bei Monatsabos) | 52 | 49,90 € | 2.595 € |
+| Basic Monatsabo (12 Mo) | 36 | 14,90 × 12 | 6.437 € |
+| Basic Jahresabo | 55 | 149 € | 8.195 € |
+| Pro Monatsabo (12 Mo) | 16 | 29,90 × 12 | 5.741 € |
+| Pro Jahresabo | 23 | 299 € | 6.877 € |
+| **Summe Jahr 1** | | | **~29.845 € brutto / ~25.080 € netto** |
 
-Ab Jahr 2 fallen Setup-Einnahmen weg, dafür wiederkehrend ~36.516 € brutto / ~30.686 € netto aus 130 aktiven Abos.
+Ab Jahr 2 fallen Setup-Einnahmen weg, dafür wiederkehrend ~27.250 € brutto / ~22.900 € netto aus 130 aktiven Abos. Bei größerem Pro-Anteil oder mehr Abos steigt der Umsatz entsprechend.
 
 **Sinas Deal.** Kostenloser, unbefristeter Zugang zum Tool. Kein Cash-Fluss, keine Provision, keine Umsatzbeteiligung. Reines Ambassador-Modell. Ihr Gewinn: das Tool selbst nutzen + ihre Downline berät besser → mehr Team-Umsatz → höhere Sinas-Provision aus MONAT (der saubere, MONAT-konforme Kreislauf).
 
@@ -145,7 +160,7 @@ Ab Jahr 2 fallen Setup-Einnahmen weg, dafür wiederkehrend ~36.516 € brutto / 
 2. **Keine Aussagen wie „die anderen machen das doch auch".** Falls andere Tools in eurem Ecosystem kursieren, ist deren Compliance-Status irrelevant. Es zählt nur, was MONAT dir vorwerfen kann.
 3. **Sinas MONAT-Kontakte + ihre 645-Downline sind das eigentliche Asset.** Wenn sie sagt „ich kenne bei MONAT DACH jemanden" — genau darauf zielen, konkret werden.
 4. **Sina bekommt kein Angebot heute — sie bekommt eine Rolle.** Botschafterin, kostenloses Tool. Wenn Marcel nach „Konditionen" fragt: es gibt keine — Sina zahlt nichts, keine Verpflichtung außer „ehrliche Weiterempfehlung nach MONAT-Genehmigung".
-5. **Wenn Marcel die Downline-Preise knapp findet:** „Wir bauen bewusst für neue Downline-Partnerinnen — die verdienen anfangs 30–100 € im Monat. Bei 29 € reicht eine einzige zusätzliche Kundinnen-Beratung, um das Abo zurückzuverdienen."
+5. **Wenn Marcel die Downline-Preise knapp findet:** „Wir bauen bewusst für neue Downline-Partnerinnen — die verdienen anfangs 30–100 € im Monat. Bei 14,90 € Basic reicht eine einzige zusätzliche Kundinnen-Beratung, um das Abo mehrfach zurückzuverdienen. Pro rechnet sich für Beraterinnen, die mehr Kundinnen aktiv betreuen."
 6. **Wenn Sina fragt, warum sie kostenlos bekommt:** „Weil du unsere Botschafterin bist. Wir wollen dich nicht als Kundin, wir wollen dich als Test-Nutzerin und Empfehlung. Wenn deine Downline berät, wächst deine MONAT-Provision — das ist dein Gewinn, sauber, ohne Nebenstruktur."
 
 ---
@@ -159,5 +174,5 @@ Damit ich das in Memory eintrage und wir für die nächsten Schritte gut aufgest
 3. Marcels Fragen zu Buchhaltung / rechtlicher Konstruktion
 4. Sinas MONAT-Corporate-Kontakte (Name/Position, wenn genannt)
 5. Was Sina konkret bereit ist zu tun für den MONAT-Antrag (Antrag mit-formulieren? nur einreichen? nur Kontakt öffnen?)
-6. Preis-Reaktion auf die 29 €/290 € für Downline-Mitglieder — fair, zu niedrig, zu hoch?
+6. Preis-Reaktion auf Basic 14,90 €/149 € bzw. Pro 29,90 €/299 € für Downline-Mitglieder — fair, zu niedrig, zu hoch?
 7. Nächster Termin

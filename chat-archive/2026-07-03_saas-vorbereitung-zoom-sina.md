@@ -12,12 +12,14 @@
 
 **Bugfix-Diagnose Tomi-Execution 793:** Desiree hatte gefragt warum Tomi „Smoothing Anti-Frizz Shampoo" bei No-Frizz-Profil bekommen hat. Analyse ergab: **kein Bug**. Das Shampoo wurde in Ranking-Stufe 3 (goal_coverage) gewählt, weil es als einziges Kandidaten-Shampoo die `reparatur`-nebenfunktion hat und Tomi genau das als care_goal wollte. Der intensMatch=1 ist neutral, weil `smoothing_shampoo.intensitaet = alle`. Der Produktname „Anti-Frizz" ist irreführend, aber die fachliche Wahl korrekt. Diese Erkenntnis motivierte das Pro-Tier-Feature.
 
-**Neues Preis-Modell mit zwei Tiers (Desirees Idee 2026-07-05):**
+**Neues Preis-Modell mit zwei Tiers (Desirees Idee 2026-07-05, Preise angepasst 2026-07-05):**
+
+Setup einheitlich 49,90 € einmalig, entfällt bei Jahresabos.
 
 | Tier | Monat | Jahr | Feature-Delta |
 |---|---|---|---|
-| Basic | 29 € | 290 € | Standard-Empfehlung wie bisher |
-| **Pro** | **49 €** | **490 €** | Zusätzlich: `warum_sinnvoll`-Erklärung pro Produkt sichtbar für Beraterin im Portal (NICHT in der Kundinnen-Mail) |
+| Basic | 14,90 € | 149 € | Standard-Empfehlung wie bisher |
+| **Pro** | **29,90 €** | **299 €** | Zusätzlich: `warum_sinnvoll`-Erklärung pro Produkt sichtbar für Beraterin im Portal (NICHT in der Kundinnen-Mail) |
 
 **Warum das Konzept sauber ist:**
 - Compliance-Vorteil: die Kundin sieht keine automatischen Produktclaims → § 3.6.1 leichter einzuhalten
@@ -38,7 +40,7 @@ Falls das Zoom-Feedback von Sina/Marcel noch nicht in Memory eingetragen ist, fo
 3. Marcels Fragen zu Buchhaltung / rechtlicher Konstruktion
 4. Sinas MONAT-DACH-Corporate-Kontakte
 5. Was Sina konkret bereit ist zu tun für den MONAT-Antrag
-6. Preis-Reaktion auf 29 €/290 € Basic bzw. 49 €/490 € Pro — fair, zu niedrig, zu hoch?
+6. Preis-Reaktion auf Basic 14,90 €/149 € bzw. Pro 29,90 €/299 € — fair, zu niedrig, zu hoch?
 7. Nächster Termin
 
 ## Ausgangslage
