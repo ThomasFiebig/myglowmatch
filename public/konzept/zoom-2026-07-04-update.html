@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Update nach unserem Gespräch · 4. Juli 2026 · myglowmatch</title>
+<style>
+  @page { size: A4; margin: 12mm; }
+  :root{
+    --bg:#fbf6f0;
+    --blush:#f6e6e1;
+    --ink:#2d2a26;
+    --ink-soft:#5c5651;
+    --muted:#8c857f;
+    --line:#efe5dc;
+    --accent:#e0b1a8;
+    --accent-dark:#c98f84;
+    --accent-deep:#d4a593;
+    --chip-bg:#f5e6dc;
+    --chip-text:#7a5641;
+    --chip-warn-bg:#f2d6c8;
+    --chip-warn-text:#8b3f2b;
+    --kupfer:#a07560;
+    --card:#ffffff;
+    --risk-border:#b26a52;
+  }
+  *{box-sizing:border-box;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Helvetica,Arial,sans-serif;font-size:10.5pt;line-height:1.5}
+  h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:var(--ink);margin:0}
+
+  /* Cover */
+  .cover{
+    background:linear-gradient(180deg,var(--blush) 0%,var(--bg) 65%);
+    padding:22mm 12mm 14mm;
+    page-break-after:always;
+  }
+  .cover-brand{display:flex;align-items:center;gap:12px;margin-bottom:24mm}
+  .brand-dot{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-deep))}
+  .brand-name{font-family:Georgia,serif;font-size:22pt;letter-spacing:.03em}
+  .cover-eyebrow{font-size:9pt;letter-spacing:.22em;color:var(--kupfer);font-weight:600;text-transform:uppercase;margin-bottom:12px}
+  .cover-title{font-family:Georgia,serif;font-size:30pt;line-height:1.2;font-weight:500;color:var(--ink);margin-bottom:14px;max-width:150mm}
+  .cover-sub{font-size:13pt;color:var(--ink-soft);max-width:150mm;line-height:1.55;margin-bottom:16px}
+  .cover-meta{display:grid;grid-template-columns:auto 1fr;gap:6px 20px;font-size:10pt;margin-top:20px;max-width:130mm}
+  .cover-meta b{color:var(--kupfer);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:8.5pt;font-family:Helvetica,Arial,sans-serif;align-self:center}
+
+  /* Content */
+  .content{padding:6mm 10mm 10mm}
+  .section-eyebrow{font-size:8.5pt;letter-spacing:.22em;color:var(--kupfer);font-weight:600;text-transform:uppercase;margin-bottom:6px}
+  h1.section{font-size:18pt;margin:0 0 12px;line-height:1.25}
+  h2{font-size:12.5pt;margin:14px 0 6px;line-height:1.3}
+  p{margin:0 0 8px}
+  ul{margin:0 0 10px 18px;padding:0}
+  li{margin-bottom:4px}
+
+  .callout{
+    background:var(--card);
+    border-left:4px solid var(--accent-dark);
+    border-radius:0 10px 10px 0;
+    padding:11px 15px;
+    margin:12px 0;
+    font-size:10pt;
+    page-break-inside:avoid;
+  }
+  .callout.risk{ border-left-color:var(--risk-border); }
+  .callout b{color:var(--kupfer)}
+  .callout .callout-title{font-family:Georgia,serif;font-size:12pt;font-weight:500;color:var(--ink);margin:0 0 4px}
+
+  .item{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:7px;
+    page-break-inside:avoid;
+  }
+  .item-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;gap:12px}
+  .item-num{
+    display:inline-block;
+    background:var(--chip-bg);color:var(--chip-text);
+    font-size:8pt;letter-spacing:.14em;font-weight:700;
+    padding:2px 8px;border-radius:14px;text-transform:uppercase
+  }
+  .item-num.warn{ background:var(--chip-warn-bg); color:var(--chip-warn-text); }
+  .item-title{font-family:Georgia,serif;font-size:12pt;font-weight:500;color:var(--ink);margin:2px 0 4px}
+  .item-body{font-size:9.8pt;color:var(--ink)}
+  .item-body .quote{
+    display:block;
+    font-family:Georgia,serif;
+    color:var(--kupfer);
+    font-size:9.7pt;
+    line-height:1.5;
+    margin:4px 0 6px;
+    padding-left:10px;
+    border-left:2px solid var(--accent);
+  }
+
+  /* Preistabelle */
+  .price-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin:12px 0;
+  }
+  .price-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    page-break-inside:avoid;
+  }
+  .price-card.pro{
+    border-color:var(--accent-dark);
+    background:linear-gradient(180deg,#fff 0%,#fdf5f1 100%);
+  }
+  .price-eyebrow{font-size:8pt;letter-spacing:.2em;color:var(--kupfer);font-weight:700;text-transform:uppercase;margin-bottom:4px}
+  .price-name{font-family:Georgia,serif;font-size:16pt;color:var(--ink);margin-bottom:8px}
+  .price-row{display:flex;justify-content:space-between;font-size:10pt;padding:4px 0;border-bottom:1px dashed var(--line)}
+  .price-row:last-child{border:none}
+  .price-row .val{font-weight:600;color:var(--ink)}
+  .price-row.big{font-size:12pt;padding:8px 0 4px}
+  .price-row.big .val{font-family:Georgia,serif;font-size:14pt}
+  .price-note{font-size:9pt;color:var(--muted);margin-top:8px;line-height:1.4}
+
+  /* Feature-Matrix */
+  .feat-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:8px 0 12px;
+    font-size:9.8pt;
+  }
+  .feat-table th{
+    background:var(--chip-bg);
+    color:var(--chip-text);
+    font-size:8.5pt;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:700;
+    padding:7px 10px;
+    text-align:left;
+    border-bottom:1px solid var(--line);
+  }
+  .feat-table td{
+    padding:7px 10px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  .feat-table td.check{text-align:center;font-family:Georgia,serif;font-size:12pt;color:var(--accent-dark);width:60px}
+  .feat-table td.dash{text-align:center;color:var(--muted);font-size:14pt;width:60px}
+  .feat-table tr:last-child td{border:none}
+
+  .strike-list li{color:var(--ink-soft)}
+  .strike-list li b{color:var(--ink)}
+
+  .signal{
+    background:linear-gradient(135deg,#fbeee6 0%,#f6dcd0 100%);
+    border:1px solid var(--accent-deep);
+    border-radius:12px;
+    padding:14px 18px;
+    margin:16px 0 0;
+    page-break-inside:avoid;
+  }
+  .signal-title{font-family:Georgia,serif;font-size:14pt;color:var(--ink);margin:0 0 6px}
+  .signal-body{font-size:10.5pt;color:var(--ink);line-height:1.55}
+  .signal-body b{color:var(--kupfer)}
+
+  .footer{
+    margin-top:14mm;
+    font-size:8.5pt;
+    color:var(--muted);
+    border-top:1px solid var(--line);
+    padding-top:8px;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<!-- Cover -->
+<div class="cover">
+  <div class="cover-brand">
+    <div class="brand-dot"></div>
+    <div class="brand-name">myglowmatch</div>
+  </div>
+
+  <div class="cover-eyebrow">Update · 4. Juli 2026</div>
+  <div class="cover-title">Was sich seit&nbsp;unserem<br>Gespräch getan hat.</div>
+  <div class="cover-sub">
+    Kurzüberblick über den Rahmen mit MONAT, den Namensvorschlag und die
+    Anpassungen an Produkt und Preismodell.
+  </div>
+
+  <div class="cover-meta">
+    <b>An</b><span>Sina Hildmann · Marcel Hildmann</span>
+    <b>Von</b><span>Desirée · Thomas (VERADEX)</span>
+    <b>Kontext</b><span>Nachbereitung des Zoom vom 4. Juli 2026</span>
+    <b>Lesezeit</b><span>ca. 5 Minuten</span>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="content">
+
+  <!-- Punkt 1: Compliance -->
+  <div class="section-eyebrow">Punkt 1 · Rahmen</div>
+  <h1 class="section">MONAT-Compliance ist der Ausgangspunkt</h1>
+  <p>
+    Alles, was wir bauen, tangiert MONAT-Vertragswerk und Markenrecht. Nach nochmaliger
+    Prüfung der einschlägigen Richtlinien führt aus zwei Gründen kein Weg an einer
+    schriftlichen MONAT-Freigabe vorbei: einerseits schützt sie eure Partnerinnen vor
+    Vertragsverstößen mit MONAT selbst, andererseits schützt sie VERADEX als
+    Systembetreiber vor markenrechtlichen Ansprüchen.
+  </p>
+
+  <div class="item">
+    <div class="item-head"><span class="item-num warn">§ 3.2.1</span></div>
+    <div class="item-title">Verbot eigener Geschäftsinstrumente</div>
+    <div class="item-body">
+      <span class="quote">„Markenpartner dürfen keine eigenen Geschäftsinstrumente
+      entwickeln oder einsetzen, ohne dazu von MONAT aufgefordert bzw. schriftlich
+      autorisiert worden zu sein."</span>
+      Unser System ist ein solches Geschäftsinstrument. Ohne Freigabe verletzt jede
+      teilnehmende Partnerin bereits mit dem bloßen Nutzen ihren MONAT-Vertrag.
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="item-num warn">§ 3.2.5</span></div>
+    <div class="item-title">Verwendung von Marken, Bildern und Produktnamen</div>
+    <div class="item-body">
+      <span class="quote">„Die Verwendung von MONAT-Markenzeichen, Logos, Produktbildern
+      oder Marketingmaterial in eigenen Medien und Instrumenten bedarf der
+      schriftlichen Genehmigung."</span>
+      Zwei Berührungspunkte in unserem System: (1) die Produktnamen in der Ergebnisseite
+      der Kundin und (2) die Nutzung der offiziellen MONAT-Produktdatenblätter als
+      interne Datenquelle für die Empfehlungslogik. Beides ist ohne Freigabe
+      markenrechtlich angreifbar.
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="item-num warn">§ 3.6.1</span></div>
+    <div class="item-title">Produktaussagen wortwörtlich aus MONAT-Literatur</div>
+    <div class="item-body">
+      <span class="quote">„Aussagen über die Wirkung von MONAT-Produkten müssen sich
+      wortwörtlich aus der offiziellen MONAT-Literatur ableiten."</span>
+      Deshalb setzen wir für unsere geplante Verkaufsargumentations-Hilfe (Pro-Feature)
+      strikte PDF-Wörtlichkeit voraus: kein Umschreiben, keine eigenen Formulierungen —
+      nur direkte Zitate mit Quellenverweis. Damit ist § 3.6.1 systemseitig
+      abgesichert, sobald die Freigabe steht.
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="item-num warn">§ 3.9.1</span></div>
+    <div class="item-title">Kein Anwerben für andere Direktvertriebe</div>
+    <div class="item-body">
+      <span class="quote">„Markenpartner dürfen keine anderen Direktvertriebe bewerben
+      oder für sie akquirieren."</span>
+      Das ist der Grund, warum Sinas Rolle in unserem Modell Botschafterin ohne
+      Vertrag, ohne Provision und ohne Cash-Fluss bleibt. Damit ist § 3.9.1 auf
+      Ambassador-Ebene entschärft — die Freigabe für das System an sich braucht es
+      trotzdem.
+    </div>
+  </div>
+
+  <div class="callout risk">
+    <div class="callout-title">Zwei getrennte Haftungsstränge</div>
+    <p style="margin:0 0 6px">
+      <b>Für eure Partnerinnen</b> greift primär MONAT-Vertragsrecht: Kontosperrung,
+      Verlust der Downline, Verlust angesparter Boni. Dieses Risiko halten wir für
+      unwahrscheinlich, solange das Team einen erkennbaren Mehrwert für MONAT
+      erzeugt — kein Verband kündigt einem seiner umsatzstärksten Teams.
+    </p>
+    <p style="margin:0">
+      <b>Für VERADEX</b> (Thomas als Einzelunternehmer) greift zivilrechtliches
+      Marken- und Urheberrecht: Abmahnung, Unterlassungsklage, Schadensersatz.
+      Als Einzelunternehmer haftet Thomas mit seinem Privatvermögen. Dieses Risiko
+      können wir nicht eingehen — daher ist die schriftliche MONAT-Freigabe für uns
+      nicht verhandelbar, sondern Startbedingung.
+    </p>
+  </div>
+
+  <!-- Punkt 2: Neuer Name -->
+  <div class="section-eyebrow" style="margin-top:16px">Punkt 2 · Der neue Name</div>
+  <h1 class="section">Vorschlag: MyBeautyKey</h1>
+  <p>
+    Nach eurem Hinweis, dass „myglowmatch" dem Namen eines Konkurrenz-Teams zu
+    ähnlich klingt und Verwechslungsgefahr besteht, haben wir mit
+    <b>MyBeautyKey.de</b> eine Alternative erarbeitet: eindeutig im Beauty-Umfeld
+    zuzuordnen, keine Namenskollision, offen für spätere Erweiterungen jenseits
+    reiner Haarberatung. Das Logo bleibt in derselben Bild- und Farbwelt wie bisher —
+    Champagne, Rosé, warmes Kupfer.
+  </p>
+
+  <div class="callout">
+    <div class="callout-title">Warum die Namensfrage jetzt entschieden werden muss</div>
+    Jeder Baustein — Domain, Logo, Portal-URL, Beratungs-Templates,
+    Demo-Version für die ca. 10 Top-Leaderinnen — trägt den Namen. Wenn wir jetzt
+    weiterbauen und der Name später wechselt, müssen wir alles zweimal machen. <b>Wir
+    bitten euch, uns schnellstmöglich Rückmeldung zu geben, ob wir bei
+    MyBeautyKey landen — oder ob euch etwas anderes lieber ist.</b>
+  </div>
+
+  <!-- Punkt 3: Produkt-Änderungen -->
+  <div class="section-eyebrow" style="margin-top:16px">Punkt 3 · Was sich am Produkt geändert hat</div>
+  <h1 class="section">Fünf konkrete Anpassungen</h1>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-num">Neu · UX</span>
+    </div>
+    <div class="item-title">Ergebnis erscheint direkt im Browser</div>
+    <div class="item-body">
+      Die Kundin bekommt ihre Analyse nicht mehr per E-Mail, sondern sofort nach
+      dem Fragebogen im Browser angezeigt — im Look der jeweiligen Beraterin.
+      Kein Warten, kein Spam-Ordner, direkte Emotion. Alternativ als PDF speicherbar.
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-num">Übernommen · Kontakt</span>
+    </div>
+    <div class="item-title">WhatsApp-Kontakt jetzt in der Ergebnisseite</div>
+    <div class="item-body">
+      Der bewährte WhatsApp-Button zur Beraterin — bisher in der Beratungs-Mail
+      enthalten — ist jetzt fester Bestandteil der neuen Browser-Ergebnisseite.
+      Kundin startet den Kontakt selbst, Beraterin braucht kein Business-WhatsApp.
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-num">Neu · Pro</span>
+    </div>
+    <div class="item-title">Verkaufsargumentations-Hilfe pro Produkt</div>
+    <div class="item-body">
+      Für Pro-Beraterinnen: zu jeder Produktempfehlung ein Info-Block „Warum
+      dieses Produkt", basierend auf wortwörtlichen Zitaten aus den
+      MONAT-Datenblättern (siehe Punkt 1, § 3.6.1). Besonders für neue Downlines
+      eine Beratungshilfe, damit sie die Empfehlung überzeugend erklären können.
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-num">Neu · Sales</span>
+    </div>
+    <div class="item-title">Öffentliche Demo zum Zeigen</div>
+    <div class="item-body">
+      Eine feste Demo-Version, die jede Interessentin durchklicken kann —
+      ohne Kauf, ohne Registrierung. Sina kann den Link direkt in ihre Boards
+      oder WhatsApp-Gruppe geben, jede kann sich das Produkt anschauen.
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-num">Anders · Modell</span>
+    </div>
+    <div class="item-title">Zwei-Tarif-Modell statt einer Version</div>
+    <div class="item-body">
+      Basic für den Einstieg, Pro für Beraterinnen mit größerer Downline und
+      höherem Beratungsvolumen. Klare Feature-Grenze zwischen beiden, jederzeit
+      wechselbar. Details auf der nächsten Seite.
+    </div>
+  </div>
+
+</div>
+
+<!-- Content Fortsetzung -->
+<div class="content" style="page-break-before:always;padding-top:10mm">
+
+  <!-- Punkt 4: Preismodell -->
+  <div class="section-eyebrow">Punkt 4 · Preismodell</div>
+  <h1 class="section">Basic und Pro im Vergleich</h1>
+
+  <div class="price-grid">
+    <div class="price-card">
+      <div class="price-eyebrow">Basic</div>
+      <div class="price-name">Das System zur Beratung</div>
+      <div class="price-row big"><span>Monatsabo</span><span class="val">14,90 €</span></div>
+      <div class="price-row big"><span>Jahresabo</span><span class="val">179 €</span></div>
+      <div class="price-row"><span>Setup einmalig</span><span class="val">49,90 €</span></div>
+      <div class="price-note">Bei Jahresabo entfällt die Setup-Gebühr — Ersparnis 49,90 €.</div>
+    </div>
+    <div class="price-card pro">
+      <div class="price-eyebrow">Pro</div>
+      <div class="price-name">Beratung mit Verkaufstraining</div>
+      <div class="price-row big"><span>Monatsabo</span><span class="val">29,90 €</span></div>
+      <div class="price-row big"><span>Jahresabo</span><span class="val">359 €</span></div>
+      <div class="price-row"><span>Setup einmalig</span><span class="val">49,90 €</span></div>
+      <div class="price-note">Bei Jahresabo entfällt die Setup-Gebühr — Ersparnis 49,90 €.</div>
+    </div>
+  </div>
+
+  <p style="font-size:9.5pt;color:var(--ink-soft);margin-top:4px">
+    Alle Preise brutto inkl. 19 % USt. Rechnungsstellung direkt durch VERADEX.
+    Die Setup-Gebühr sichert uns gegen Kurzzeit-Buchungen ab, weil das Einrichten
+    einer neuen Beraterin auch im Hintergrund Arbeit macht — sie entfällt bei
+    Jahresabschluss vollständig.
+  </p>
+
+  <!-- Punkt 5: Feature-Grenze -->
+  <div class="section-eyebrow" style="margin-top:14px">Punkt 5 · Feature-Grenze</div>
+  <h1 class="section">Was Basic kann, was Pro obendrauf hat</h1>
+
+  <table class="feat-table">
+    <thead>
+      <tr>
+        <th>Funktion</th>
+        <th style="text-align:center">Basic</th>
+        <th style="text-align:center">Pro</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Fragebogen + Analyse-System für Kundinnen</td>
+        <td class="check">✓</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td>Ergebnis im Browser + PDF-Download für die Kundin</td>
+        <td class="check">✓</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td>WhatsApp-Kontakt-Button zur Beraterin</td>
+        <td class="check">✓</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td>Beratungs-Mail an die Beraterin nach jeder Analyse</td>
+        <td class="check">✓</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td>Dashboard mit Übersicht aller Beratungen</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td>Branding-Bereich (Portrait, Farben, Grußformel)</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td>Verkaufsargumentations-Hilfe pro Produkt („Warum dieses Produkt")</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td>Push-Benachrichtigung aufs Handy bei neuer Beratung</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td>Dashboard als App auf den Homebildschirm installieren</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:9.5pt;color:var(--ink-soft)">
+    Basic-Beraterinnen sehen im Portal ihre Stammdaten (Name, Kontakt, Rechnung).
+    Die Pro-Funktionen sind sichtbar, aber deaktiviert — jederzeit per Klick
+    freischaltbar.
+  </p>
+
+  <!-- Punkt 6: Weggelassen -->
+  <div class="section-eyebrow" style="margin-top:14px">Punkt 6 · Bewusst weggelassen</div>
+  <h1 class="section">Was wir nicht bauen — und warum</h1>
+
+  <ul class="strike-list">
+    <li><b>Beratung per WhatsApp automatisiert:</b> laufende Kosten pro Nachricht bei Meta,
+      Compliance-Sonderprüfung. Statt dessen: Ergebnis im Browser + WhatsApp-Kontakt-Button.</li>
+    <li><b>Eigene Domain pro Beraterin:</b> hoher technischer Support-Aufwand, geringer
+      Wert. Jede Beraterin bekommt ihre persönliche URL <i>[name].de/[Beraterin]</i>.</li>
+    <li><b>Kostenlose Testphase (7 oder 14 Tage):</b> die öffentliche Demo übernimmt
+      die Trial-Funktion. Wer kauft, ist überzeugt.</li>
+  </ul>
+
+  <!-- Punkt 7: Vorgehen bei MONAT -->
+  <div class="section-eyebrow" style="margin-top:14px">Punkt 7 · Vorgehen bei MONAT</div>
+  <h1 class="section">Wie wir die Freigabe angehen</h1>
+
+  <p>
+    Wir schlagen einen zweistufigen Weg vor: <b>Sina schreibt persönlich</b> als
+    Markenpartnerin an ihren MONAT-DACH-Kontakt und öffnet damit die Tür.
+    <b>VERADEX (Thomas) liefert das formelle Anschreiben</b> mit allen Compliance-Details
+    als PDF-Anhang. So bekommen beide Seiten der Anfrage die Rolle, die zu ihnen
+    passt — Sinas Standing im MONAT-Haus plus die sachliche Anbieter-Perspektive.
+  </p>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-num">Schritt 1</span>
+    </div>
+    <div class="item-title">Sinas persönliche Anfrage · myglowmatch-Optik</div>
+    <div class="item-body">
+      Kurzer, wärmerer Text an Sinas Ansprechpartner bei MONAT-DACH: sie
+      befürwortet das Tool ausdrücklich, verweist auf das beigefügte
+      VERADEX-Anschreiben, bietet einen gemeinsamen Vorstellungstermin an.
+      Vorlage liegt separat bei: <i>sina-vorspann-monat.html</i>.
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-num">Schritt 2</span>
+    </div>
+    <div class="item-title">Formelles VERADEX-Anschreiben · VERADEX-Optik</div>
+    <div class="item-body">
+      Zweiseitiger Brief von Thomas Fiebig als Markenpartner (Nr. 14074120) und
+      VERADEX-Inhaber. Nimmt konkret Bezug auf §§ 3.2.1, 3.2.5, 3.6.1 und 3.9.1,
+      erklärt die geplanten Compliance-Maßnahmen (PDF-Wörtlichkeit,
+      Ambassador-Modell, keine Bilder/Logos), bittet um schriftliche Freigabe.
+      Vorlage liegt separat bei: <i>veradex-anschreiben-monat.html</i>.
+    </div>
+  </div>
+
+  <p style="font-size:9.5pt;color:var(--ink-soft);margin-top:4px">
+    Beide Vorlagen enthalten Platzhalter für den konkreten
+    MONAT-DACH-Ansprechpartner. Sobald ihr uns Namen und Adresse nennt, passen
+    wir beide Schreiben entsprechend an — dann sind sie sofort druck- und
+    versandfertig.
+  </p>
+
+  <!-- Punkt 8: Bau-Reihenfolge -->
+  <div class="section-eyebrow" style="margin-top:14px">Punkt 8 · Wie es weitergeht</div>
+  <h1 class="section">Bau-Reihenfolge nach Namensfreigabe</h1>
+
+  <ol style="margin-left:20px;padding:0">
+    <li style="margin-bottom:5px">Domain sichern + neues Logo finalisieren</li>
+    <li style="margin-bottom:5px">Öffentliche Demo unter dem neuen Namen aufsetzen</li>
+    <li style="margin-bottom:5px">Fragebogen + Ergebnisseite auf neuen Namen umbauen</li>
+    <li style="margin-bottom:5px">Basic-Version (Fragebogen, Ergebnisseite, Beratermail, Minimal-Portal) fertigstellen</li>
+    <li style="margin-bottom:5px">Pro-Version (Dashboard, Branding-Bereich, Verkaufsargumente, Push) obendrauf bauen</li>
+    <li style="margin-bottom:5px">Stripe-Anbindung für Basic- und Pro-Buchung</li>
+    <li style="margin-bottom:0">Übergabe der finalen Demo an die ca. 10 Top-Leaderinnen unter Sina</li>
+  </ol>
+
+  <div class="signal">
+    <div class="signal-title">Was uns jetzt aufhält</div>
+    <div class="signal-body">
+      Zwei Dinge müssen geklärt sein, bevor der nächste Bauschritt sinnvoll ist:
+      <b>der endgültige Name</b> (Punkt 2) und <b>der Weg zur MONAT-Freigabe</b>
+      (Punkt 1). Beim Namen brauchen wir eure Entscheidung, bei der Freigabe eure
+      Bereitschaft, den Kontakt zu MONAT-DACH gemeinsam mit uns zu suchen. Auch die
+      Demo für die ca. 10 Top-Leaderinnen soll den finalen Namen tragen, damit
+      niemand verwirrt wird. Sobald hier Klarheit herrscht, geht es sofort los.
+    </div>
+  </div>
+
+  <div class="footer">
+    Erstellt am 4. Juli 2026 im Nachgang zum Zoom mit Sina + Marcel Hildmann · myglowmatch
+  </div>
+
+</div>
+
+</body>
+</html>

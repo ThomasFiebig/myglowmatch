@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VERADEX · Antrag Freigabe · MONAT-DACH</title>
+<style>
+  :root{
+    --black:#0f0f0f;
+    --graphite:#2e2e2e;
+    --light-gray:#e8e6e3;
+    --mid-gray:#9a9790;
+    --sand:#d4cfc8;
+    --blue-gray:#8a9ba8;
+    --font:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html,body{background:#fff;font-family:var(--font);color:var(--graphite)}
+
+  /* A4-Seite mit Briefpapier als Vollflächen-Hintergrund */
+  .page{
+    width:210mm;
+    height:297mm;
+    background-image:url('veradex_briefpapier.png');
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+    background-position:top left;
+    position:relative;
+    overflow:hidden;
+    page-break-after:always;
+    break-after:page;
+  }
+  .page:last-child{page-break-after:auto}
+
+  /* Content sitzt zwischen Header-Balken und Footer-Balken */
+  .content{
+    padding:42mm 22mm 44mm 22mm;
+    font-size:9.5pt;
+    line-height:1.5;
+    color:var(--graphite);
+  }
+
+  .letterhead{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:20mm;
+    margin-bottom:7mm;
+  }
+  .empfänger{
+    font-size:9pt;
+    line-height:1.5;
+    color:var(--black);
+    max-width:80mm;
+  }
+  .empfänger .lbl{
+    font-size:7pt;letter-spacing:.20em;color:var(--blue-gray);
+    font-weight:400;text-transform:uppercase;margin-bottom:3px;
+  }
+  .datum-block{
+    text-align:right;
+    font-size:9pt;
+    color:var(--graphite);
+    line-height:1.5;
+  }
+  .datum-block .lbl{
+    font-size:7pt;letter-spacing:.20em;color:var(--blue-gray);
+    font-weight:400;text-transform:uppercase;margin-bottom:3px;
+  }
+
+  .betreff{
+    font-size:10.5pt;
+    color:var(--black);
+    font-weight:400;
+    line-height:1.35;
+    padding:8px 0;
+    border-top:1px solid var(--light-gray);
+    border-bottom:1px solid var(--light-gray);
+    margin-bottom:5mm;
+    letter-spacing:.01em;
+  }
+  .betreff .lbl{
+    display:block;
+    font-size:7pt;letter-spacing:.20em;color:var(--blue-gray);
+    font-weight:400;text-transform:uppercase;margin-bottom:3px;
+  }
+
+  .anrede{margin-bottom:3.5mm;font-size:9.5pt;color:var(--black)}
+  p{
+    font-size:9.5pt;
+    line-height:1.45;
+    color:var(--graphite);
+    margin:0 0 2.5mm;
+  }
+  p.close{margin-bottom:4mm}
+
+  .paragraph-block{
+    margin:3.5mm 0 3.5mm;
+    padding:8px 12px;
+    background:rgba(232,230,227,.35);
+    border-left:2px solid var(--blue-gray);
+  }
+  .paragraph-block p{margin:0 0 2px;font-size:9pt;line-height:1.4}
+  .paragraph-block p:last-child{margin-bottom:0}
+  .paragraph-block .par-num{font-weight:400;color:var(--black);letter-spacing:.02em}
+
+  .highlight{color:var(--black);font-weight:400}
+
+  .sig-block{margin-top:4mm;padding-top:3mm;border-top:1px solid var(--light-gray)}
+  .sig-line{font-size:9.5pt;color:var(--graphite);margin-bottom:3mm}
+  .sig-name{font-size:10.5pt;color:var(--black);margin-top:1.5mm;letter-spacing:.02em}
+  .sig-role{font-size:7.5pt;color:var(--blue-gray);letter-spacing:.14em;text-transform:uppercase;margin-top:0.5mm}
+
+  .contact-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:5mm;
+    margin-top:4mm;
+    padding:9px 13px;
+    background:rgba(232,230,227,.35);
+    border-left:2px solid var(--sand);
+  }
+  .contact-cell .lbl{
+    font-size:7pt;letter-spacing:.18em;color:var(--blue-gray);
+    font-weight:400;text-transform:uppercase;margin-bottom:2px;
+  }
+  .contact-cell .name{font-size:9.5pt;color:var(--black);margin-bottom:1px}
+  .contact-cell .role{font-size:8pt;color:var(--mid-gray);margin-bottom:2px;line-height:1.35}
+  .contact-cell .mail{font-size:8.5pt;color:var(--graphite)}
+
+  .anhang{
+    margin-top:4mm;padding-top:3mm;
+    border-top:1px solid var(--light-gray);
+    font-size:8pt;color:var(--mid-gray);line-height:1.45;
+  }
+  .anhang b{color:var(--blue-gray);font-weight:400;font-size:7pt;letter-spacing:.20em;text-transform:uppercase;display:block;margin-bottom:3px}
+
+  /* Bildschirm-Vorschau: helle Umgebung, Seiten-Trenner */
+  @media screen{
+    body{background:var(--light-gray);padding:20px 0}
+    .page{
+      margin:0 auto 20px;
+      box-shadow:0 4px 24px rgba(0,0,0,.12);
+    }
+  }
+
+  /* Print — exakt A4 pro .page, keine Ränder außen herum */
+  @page{
+    size:A4 portrait;
+    margin:0;
+  }
+  @media print{
+    html,body{background:#fff !important;margin:0 !important;padding:0 !important}
+    .page{margin:0;box-shadow:none}
+    .paragraph-block,.contact-grid,.sig-block,.anhang,.letterhead,.betreff{
+      break-inside:avoid;page-break-inside:avoid;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ SEITE 1 ═══ -->
+<div class="page">
+  <div class="content">
+
+    <div class="letterhead">
+      <div class="empfänger">
+        <div class="lbl">Adressat</div>
+        MONAT Global DACH<br>
+        z. Hd. [Ansprechpartner Compliance / Corporate Relations]<br>
+        [Straße Hausnummer]<br>
+        [PLZ Ort]<br>
+        Deutschland
+      </div>
+      <div class="datum-block">
+        <div class="lbl">Datum</div>
+        Nordrach, den 6. Juli 2026
+      </div>
+    </div>
+
+    <div class="betreff">
+      <span class="lbl">Betreff</span>
+      Antrag auf ausdrückliche schriftliche Erlaubnis nach § 3.2.1 der
+      MONAT-Markenpartner-Richtlinien (DE-Fassung, gültig ab 01.04.2026) für
+      den Einsatz eines digitalen Beratungs-Tools
+    </div>
+
+    <div class="anrede">Sehr geehrte Damen und Herren,</div>
+
+    <p>
+      als Inhaber des Einzelunternehmens VERADEX und eingetragener
+      MONAT-Markenpartner unter der Nummer <span class="highlight">14074120</span>
+      wende ich mich heute mit einem formalen Genehmigungsantrag an Sie. VERADEX
+      ist rechtlicher Antragsteller, Vertragspartner der teilnehmenden
+      Markenpartnerinnen und trägt den operativen Betrieb (Infrastruktur,
+      Datenschutz-Verantwortlicher, Kaufmännisches).
+    </p>
+
+    <p>
+      Fachlich und technisch verantwortet wird das Beratungs-Tool von meiner Frau
+      <span class="highlight">Desirée Fiebig</span> — ebenfalls eingetragene
+      MONAT-Markenpartnerin (Nr. <span class="highlight">14038921</span>) und
+      Downline-Partnerin von Frau Sina Hildmann.
+      Desirée bringt die Sortimentskenntnis ein, verantwortet die Beratungslogik
+      und die konzeptionell-technische Umsetzung. Sie ist zugleich fachliche und
+      technische Ansprechpartnerin für Rückfragen zum System.
+    </p>
+
+    <p>
+      Das Tool funktioniert wie folgt: Die Endkundin beantwortet online einen
+      strukturierten Fragebogen zu Haartyp, Kopfhaut und Pflegezielen. Das System
+      berechnet daraus eine individuelle Produkt-Empfehlung aus dem
+      MONAT-Sortiment und stellt sie ihr im Browser dar. Die Markenpartnerin
+      erhält parallel eine Zusammenfassung, um die Beratung persönlich
+      fortzuführen. Das Tool unterstützt die persönliche Beratung, es ersetzt
+      sie nicht.
+    </p>
+
+    <p>
+      Wir differenzieren zwischen zwei Nutzungsebenen der MONAT-Materialien:
+    </p>
+
+    <div class="paragraph-block">
+      <p>
+        <span class="par-num">Sichtbar für die Endkundin</span> sind
+        ausschließlich die MONAT-Produktnamen sowie kurze Anwendungshinweise und
+        Wirkbeschreibungen — jeweils als <b>wortwörtliches Zitat aus dem
+        offiziellen MONAT-Produktdatenblatt mit Quellenverweis</b>, kein eigener
+        Text, keine Umschreibungen. Produktbilder, Logos, MONAT-Marketingmaterial
+        oder Verlinkungen ins MONAT-Sortiment werden im Tool nicht verwendet.
+      </p>
+      <p>
+        <span class="par-num">Intern als Datengrundlage</span> werden die
+        Datenblätter zur Auswahl-Logik, für Kontraindikationen und für
+        Kombinierbarkeitsregeln ausgewertet. Diese Auswertung ist für die
+        Endkundin nicht sichtbar.
+      </p>
+    </div>
+
+    <p>
+      Konkret ist geplant, das Tool zunächst dem Team von Frau Sina Hildmann zur
+      Verfügung zu stellen. Frau Hildmann hat die Absicht bekundet, das System
+      ihren Downline-Partnerinnen als Botschafterin zu empfehlen; ein Vertrag
+      oder eine Provisionszahlung zwischen ihr und VERADEX besteht nicht und
+    </p>
+
+  </div>
+</div>
+
+<!-- ═══ SEITE 2 ═══ -->
+<div class="page">
+  <div class="content">
+
+    <p style="margin-top:0">
+      ist auch nicht vorgesehen, um § 3.9.1 der Richtlinien zu wahren.
+      Vertragspartner der teilnehmenden Markenpartnerinnen ist ausschließlich
+      VERADEX.
+    </p>
+
+    <p>
+      Auf dieser Grundlage <b>beantrage ich hiermit ausdrücklich Ihre
+      schriftliche Erlaubnis</b> für die folgenden Nutzungen:
+    </p>
+
+    <div class="paragraph-block">
+      <p>
+        <span class="par-num">Nach § 3.2.1</span> — Einsatz des beschriebenen
+        Beratungs-Tools als eigenes digitales Geschäftsinstrument, das VERADEX
+        MONAT-Markenpartnerinnen zur Verfügung stellt.
+      </p>
+      <p>
+        <span class="par-num">Nach § 3.2.5</span> — Nennung der offiziellen
+        MONAT-Produktnamen in der Ergebnisdarstellung für die Endkundin.
+      </p>
+    </div>
+
+    <p>
+      Zusätzlich möchten wir folgende Compliance-Zusagen ausdrücklich festhalten:
+    </p>
+
+    <div class="paragraph-block">
+      <p>
+        <span class="par-num">§ 3.6.1</span> — sämtliche produktbezogenen
+        Aussagen einschließlich der wortwörtlichen Wiedergabe von
+        Datenblatt-Inhalten in der Ergebnisdarstellung sind Zitate aus
+        offizieller MONAT-Literatur mit Quellenverweis. Keine Umformulierungen,
+        keine eigenen Wirkversprechen.
+      </p>
+      <p>
+        <span class="par-num">§ 3.6.3</span> — das Tool enthält keine Aussagen
+        zu Verdienstmöglichkeiten, Karrierechancen oder Einkommen von
+        Markenpartnerinnen.
+      </p>
+      <p>
+        <span class="par-num">§ 3.2.8</span> — alle automatisierten E-Mails aus
+        dem System erfüllen die Pflichtangaben (physische Absenderadresse,
+        Opt-out-Möglichkeit, Werbekennzeichnung wo einschlägig, Hinweis auf
+        DSGVO-Betroffenenrechte).
+      </p>
+      <p>
+        <span class="par-num">§ 3.20 / DSGVO</span> — VERADEX handelt als
+        eigenständiger Verantwortlicher im Sinne von Art. 4 Nr. 7 DSGVO. Die
+        Datenverarbeitung erfolgt auf Servern innerhalb der EU beziehungsweise
+        mit Standardvertragsklauseln nach Art. 46 DSGVO. Haar- und
+        Kopfhautdaten werden mit erhöhter Sorgfalt behandelt. Alle
+        Kundinnen-Oberflächen des Tools verfügen über TMG-konformes Impressum
+        und DSGVO-konforme Datenschutzerklärung.
+      </p>
+    </div>
+
+    <p>
+      Wir bieten Ihnen gerne einen kurzen Vorstellungstermin per Videokonferenz
+      an, in dem Sie das Tool einsehen und die Compliance-Umsetzung im Detail
+      prüfen können. Für Rückfragen, ergänzende Unterlagen oder einen Testzugang
+      stehen wir jederzeit zur Verfügung.
+    </p>
+
+    <p class="close">
+      Wir danken Ihnen für die Prüfung unseres Antrags und freuen uns auf Ihre
+      Rückmeldung.
+    </p>
+
+    <div class="sig-block">
+      <div class="sig-line">Mit freundlichen Grüßen</div>
+      <div class="sig-name">Thomas Fiebig</div>
+      <div class="sig-role">Inhaber VERADEX · MONAT-Markenpartner-Nr. 14074120</div>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-cell">
+        <div class="lbl">Rückfragen · fachlich &amp; technisch</div>
+        <div class="name">Desirée Fiebig</div>
+        <div class="role">MONAT-Markenpartnerin Nr. 14038921 · Konzept, Beratungslogik, Umsetzung</div>
+        <div class="mail">info@veradex.de</div>
+      </div>
+      <div class="contact-cell">
+        <div class="lbl">Rückfragen · formal &amp; rechtlich</div>
+        <div class="name">Thomas Fiebig</div>
+        <div class="role">VERADEX · Antragsteller, Vertrag, Betrieb, DSGVO</div>
+        <div class="mail">info@veradex.de</div>
+      </div>
+    </div>
+
+    <div class="anhang">
+      <b>Anlagen</b>
+      • Fürsprache-Schreiben von MONAT-Markenpartnerin Sina Hildmann<br>
+      • Auf Anfrage: Screenshots, technische Kurzbeschreibung, Compliance-Übersicht,
+        Testzugang zum System
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

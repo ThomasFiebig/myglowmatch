@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>myglowmatch — Partnerbereich (Demo-Mockup)</title>
+  <style>
+    :root{
+      --bg:#fbf6f0;          /* Champagne */
+      --blush:#f6e6e1;
+      --ink:#322e2d;
+      --ink-soft:#6f6663;
+      --muted:#8c857f;
+      --line:#efe5dc;
+      --accent:#e0b1a8;      /* Rosegold */
+      --accent-dark:#c98f84;
+      --accent-deep:#d4a593;
+      --chip-bg:#f5e6dc;
+      --chip-text:#7a5641;
+      --kupfer:#a07560;
+      --card:#ffffff;
+      --card-tint:#fefbf8;
+      --ok:#3f7d4a;
+      --warn:#b17a2c;
+      --whatsapp:#25d366;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+    a{color:var(--accent-dark);text-decoration:none}
+    button{font:inherit;cursor:pointer}
+    h1,h2,h3{margin:0;font-family:Georgia,"Times New Roman",serif;font-weight:500;color:var(--ink)}
+    .serif{font-family:Georgia,"Times New Roman",serif}
+    .uppercase-kupfer{font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--kupfer);text-transform:uppercase}
+
+    /* ============ LOGIN ============ */
+    #login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(180deg,var(--blush) 0%,var(--bg) 60%)}
+    .login-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:44px;max-width:440px;width:100%;box-shadow:0 12px 40px rgba(50,46,45,.08)}
+    .brand{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+    .brand-dot{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-deep))}
+    .brand-name{font-family:Georgia,serif;font-size:20px;letter-spacing:.03em;color:var(--ink)}
+    .login-title{font-size:26px;margin:22px 0 6px}
+    .login-sub{color:var(--ink-soft);font-size:14px;margin-bottom:22px}
+    label{display:block;font-size:12px;color:var(--ink-soft);margin:14px 0 6px;letter-spacing:.02em}
+    input[type=email],input[type=password],input[type=text],select,textarea{
+      width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card-tint);font:inherit;color:var(--ink)
+    }
+    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);background:#fff}
+    .primary{background:var(--accent);color:var(--ink);border:0;border-radius:50px;padding:13px 22px;font-weight:600;letter-spacing:.01em}
+    .primary.block{width:100%;margin-top:20px}
+    .primary:hover{background:var(--accent-dark);color:#fff}
+    .secondary{background:transparent;border:1px solid var(--line);border-radius:50px;padding:9px 16px;color:var(--ink);font-weight:500}
+    .secondary:hover{background:var(--blush);border-color:var(--accent-deep)}
+    .login-foot{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+    .login-foot a{color:var(--muted);text-decoration:underline}
+
+    /* ============ DASHBOARD ============ */
+    #dashboard{display:none;min-height:100vh}
+    #dashboard.active{display:grid;grid-template-columns:250px 1fr}
+    .sidebar{background:#fff;border-right:1px solid var(--line);padding:24px 0;display:flex;flex-direction:column;justify-content:space-between;position:sticky;top:0;height:100vh}
+    .sidebar-brand{padding:0 24px 24px;border-bottom:1px solid var(--line);margin-bottom:18px}
+    .nav a{display:flex;align-items:center;gap:12px;padding:12px 24px;color:var(--ink);font-size:14px;border-left:3px solid transparent;cursor:pointer}
+    .nav a:hover{background:var(--card-tint)}
+    .nav a.active{background:var(--blush);border-left-color:var(--accent);font-weight:500}
+    .user-box{padding:16px 24px;font-size:13px;color:var(--ink-soft);border-top:1px solid var(--line);display:flex;align-items:center;gap:12px}
+    .user-portrait{width:40px;height:40px;border-radius:50%;background:var(--accent-deep);display:flex;align-items:center;justify-content:center;color:#fff;font-family:Georgia,serif;font-weight:500;font-size:15px;flex-shrink:0}
+    .user-box b{color:var(--ink);display:block;font-weight:500;font-size:14px}
+
+    main{padding:36px 44px 80px;overflow-x:hidden}
+    .view{display:none}
+    .view.active{display:block}
+    .top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;gap:24px;flex-wrap:wrap}
+    .hello{font-size:30px}
+    .hello-sub{color:var(--ink-soft);font-size:14px;margin-top:8px}
+    .cta{background:var(--accent);color:var(--ink);border:0;border-radius:50px;padding:13px 24px;font-weight:600}
+    .cta:hover{background:var(--accent-dark);color:#fff}
+
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:20px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+    .card-title{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--kupfer);margin-bottom:10px;font-weight:600}
+    .kpi{font-family:Georgia,serif;font-size:34px;color:var(--ink);font-weight:500}
+    .kpi-sub{color:var(--ink-soft);font-size:13px;margin-top:4px}
+
+    .col-3{grid-column:span 3}
+    .col-4{grid-column:span 4}
+    .col-5{grid-column:span 5}
+    .col-6{grid-column:span 6}
+    .col-7{grid-column:span 7}
+    .col-8{grid-column:span 8}
+    .col-12{grid-column:span 12}
+
+    /* Kundinnen-Liste (Übersicht) */
+    .lead-list{display:flex;flex-direction:column;gap:2px}
+    .lead{display:grid;grid-template-columns:1fr auto auto;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);align-items:center}
+    .lead:last-child{border-bottom:0}
+    .lead-name{font-weight:500;color:var(--ink)}
+    .lead-sub{color:var(--ink-soft);font-size:13px}
+    .lead-date{color:var(--muted);font-size:13px}
+    .lead-status{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--chip-bg);color:var(--chip-text);white-space:nowrap;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+    .lead-status.sent{background:#eaf2ec;color:var(--ok)}
+    .lead-status.warn{background:#fbf1de;color:var(--warn)}
+    .lead-link{color:var(--accent-dark);font-size:13px}
+
+    /* Table */
+    .tbl{width:100%;border-collapse:collapse;font-size:14px}
+    .tbl th{text-align:left;font-size:11px;font-weight:600;color:var(--kupfer);text-transform:uppercase;letter-spacing:.1em;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--card-tint)}
+    .tbl td{padding:14px;border-bottom:1px solid var(--line);vertical-align:middle}
+    .tbl tr:last-child td{border-bottom:0}
+    .tbl tr:hover td{background:var(--card-tint);cursor:pointer}
+
+    /* Follow-up Toggles in Tabellen-Zeilen */
+    .fu-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;user-select:none;border:1px solid var(--line);background:#fff;color:var(--ink-soft);transition:all .12s}
+    .fu-chip:hover{border-color:var(--accent-deep)}
+    .fu-chip.on{background:var(--blush);border-color:var(--accent);color:var(--chip-text)}
+    .fu-chip.on.done{background:#eaf2ec;border-color:#c8dfcd;color:var(--ok)}
+
+    /* Filter chips */
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    .chip{padding:7px 15px;border:1px solid var(--line);border-radius:50px;font-size:13px;background:#fff;cursor:pointer;color:var(--ink-soft)}
+    .chip.active{background:var(--accent);color:var(--ink);border-color:var(--accent);font-weight:600}
+
+    .search{display:flex;gap:12px;align-items:center;margin-bottom:16px}
+    .search input{flex:1}
+
+    /* Titelbild */
+    .hero-preview{
+      position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;
+      background-size:cover;background-position:center;background-color:var(--blush);
+      border:1px solid var(--line);overflow:hidden;margin-bottom:12px;
+    }
+    .hero-preview::after{
+      content:"aktuell";position:absolute;top:10px;right:10px;
+      background:rgba(255,255,255,.9);padding:4px 10px;border-radius:20px;
+      font-size:10px;font-weight:600;letter-spacing:.1em;
+      color:var(--chip-text);text-transform:uppercase;
+    }
+    .hero-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+
+    /* Portrait-Upload */
+    .portrait-upload{display:flex;align-items:center;gap:18px;margin-bottom:8px}
+    .portrait-preview{width:96px;height:96px;border-radius:50%;background:var(--accent-deep);display:flex;align-items:center;justify-content:center;color:#fff;font-family:Georgia,serif;font-size:32px;font-weight:500;flex-shrink:0;border:3px solid #fff;box-shadow:0 0 0 1px var(--line)}
+    .portrait-actions{flex:1}
+    .portrait-actions button{margin-right:6px;margin-bottom:6px}
+    .portrait-hint{font-size:12px;color:var(--muted);margin-top:8px}
+
+    /* Pastell-Farb-Swatches */
+    .color-swatches{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap}
+    .swatch{width:38px;height:38px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px var(--line);cursor:pointer;transition:transform .12s}
+    .swatch:hover{transform:scale(1.08)}
+    .swatch.selected{box-shadow:0 0 0 2px var(--ink)}
+    .swatch-label{display:block;font-size:11px;color:var(--ink-soft);text-align:center;margin-top:6px}
+    .swatch-item{display:flex;flex-direction:column;align-items:center}
+
+    /* Bar chart (CSS only) */
+    .bar-chart{display:flex;align-items:flex-end;gap:16px;height:190px;padding:24px 8px 0}
+    .bar{flex:1;background:linear-gradient(to top,var(--accent),var(--blush));border-radius:8px 8px 0 0;position:relative;min-height:6px}
+    .bar span{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-size:12px;font-weight:600;color:var(--chip-text)}
+    .bar-labels{display:flex;justify-content:space-around;font-size:12px;color:var(--muted);margin-top:8px}
+
+    /* Info-Callouts */
+    .callout{background:var(--card-tint);border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-size:13px;color:var(--ink)}
+    .callout.compliance{background:#eaf2ec;border-color:#c8dfcd;color:var(--ok)}
+    .callout b{display:block;margin-bottom:2px}
+
+    /* Beratungs-Link Box */
+    .link-box{background:var(--card-tint);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:"SF Mono",Consolas,monospace;font-size:13px;word-break:break-all;color:var(--ink)}
+
+    /* Copy Row */
+    .copy-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+
+    /* Demo Hint */
+    .demo-hint{background:#fff;border:1px dashed var(--accent-deep);border-radius:12px;padding:14px 18px;font-size:13px;color:var(--muted);margin-top:36px}
+    .demo-hint b{color:var(--ink)}
+
+    /* Settings */
+    .setting-row{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--line);gap:16px}
+    .setting-row:last-child{border-bottom:0}
+    .setting-label{font-weight:500;color:var(--ink)}
+    .setting-desc{color:var(--ink-soft);font-size:13px;margin-top:2px}
+
+    .toggle{position:relative;width:46px;height:26px;background:#dcd2c7;border-radius:14px;cursor:pointer;transition:background .15s;flex-shrink:0}
+    .toggle.on{background:var(--accent)}
+    .toggle::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left .15s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+    .toggle.on::after{left:23px}
+
+    /* ============ MAIL PREVIEW (Node-17-treu) ============ */
+    .mail-preview-wrap{background:#FBF5EE;border-radius:14px;padding:24px;border:1px solid var(--line);max-height:720px;overflow-y:auto}
+    .mail-inner{max-width:520px;margin:0 auto;font-family:Helvetica,Arial,sans-serif}
+    .mail-inner .mail-brand{text-align:center;padding:8px 0 24px;font-family:Georgia,serif;font-size:22px;letter-spacing:.05em;color:#2D2A26}
+    .mail-card{background:#fff;border-radius:20px;overflow:hidden}
+    .mail-hero{padding:36px 30px 26px;background:linear-gradient(180deg,#F5E6DC 0%,#FFFFFF 100%);text-align:center}
+    .mail-hero .kupfer-eyebrow{font-size:11px;letter-spacing:.16em;color:#A07560;font-weight:600;text-transform:uppercase;margin-bottom:14px}
+    .mail-hero h2{font-family:Georgia,serif;font-size:28px;line-height:1.25;color:#2D2A26;font-weight:500;margin-bottom:12px}
+    .mail-hero .lead{font-size:15px;line-height:1.65;color:#5C5651}
+    .mail-body{padding:26px 30px}
+    .mail-body p{margin:0 0 14px;font-size:15px;line-height:1.7;color:#3D3935}
+    .mail-divider{width:60px;height:1px;background:#EFE5DC;margin:20px auto}
+    .mail-section-eyebrow{text-align:center;font-size:11px;letter-spacing:.16em;color:#A07560;font-weight:600;text-transform:uppercase;margin:6px 0 8px}
+    .mail-section-title{text-align:center;font-family:Georgia,serif;font-size:22px;color:#2D2A26;font-weight:500;margin-bottom:22px}
+    .mail-step{background:#fff;border:1px solid #EFE5DC;border-radius:14px;padding:20px;margin-bottom:12px}
+    .mail-step-chip{display:inline-block;background:#F5E6DC;color:#7A5641;font-size:10px;font-weight:600;letter-spacing:.12em;padding:5px 11px;border-radius:20px;text-transform:uppercase;margin-bottom:8px}
+    .mail-step h3{font-family:Georgia,serif;font-size:19px;color:#2D2A26;font-weight:500;margin-bottom:6px}
+    .mail-step p{margin:0;font-size:14px;line-height:1.6;color:#5C5651}
+    .mail-partner{background:#FBF5EE;border-radius:14px;padding:24px;text-align:center;margin-top:16px}
+    .mail-partner .mp-portrait{width:74px;height:74px;border-radius:50%;background:#D4A593;color:#fff;font-family:Georgia,serif;font-size:26px;line-height:74px;text-align:center;font-weight:500;margin:0 auto 12px}
+    .mail-partner .mp-title{font-size:10px;letter-spacing:.16em;color:#A07560;font-weight:600;text-transform:uppercase;margin-bottom:5px}
+    .mail-partner .mp-name{font-family:Georgia,serif;font-size:19px;color:#2D2A26;font-weight:500;margin-bottom:14px}
+    .mail-partner .mp-cta{display:inline-block;background:var(--whatsapp);color:#fff;font-size:14px;font-weight:600;padding:11px 24px;border-radius:50px;text-decoration:none;margin-top:2px}
+    .mail-partner .mp-contact{font-size:13px;color:#5C5651;margin-top:12px}
+    .mail-footer{padding:20px 24px;text-align:center;color:#8C857F;font-size:11px;line-height:1.6}
+  </style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<section id="login">
+  <div class="login-card">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <div class="brand-name">myglowmatch <span style="color:var(--ink-soft);font-size:14px">| Partnerbereich</span></div>
+    </div>
+    <div class="login-title serif">Willkommen zurück</div>
+    <div class="login-sub">Melde dich mit deinem Partner-Zugang an.</div>
+
+    <label for="email">E-Mail</label>
+    <input id="email" type="email" value="sina.hildmann@example.com" autocomplete="email">
+
+    <label for="pw">Passwort</label>
+    <input id="pw" type="password" value="••••••••" autocomplete="current-password">
+
+    <button class="primary block" onclick="showDashboard()">Anmelden</button>
+
+    <div class="login-foot">
+      Noch kein Zugang? <a href="#">Partnerin werden</a> · <a href="#">Passwort vergessen</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DASHBOARD ============ -->
+<section id="dashboard">
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-brand">
+        <div class="brand">
+          <div class="brand-dot"></div>
+          <div class="brand-name">myglowmatch</div>
+        </div>
+        <div style="color:var(--ink-soft);font-size:12px;margin-top:4px;letter-spacing:.02em">Partnerbereich</div>
+      </div>
+      <nav class="nav">
+        <a onclick="showView('uebersicht',this)" class="active">📊 &nbsp; Übersicht</a>
+        <a onclick="showView('kundinnen',this)">👥 &nbsp; Meine Kundinnen</a>
+        <a onclick="showView('beratung',this)">✨ &nbsp; Beratung starten</a>
+        <a onclick="showView('branding',this)">🎨 &nbsp; Mein Branding</a>
+        <a onclick="showView('statistiken',this)">📈 &nbsp; Statistiken</a>
+        <a onclick="showView('einstellungen',this)">⚙️ &nbsp; Einstellungen</a>
+      </nav>
+    </div>
+    <div class="user-box">
+      <div class="user-portrait">SH</div>
+      <div>
+        <b>Sina Hildmann</b>
+        <a href="#" onclick="location.reload()" style="font-size:12px">Abmelden</a>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- ===== ÜBERSICHT ===== -->
+    <section id="view-uebersicht" class="view active">
+      <div class="top">
+        <div>
+          <h1 class="hello">Hallo Sina 👋</h1>
+          <div class="hello-sub">Dein persönlicher Beratungs-Link: <b>myglowmatch.de/sina</b> · <a href="#">kopieren</a></div>
+        </div>
+        <button class="cta" onclick="showView('beratung',document.querySelector('.nav a:nth-child(3)'))">+ Neue Beratung starten</button>
+      </div>
+
+      <div class="grid" style="margin-bottom:20px">
+        <div class="card col-3"><div class="card-title">Beratungen · 30 Tage</div><div class="kpi">12</div><div class="kpi-sub">↑ 4 mehr als Vormonat</div></div>
+        <div class="card col-3"><div class="card-title">Warenkorb-Links versendet</div><div class="kpi">8</div><div class="kpi-sub">von dir manuell markiert</div></div>
+        <div class="card col-3"><div class="card-title">Bestellungen</div><div class="kpi">5</div><div class="kpi-sub">42 % Conversion</div></div>
+        <div class="card col-3"><div class="card-title">Follow-ups offen</div><div class="kpi">3</div><div class="kpi-sub">seit 5+ Tagen ohne Rückmeldung</div></div>
+      </div>
+
+      <div class="grid">
+        <div class="card col-8">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <h3 style="font-size:18px">Zuletzt beraten</h3>
+            <a onclick="showView('kundinnen',document.querySelector('.nav a:nth-child(2)'))" style="font-size:13px;cursor:pointer">Alle ansehen →</a>
+          </div>
+          <div class="lead-list">
+            <div class="lead"><div><div class="lead-name">Marie K.</div><div class="lead-sub">wellig · gefärbt · trockene Spitzen</div></div><div class="lead-date">heute, 09:14</div><div class="lead-status sent">Bestellt</div></div>
+            <div class="lead"><div><div class="lead-name">Julia P.</div><div class="lead-sub">lockig · Volumen-Wunsch · sensibel</div></div><div class="lead-date">gestern, 21:03</div><div class="lead-status">Warenkorb</div></div>
+            <div class="lead"><div><div class="lead-name">Anna F.</div><div class="lead-sub">glatt · fein · Hitzeschutz</div></div><div class="lead-date">gestern, 15:47</div><div class="lead-status warn">Follow-up fällig</div></div>
+            <div class="lead"><div><div class="lead-name">Elena T.</div><div class="lead-sub">kraus · blondiert · Reparatur</div></div><div class="lead-date">30.06., 11:22</div><div class="lead-status sent">Bestellt</div></div>
+            <div class="lead"><div><div class="lead-name">Sarah M.</div><div class="lead-sub">wellig · Kopfhaut fettig</div></div><div class="lead-date">28.06., 18:56</div><div class="lead-status">Warenkorb</div></div>
+          </div>
+        </div>
+
+        <div class="card col-4">
+          <h3 style="font-size:18px;margin-bottom:14px">Beratungs-Link teilen</h3>
+          <div class="link-box">https://myglowmatch.de/sina</div>
+          <div class="copy-row">
+            <button class="secondary">🔗 Kopieren</button>
+            <button class="secondary">📱 WhatsApp</button>
+            <button class="secondary">📷 QR-Code</button>
+          </div>
+          <div style="margin-top:14px;font-size:13px;color:var(--ink-soft)">Deine Kundinnen füllen dort den Fragebogen aus. Du bekommst Lead + Empfehlungs-Mail automatisch als Kopie.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MEINE KUNDINNEN ===== -->
+    <section id="view-kundinnen" class="view">
+      <div class="top">
+        <div>
+          <h1 class="hello">Meine Kundinnen</h1>
+          <div class="hello-sub">Klick pro Kundin auf 🛒 Warenkorb oder 🎁 Bestellt, um zu markieren.</div>
+        </div>
+        <button class="cta" onclick="showView('beratung',document.querySelector('.nav a:nth-child(3)'))">+ Neue Beratung</button>
+      </div>
+
+      <div class="card">
+        <div class="search">
+          <input type="text" placeholder="🔍  Nach Name, E-Mail oder Merkmal suchen …">
+          <button class="secondary">Filter</button>
+          <button class="secondary">Export CSV</button>
+        </div>
+        <div class="chips">
+          <div class="chip active">Alle (43)</div>
+          <div class="chip">Heute (2)</div>
+          <div class="chip">Diese Woche (7)</div>
+          <div class="chip">30 Tage (12)</div>
+          <div class="chip">Follow-up offen (3)</div>
+          <div class="chip">Bestellt (11)</div>
+        </div>
+
+        <table class="tbl">
+          <thead>
+            <tr><th>Name</th><th>Profil</th><th>Beratung am</th><th>Follow-up</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr><td><b>Marie Kessler</b><br><span class="lead-sub">marie.k@…</span></td><td>wellig · gefärbt · trockene Spitzen</td><td>heute, 09:14</td><td><span class="fu-chip on">🛒 Warenkorb</span> <span class="fu-chip on done">🎁 Bestellt</span></td><td><a href="#">öffnen →</a></td></tr>
+            <tr><td><b>Julia Peters</b><br><span class="lead-sub">j.peters@…</span></td><td>lockig · Volumen · sensibel</td><td>gestern, 21:03</td><td><span class="fu-chip on">🛒 Warenkorb</span> <span class="fu-chip">🎁 Bestellt</span></td><td><a href="#">öffnen →</a></td></tr>
+            <tr><td><b>Anna Frei</b><br><span class="lead-sub">anna.f@…</span></td><td>glatt · fein · Hitzeschutz</td><td>gestern, 15:47</td><td><span class="fu-chip">🛒 Warenkorb</span> <span class="fu-chip">🎁 Bestellt</span></td><td><a href="#">öffnen →</a></td></tr>
+            <tr><td><b>Elena Tomsic</b><br><span class="lead-sub">elena.t@…</span></td><td>kraus · blondiert · Reparatur</td><td>30.06., 11:22</td><td><span class="fu-chip on">🛒 Warenkorb</span> <span class="fu-chip on done">🎁 Bestellt</span></td><td><a href="#">öffnen →</a></td></tr>
+            <tr><td><b>Sarah Mayr</b><br><span class="lead-sub">s.mayr@…</span></td><td>wellig · Kopfhaut fettig</td><td>28.06., 18:56</td><td><span class="fu-chip on">🛒 Warenkorb</span> <span class="fu-chip">🎁 Bestellt</span></td><td><a href="#">öffnen →</a></td></tr>
+            <tr><td><b>Ines Weber</b><br><span class="lead-sub">ines.w@…</span></td><td>glatt · mittel · Glanz</td><td>27.06., 14:12</td><td><span class="fu-chip on">🛒 Warenkorb</span> <span class="fu-chip on done">🎁 Bestellt</span></td><td><a href="#">öffnen →</a></td></tr>
+            <tr><td><b>Lisa Brenner</b><br><span class="lead-sub">lisa.b@…</span></td><td>lockig · gefärbt · Definition</td><td>26.06., 20:45</td><td><span class="fu-chip">🛒 Warenkorb</span> <span class="fu-chip">🎁 Bestellt</span></td><td><a href="#">öffnen →</a></td></tr>
+            <tr><td><b>Sabine Hofer</b><br><span class="lead-sub">s.hofer@…</span></td><td>glatt · fein · Volumen</td><td>25.06., 09:33</td><td><span class="fu-chip on">🛒 Warenkorb</span> <span class="fu-chip on done">🎁 Bestellt</span></td><td><a href="#">öffnen →</a></td></tr>
+            <tr><td><b>Katharina Reiter</b><br><span class="lead-sub">k.reiter@…</span></td><td>wellig · Hitzeschutz · Frizz</td><td>24.06., 17:22</td><td><span class="fu-chip on">🛒 Warenkorb</span> <span class="fu-chip">🎁 Bestellt</span></td><td><a href="#">öffnen →</a></td></tr>
+            <tr><td><b>Nadine Sommer</b><br><span class="lead-sub">n.sommer@…</span></td><td>lockig · dick · Feuchtigkeit</td><td>22.06., 12:08</td><td><span class="fu-chip">🛒 Warenkorb</span> <span class="fu-chip">🎁 Bestellt</span></td><td><a href="#">öffnen →</a></td></tr>
+            <tr><td><b>Franziska Hell</b><br><span class="lead-sub">f.hell@…</span></td><td>kraus · Bruch · Bond-Reparatur</td><td>20.06., 15:44</td><td><span class="fu-chip on">🛒 Warenkorb</span> <span class="fu-chip on done">🎁 Bestellt</span></td><td><a href="#">öffnen →</a></td></tr>
+            <tr><td><b>Alexandra Ott</b><br><span class="lead-sub">a.ott@…</span></td><td>glatt · gefärbt · Glanz + Halt</td><td>18.06., 11:59</td><td><span class="fu-chip on">🛒 Warenkorb</span> <span class="fu-chip">🎁 Bestellt</span></td><td><a href="#">öffnen →</a></td></tr>
+          </tbody>
+        </table>
+        <div style="text-align:center;margin-top:16px;color:var(--muted);font-size:13px">1–12 von 43 · <a href="#">Weitere laden</a></div>
+      </div>
+    </section>
+
+    <!-- ===== BERATUNG STARTEN ===== -->
+    <section id="view-beratung" class="view">
+      <div class="top">
+        <div>
+          <h1 class="hello">Beratung starten</h1>
+          <div class="hello-sub">Drei Wege, wie deine Kundinnen den Fragebogen ausfüllen.</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card col-4">
+          <div style="font-size:36px;margin-bottom:12px">🔗</div>
+          <h3 style="font-size:20px;margin-bottom:10px">Link teilen</h3>
+          <p style="color:var(--ink-soft);font-size:14px;margin-bottom:14px">Für Fern-Beratung: sende deinen persönlichen Link per WhatsApp, E-Mail oder Instagram.</p>
+          <div class="link-box">myglowmatch.de/sina</div>
+          <div class="copy-row">
+            <button class="secondary">🔗 Kopieren</button>
+            <button class="secondary">📱 WhatsApp</button>
+          </div>
+        </div>
+
+        <div class="card col-4">
+          <div style="font-size:36px;margin-bottom:12px">📷</div>
+          <h3 style="font-size:20px;margin-bottom:10px">QR-Code</h3>
+          <p style="color:var(--ink-soft);font-size:14px;margin-bottom:14px">Für Events, Salon, Messe: druck den QR-Code auf Flyer, Visitenkarten oder Aufsteller.</p>
+          <div style="background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px;text-align:center">
+            <div style="width:120px;height:120px;margin:0 auto;background:repeating-linear-gradient(45deg,var(--ink),var(--ink) 6px,#fff 6px,#fff 12px);border-radius:6px"></div>
+            <div style="font-size:12px;color:var(--muted);margin-top:8px">QR-Code (Vorschau)</div>
+          </div>
+          <div class="copy-row">
+            <button class="secondary">⬇ PNG</button>
+            <button class="secondary">⬇ PDF</button>
+          </div>
+        </div>
+
+        <div class="card col-4">
+          <div style="font-size:36px;margin-bottom:12px">💬</div>
+          <h3 style="font-size:20px;margin-bottom:10px">Vor Ort ausfüllen</h3>
+          <p style="color:var(--ink-soft);font-size:14px;margin-bottom:14px">Wenn du mit einer Kundin persönlich sprichst: öffne den Fragebogen jetzt auf deinem Tablet/Handy.</p>
+          <button class="primary" style="width:100%">Fragebogen jetzt öffnen →</button>
+          <div style="font-size:12px;color:var(--muted);margin-top:10px">Wird als Beratung mit Notiz „vor Ort mit Sina" gespeichert.</div>
+        </div>
+
+        <div class="card col-12" style="margin-top:8px">
+          <h3 style="font-size:18px;margin-bottom:14px">Was passiert nach dem Ausfüllen?</h3>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;font-size:14px">
+            <div><div class="uppercase-kupfer" style="margin-bottom:6px">Schritt 1</div><b style="color:var(--ink)">Fragebogen</b><br><span style="color:var(--ink-soft)">Deine Kundin füllt ~15 Fragen aus (5-8 Min).</span></div>
+            <div><div class="uppercase-kupfer" style="margin-bottom:6px">Schritt 2</div><b style="color:var(--ink)">Empfehlung</b><br><span style="color:var(--ink-soft)">System berechnet individuelle Routine aus dem MONAT-Produktkatalog.</span></div>
+            <div><div class="uppercase-kupfer" style="margin-bottom:6px">Schritt 3</div><b style="color:var(--ink)">Mail an Kundin</b><br><span style="color:var(--ink-soft)">Kundin bekommt die Empfehlungs-Mail (kann in Einstellungen deaktiviert werden).</span></div>
+            <div><div class="uppercase-kupfer" style="margin-bottom:6px">Schritt 4</div><b style="color:var(--ink)">Mail an dich</b><br><span style="color:var(--ink-soft)">Du bekommst Lead + Empfehlung als Kopie, um nachzufassen.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== BRANDING ===== -->
+    <section id="view-branding" class="view">
+      <div class="top">
+        <div>
+          <h1 class="hello">Mein Branding</h1>
+          <div class="hello-sub">So sehen dein Fragebogen und die Empfehlungs-Mail für deine Kundinnen aus.</div>
+        </div>
+        <button class="cta">Änderungen speichern</button>
+      </div>
+
+      <div class="grid">
+        <div class="card col-5">
+          <h3 style="font-size:18px;margin-bottom:18px">Deine Marke</h3>
+
+          <label>Portrait</label>
+          <div class="portrait-upload">
+            <div class="portrait-preview">SH</div>
+            <div class="portrait-actions">
+              <button class="secondary">📷 Bild hochladen</button>
+              <button class="secondary">Entfernen</button>
+              <div class="portrait-hint">Erscheint im Fragebogen-Header und in der Mail-Signatur. Rundes Format, mind. 400×400px, JPG/PNG.</div>
+            </div>
+          </div>
+
+          <label>Anzeige-Name</label>
+          <input type="text" value="Sina Hildmann">
+
+          <label>Slogan / Untertitel (optional)</label>
+          <input type="text" value="Deine Haarpflege-Beraterin">
+
+          <label>Signatur-Zeile für Mails</label>
+          <input type="text" value="Deine Sina · Ich freu mich auf dich!">
+
+          <label>Kontakt-E-Mail (Antworten der Kundinnen)</label>
+          <input type="email" value="sina.hildmann@example.com">
+
+          <label>Telefon / WhatsApp (optional)</label>
+          <input type="text" value="+49 170 1234567">
+
+        </div>
+
+        <div class="col-7">
+          <div class="card" style="padding:20px">
+            <h3 style="font-size:18px;margin-bottom:14px">Vorschau · Empfehlungs-Mail an Kundin</h3>
+            <div class="mail-preview-wrap">
+              <div class="mail-inner">
+                <div class="mail-brand">myglowmatch</div>
+                <div class="mail-card">
+                  <div class="mail-hero">
+                    <div class="kupfer-eyebrow">Deine persönliche Empfehlung</div>
+                    <h2>Hallo Marie,</h2>
+                    <p class="lead">wie schön, dass du dir die Zeit genommen hast – jetzt kommt das Ergebnis.</p>
+                  </div>
+                  <div class="mail-body">
+                    <p>Dein welliges, gefärbtes Haar zeigt trockene Spitzen und braucht farb­schonende Feuchtigkeit — ich hab dir eine Routine zusammengestellt, die genau da ansetzt.</p>
+                    <p>Dein Pflegelevel liegt im mittleren Bereich: 3 bis 5 Produkte, ohne dich zu überfordern.</p>
+                    <div class="mail-divider"></div>
+                    <div class="mail-section-eyebrow">Deine Routine</div>
+                    <div class="mail-section-title">Schritt für Schritt zu deinem Haar.</div>
+
+                    <div class="mail-step">
+                      <div class="mail-step-chip">Schritt 1</div>
+                      <h3>Feuchtigkeits-Shampoo</h3>
+                      <p>Sanft reinigend, farb­schonend. 2× pro Woche, Kopfhaut sanft einmassieren, gründlich ausspülen.</p>
+                    </div>
+                    <div class="mail-step">
+                      <div class="mail-step-chip">Schritt 2</div>
+                      <h3>Farb-Spülung</h3>
+                      <p>Nach jeder Wäsche, in Längen und Spitzen einarbeiten, 2 Minuten einwirken, ausspülen.</p>
+                    </div>
+                    <div class="mail-step">
+                      <div class="mail-step-chip">Schritt 3</div>
+                      <h3>Super-Feuchtigkeitsmaske</h3>
+                      <p>1× pro Woche statt Spülung. In die feuchten Längen einarbeiten, 5-10 Minuten wirken lassen.</p>
+                    </div>
+
+                    <div class="mail-partner">
+                      <div class="mp-portrait">SH</div>
+                      <div class="mp-title">Deine Beraterin</div>
+                      <div class="mp-name">Sina Hildmann</div>
+                      <a href="#" class="mp-cta">Per WhatsApp anschreiben</a>
+                      <div class="mp-contact">Deine Sina · Ich freu mich auf dich!</div>
+                    </div>
+                  </div>
+                  <div class="mail-footer">
+                    Du hast diese E-Mail erhalten, weil du die Haaranalyse auf myglowmatch.de durchgeführt hast.<br>
+                    <a href="#" style="color:#8C857F;text-decoration:underline">Impressum</a> · <a href="#" style="color:#8C857F;text-decoration:underline">Datenschutz</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STATISTIKEN ===== -->
+    <section id="view-statistiken" class="view">
+      <div class="top">
+        <div>
+          <h1 class="hello">Statistiken</h1>
+          <div class="hello-sub">Wie läuft dein Beratungs-Business?</div>
+        </div>
+        <div>
+          <select style="width:auto">
+            <option>Letzte 30 Tage</option>
+            <option>Letzte 90 Tage</option>
+            <option>Dieses Jahr</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-bottom:20px">
+        <div class="card col-3"><div class="card-title">Beratungen</div><div class="kpi">12</div><div class="kpi-sub">↑ 50% vs. Vormonat</div></div>
+        <div class="card col-3"><div class="card-title">Warenkorb-Links</div><div class="kpi">8</div><div class="kpi-sub">67 % der Beratungen</div></div>
+        <div class="card col-3"><div class="card-title">Bestellungen</div><div class="kpi">5</div><div class="kpi-sub">42 % Conversion</div></div>
+        <div class="card col-3"><div class="card-title">Follow-up-Quote</div><div class="kpi">75 %</div><div class="kpi-sub">von Warenkorb zu Bestellung</div></div>
+      </div>
+
+      <div class="grid">
+        <div class="card col-8">
+          <h3 style="font-size:18px;margin-bottom:24px">Beratungen pro Woche</h3>
+          <div class="bar-chart">
+            <div class="bar" style="height:30%"><span>2</span></div>
+            <div class="bar" style="height:45%"><span>3</span></div>
+            <div class="bar" style="height:75%"><span>5</span></div>
+            <div class="bar" style="height:60%"><span>4</span></div>
+            <div class="bar" style="height:90%"><span>6</span></div>
+            <div class="bar" style="height:100%"><span>7</span></div>
+          </div>
+          <div class="bar-labels"><span>KW22</span><span>KW23</span><span>KW24</span><span>KW25</span><span>KW26</span><span>KW27</span></div>
+        </div>
+
+        <div class="card col-4">
+          <h3 style="font-size:18px;margin-bottom:14px">Am häufigsten empfohlen</h3>
+          <div class="lead-list">
+            <div class="lead"><div><div class="lead-name">Feuchtigkeits-Shampoo</div><div class="lead-sub">Basis-Pflege</div></div><div></div><div class="lead-link">9×</div></div>
+            <div class="lead"><div><div class="lead-name">Bond-IQ Leave-In</div><div class="lead-sub">Reparatur</div></div><div></div><div class="lead-link">7×</div></div>
+            <div class="lead"><div><div class="lead-name">Hitzeschutzspray</div><div class="lead-sub">Styling</div></div><div></div><div class="lead-link">6×</div></div>
+            <div class="lead"><div><div class="lead-name">Super-Feuchtigkeitsmaske</div><div class="lead-sub">Intensiv</div></div><div></div><div class="lead-link">5×</div></div>
+            <div class="lead"><div><div class="lead-name">Curl-Creme</div><div class="lead-sub">Locken</div></div><div></div><div class="lead-link">4×</div></div>
+          </div>
+        </div>
+
+        <div class="card col-6">
+          <h3 style="font-size:18px;margin-bottom:14px">Haartyp-Verteilung</h3>
+          <div class="lead-list">
+            <div class="lead"><div><div class="lead-name">Wellig</div></div><div style="flex:1;background:var(--blush);border-radius:6px;height:10px;margin:0 12px"><div style="width:42%;background:var(--accent);height:100%;border-radius:6px"></div></div><div class="lead-sub">42%</div></div>
+            <div class="lead"><div><div class="lead-name">Glatt</div></div><div style="flex:1;background:var(--blush);border-radius:6px;height:10px;margin:0 12px"><div style="width:31%;background:var(--accent);height:100%;border-radius:6px"></div></div><div class="lead-sub">31%</div></div>
+            <div class="lead"><div><div class="lead-name">Lockig</div></div><div style="flex:1;background:var(--blush);border-radius:6px;height:10px;margin:0 12px"><div style="width:19%;background:var(--accent);height:100%;border-radius:6px"></div></div><div class="lead-sub">19%</div></div>
+            <div class="lead"><div><div class="lead-name">Kraus</div></div><div style="flex:1;background:var(--blush);border-radius:6px;height:10px;margin:0 12px"><div style="width:8%;background:var(--accent);height:100%;border-radius:6px"></div></div><div class="lead-sub">8%</div></div>
+          </div>
+        </div>
+
+        <div class="card col-6">
+          <h3 style="font-size:18px;margin-bottom:14px">Top-Anliegen</h3>
+          <div class="lead-list">
+            <div class="lead"><div><div class="lead-name">Trockenheit / Feuchtigkeit</div></div><div></div><div class="lead-link">58%</div></div>
+            <div class="lead"><div><div class="lead-name">Farbgeschädigt / gefärbt</div></div><div></div><div class="lead-link">42%</div></div>
+            <div class="lead"><div><div class="lead-name">Frizz / Definition</div></div><div></div><div class="lead-link">33%</div></div>
+            <div class="lead"><div><div class="lead-name">Volumen</div></div><div></div><div class="lead-link">25%</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== EINSTELLUNGEN ===== -->
+    <section id="view-einstellungen" class="view">
+      <div class="top">
+        <div>
+          <h1 class="hello">Einstellungen</h1>
+          <div class="hello-sub">Konto, Abo, Rechnungen, Benachrichtigungen.</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card col-6">
+          <h3 style="font-size:18px;margin-bottom:8px">Konto</h3>
+          <div class="setting-row">
+            <div><div class="setting-label">E-Mail</div><div class="setting-desc">sina.hildmann@example.com</div></div>
+            <button class="secondary">Ändern</button>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">Passwort</div><div class="setting-desc">Zuletzt geändert vor 3 Wochen</div></div>
+            <button class="secondary">Ändern</button>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">2-Faktor-Anmeldung</div><div class="setting-desc">SMS an +49 170 1234567</div></div>
+            <div class="toggle on"></div>
+          </div>
+        </div>
+
+        <div class="card col-6">
+          <h3 style="font-size:18px;margin-bottom:8px">Mein Abo</h3>
+          <div class="setting-row">
+            <div><div class="setting-label">Jahresabo</div><div class="setting-desc">290 € / Jahr · aktiv seit 15.05.2026</div></div>
+            <span class="lead-status sent">Aktiv</span>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">Nächste Abbuchung</div><div class="setting-desc">15.05.2027 · SEPA-Lastschrift</div></div>
+            <button class="secondary">Zahlungsmittel</button>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">Laufzeit</div><div class="setting-desc">12 Monate · Verlängerung 15.05.2027 · Kündigung bis 15.04.2027 möglich</div></div>
+            <a href="#" style="font-size:13px">Kündigen</a>
+          </div>
+        </div>
+
+        <div class="card col-12">
+          <h3 style="font-size:18px;margin-bottom:8px">Rechnungen</h3>
+          <table class="tbl">
+            <thead><tr><th>Datum</th><th>Nummer</th><th>Betrag brutto</th><th>USt (19%)</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr><td>15.05.2026</td><td>VDX-2026-0619</td><td>290,00 €</td><td>46,30 €</td><td><span class="lead-status sent">Bezahlt</span></td><td><a href="#">⬇ PDF · Jahresabo 2026/2027</a></td></tr>
+            </tbody>
+          </table>
+          <div style="font-size:12px;color:var(--muted);margin-top:12px">Rechnungsstellung durch VERADEX (Thomas Fiebig, veradex.de) · USt separat ausgewiesen</div>
+        </div>
+
+        <div class="card col-12">
+          <h3 style="font-size:18px;margin-bottom:8px">Benachrichtigungen</h3>
+          <div class="setting-row">
+            <div><div class="setting-label">Empfehlungs-Mail automatisch an Kundin senden</div><div class="setting-desc">Wenn aus, bekommst nur du die Mail zum Review und leitest sie manuell an die Kundin weiter</div></div>
+            <div class="toggle on"></div>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">Kopie der Kundinnen-Mail an dich</div><div class="setting-desc">Damit du weißt, was die Kundin bekommen hat</div></div>
+            <div class="toggle on"></div>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">Follow-up-Erinnerung</div><div class="setting-desc">Wenn nach 5 Tagen kein Warenkorb-Link versendet wurde</div></div>
+            <div class="toggle on"></div>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">Neuigkeiten von myglowmatch</div><div class="setting-desc">Produkt-Updates, neue Features</div></div>
+            <div class="toggle"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="demo-hint">
+      <b>Demo-Mockup, 03.07.2026.</b> Klickbares Wireframe für die Zoom-Vorstellung. Alle Zahlen und Kundinnen-Namen sind Beispieldaten. Kein echtes Login, keine echten Daten.
+    </div>
+  </main>
+</section>
+
+<script>
+  function showDashboard(){
+    document.getElementById('login').style.display='none';
+    document.getElementById('dashboard').classList.add('active');
+    window.scrollTo(0,0);
+  }
+  function showView(name, navEl){
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-'+name).classList.add('active');
+    document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
+    if(navEl) navEl.classList.add('active');
+    window.scrollTo(0,0);
+  }
+  document.addEventListener('click',e=>{
+    if(e.target.classList.contains('toggle')) e.target.classList.toggle('on');
+    if(e.target.classList.contains('chip')){
+      const chips = e.target.parentElement.querySelectorAll('.chip');
+      chips.forEach(c=>c.classList.remove('active'));
+      e.target.classList.add('active');
+    }
+    if(e.target.classList.contains('swatch')){
+      const swatches = document.querySelectorAll('.swatch');
+      swatches.forEach(s=>s.classList.remove('selected'));
+      e.target.classList.add('selected');
+    }
+    if(e.target.classList.contains('fu-chip')){
+      // toggle Warenkorb (on) oder Bestellt (on done)
+      if(e.target.textContent.includes('Warenkorb')){
+        e.target.classList.toggle('on');
+      } else if(e.target.textContent.includes('Bestellt')){
+        e.target.classList.toggle('on');
+        e.target.classList.toggle('done');
+      }
+    }
+  });
+</script>
+</body>
+</html>

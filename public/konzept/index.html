@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Konzept-Überblick · für Sina &amp; Marcel Hildmann</title>
+<style>
+  :root{
+    --bg:#fbf6f0;
+    --blush:#f6e6e1;
+    --ink:#2d2a26;
+    --ink-soft:#5c5651;
+    --muted:#8c857f;
+    --line:#efe5dc;
+    --accent:#e0b1a8;
+    --accent-dark:#c98f84;
+    --accent-deep:#d4a593;
+    --chip-bg:#f5e6dc;
+    --chip-text:#7a5641;
+    --kupfer:#a07560;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.55}
+  h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:var(--ink);margin:0}
+  a{color:inherit}
+
+  .hero{
+    background:linear-gradient(180deg,var(--blush) 0%,var(--bg) 75%);
+    padding:70px 24px 60px;
+  }
+  .hero-inner{max-width:1080px;margin:0 auto}
+  .hero-brand{display:flex;align-items:center;gap:12px;margin-bottom:44px}
+  .brand-dot{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-deep))}
+  .brand-name{font-family:Georgia,serif;font-size:19px;letter-spacing:.03em}
+  .eyebrow{
+    font-size:11px;letter-spacing:.24em;color:var(--kupfer);
+    font-weight:600;text-transform:uppercase;margin-bottom:14px;
+  }
+  h1.title{
+    font-family:Georgia,serif;
+    font-size:42px;
+    line-height:1.2;
+    font-weight:500;
+    color:var(--ink);
+    margin-bottom:16px;
+    max-width:720px;
+  }
+  .subtitle{
+    font-size:17px;
+    color:var(--ink-soft);
+    max-width:700px;
+    line-height:1.6;
+  }
+  .subtitle b{color:var(--kupfer);font-weight:600}
+
+  .grid-wrap{padding:20px 24px 80px}
+  .grid{
+    max-width:1080px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:20px;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:24px 26px 22px;
+    display:flex;
+    flex-direction:column;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.06)}
+  .card-num{
+    display:inline-block;
+    background:var(--chip-bg);color:var(--chip-text);
+    font-size:10px;letter-spacing:.18em;font-weight:700;
+    padding:3px 10px;border-radius:14px;text-transform:uppercase;
+    align-self:flex-start;
+    margin-bottom:14px;
+  }
+  .card-num.demo{background:#e8dfd2;color:#6e5240}
+  .card-num.live{background:#dbecdb;color:#3f6842}
+  .card h3{
+    font-family:Georgia,serif;
+    font-size:22px;
+    line-height:1.25;
+    margin-bottom:10px;
+    color:var(--ink);
+  }
+  .card-desc{
+    font-size:14px;
+    color:var(--ink-soft);
+    line-height:1.55;
+    margin-bottom:20px;
+    flex:1;
+  }
+  .card-actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:9px 16px;
+    font-size:13px;
+    font-weight:500;
+    letter-spacing:.02em;
+    border-radius:8px;
+    text-decoration:none;
+    transition:background .15s ease, color .15s ease;
+  }
+  .btn.primary{
+    background:var(--ink);
+    color:#fff;
+  }
+  .btn.primary:hover{background:#3f3a35}
+  .btn.secondary{
+    background:transparent;
+    color:var(--kupfer);
+    border:1px solid var(--line);
+  }
+  .btn.secondary:hover{background:var(--blush);border-color:var(--accent)}
+  .btn svg{width:14px;height:14px;flex-shrink:0}
+
+  .note{
+    background:#faf5ef;
+    border:1px solid var(--line);
+    border-left:3px solid var(--accent-dark);
+    border-radius:0 10px 10px 0;
+    padding:11px 15px;
+    margin-top:14px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    line-height:1.5;
+  }
+  .note b{color:var(--kupfer)}
+
+  .footer{
+    max-width:1080px;
+    margin:0 auto;
+    padding:32px 24px 60px;
+    border-top:1px solid var(--line);
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.6;
+  }
+  .footer b{color:var(--kupfer);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:10px}
+  .footer-cols{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin-top:14px;
+  }
+
+  @media (max-width:640px){
+    .hero{padding:50px 20px 40px}
+    h1.title{font-size:32px}
+    .grid-wrap{padding:16px 16px 60px}
+    .card{padding:20px 20px 18px}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-brand">
+      <div class="brand-dot"></div>
+      <div class="brand-name">myglowmatch</div>
+    </div>
+    <div class="eyebrow">Konzept-Überblick · nach dem Zoom vom 4. Juli 2026</div>
+    <h1 class="title">Für Sina &amp; Marcel Hildmann.</h1>
+    <div class="subtitle">
+      Alle Unterlagen, Anschreiben und Demos an einem Ort — zum Ansehen im
+      Browser oder Herunterladen als PDF. <b>Diese Seite ist nur für euch
+      gedacht und wird nicht öffentlich verlinkt.</b>
+    </div>
+  </div>
+</div>
+
+<div class="grid-wrap">
+  <div class="grid">
+
+    <!-- 1: Konzept-Übersicht -->
+    <div class="card">
+      <span class="card-num">01 · Übersicht</span>
+      <h3>Konzept-Überblick</h3>
+      <div class="card-desc">
+        Die Zusammenfassung aller Anpassungen an Produkt und Preismodell nach
+        unserem Gespräch — inkl. Namensvorschlag MyBeautyKey, Basic/Pro-Split
+        und geplantem Vorgehen bei MONAT.
+      </div>
+      <div class="card-actions">
+        <a class="btn primary" href="zoom-2026-07-04-update.html" target="_blank">
+          Im Browser öffnen
+        </a>
+        <a class="btn secondary" href="Konzept-Uebersicht.pdf" target="_blank" download>
+          ↓ PDF herunterladen
+        </a>
+      </div>
+    </div>
+
+    <!-- 2: VERADEX-Antrag -->
+    <div class="card">
+      <span class="card-num">02 · MONAT</span>
+      <h3>VERADEX-Antrag an MONAT</h3>
+      <div class="card-desc">
+        Das formelle Antragsschreiben an MONAT-DACH — mit Bezug auf §§ 3.2.1,
+        3.2.5, 3.6.1, 3.6.3, 3.9.1, 3.2.8, 3.20/DSGVO. Zweiseitig,
+        VERADEX-Briefpapier.
+      </div>
+      <div class="card-actions">
+        <a class="btn primary" href="veradex-anschreiben-monat.html" target="_blank">
+          Im Browser öffnen
+        </a>
+        <a class="btn secondary" href="VERADEX_Antrag_MONAT.pdf" target="_blank" download>
+          ↓ PDF herunterladen
+        </a>
+      </div>
+    </div>
+
+    <!-- 3: Sinas Vorspann -->
+    <div class="card">
+      <span class="card-num">03 · MONAT</span>
+      <h3>Sinas Vorspann-E-Mail</h3>
+      <div class="card-desc">
+        Der Text zum Kopieren für Sinas E-Mail an ihren MONAT-DACH-Kontakt —
+        Fürsprache und Kernnutzen kompakt aus Sinas Perspektive. VERADEX-Antrag
+        wird als PDF-Anhang beigelegt.
+      </div>
+      <div class="card-actions">
+        <a class="btn primary" href="sina-vorspann-monat.html" target="_blank">
+          Im Browser öffnen
+        </a>
+        <a class="btn secondary" href="Sina-Vorspann_MONAT.pdf" target="_blank" download>
+          ↓ PDF herunterladen
+        </a>
+      </div>
+    </div>
+
+    <!-- 4: App-Demo -->
+    <div class="card">
+      <span class="card-num demo">04 · Demo</span>
+      <h3>App-Demo (mobil)</h3>
+      <div class="card-desc">
+        Klickbare Demo der Beraterinnen-App im iPhone-Frame — Übersicht der
+        Kundinnen, Beratungshistorie, Follow-up-Chips.
+      </div>
+      <div class="card-actions">
+        <a class="btn primary" href="partner-app.html" target="_blank">
+          Demo öffnen
+        </a>
+      </div>
+    </div>
+
+    <!-- 5: Dashboard-Demo -->
+    <div class="card">
+      <span class="card-num demo">05 · Demo</span>
+      <h3>Dashboard-Demo (Desktop)</h3>
+      <div class="card-desc">
+        Klickbare Demo des Beraterinnen-Portals — Kundinnenübersicht, Auswertung,
+        Branding-Einstellungen. Aktueller Stand.
+      </div>
+      <div class="card-actions">
+        <a class="btn primary" href="partner-portal.html" target="_blank">
+          Demo öffnen
+        </a>
+      </div>
+      <div class="note">
+        <b>Update in Arbeit</b> — im nächsten Schritt bekommt das Dashboard einen
+        vollständigen Branding-Bereich mit Portrait-Upload, Farbwahl inkl.
+        Pastellpalette und Deckblatt-Austausch für den Fragebogen. Der Link
+        aktualisiert sich automatisch, sobald der Umbau live ist.
+      </div>
+    </div>
+
+    <!-- 6: Fragebogen -->
+    <div class="card">
+      <span class="card-num live">06 · Live</span>
+      <h3>Fragebogen selbst ausprobieren</h3>
+      <div class="card-desc">
+        Kein Screenshot, sondern das echte System: klickt euch einmal durch den
+        Fragebogen und schaut, was eine Endkundin am Ende zu sehen bekommt.
+      </div>
+      <div class="card-actions">
+        <a class="btn primary" href="/desiree" target="_blank">
+          Zum Live-Fragebogen
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  <b>Kontakt</b>
+  <div class="footer-cols">
+    <div>
+      Desirée Fiebig<br>
+      MONAT-Markenpartnerin Nr. 14038921<br>
+      Konzept · Beratungslogik · Umsetzung
+    </div>
+    <div>
+      Thomas Fiebig<br>
+      VERADEX · MONAT-Markenpartner Nr. 14074120<br>
+      Vertrag · Betrieb · Formales
+    </div>
+    <div>
+      info@veradex.de<br>
+      veradex.de<br>
+      Bürgermeister-Benz-Straße 13 · 77787 Nordrach
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
