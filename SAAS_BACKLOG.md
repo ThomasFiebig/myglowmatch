@@ -211,6 +211,101 @@ finalisieren.
 
 ---
 
+## 2.6 — Compliance-Absicherung Whitelabel (kritisch vor Launch)
+
+**Grundprinzip:** VERADEX ist neutraler SaaS-Anbieter analog Salesforce,
+Notion, Airtable. Wir speichern User-Generated Content der Beraterinnen. Sie
+haften für ihre Markenreferenzen, wir für die Plattform-Neutralität. Diese
+Position ist rechtlich tragfähig (§ 10 TMG „Speicherung von Informationen"
+plus Standard-SaaS-Praxis), **wenn** wir drei Fallen konsequent vermeiden.
+
+### Die drei Fallen und wie wir sie vermeiden
+
+**Falle 1 — Vorbelegte Bibliotheken mit MONAT-Produkten**
+Wenn wir eine fertige „37-Produkte-MONAT-Sortiment-Vorlage" zum Import
+anbieten, sind wir aktiver Distributor → Markenverletzung.
+
+*Absicherung:*
+- Bibliothek startet immer **komplett leer**
+- Kein Autocomplete oder Vorschlagsliste mit Markennamen
+- Kein „Standard-Sortiment"-Import einer bestimmten Marke
+- Beraterin muss jeden Produktnamen selbst tippen (oder eigenen CSV-Import)
+
+**Falle 2 — Kundinnenseite mit Markennamen auf VERADEX-Domain**
+Wenn die Kundin auf `[name].de/[Beraterin]` MONAT-Produktnamen sieht, könnte
+MONAT argumentieren, VERADEX-Plattform verbreitet ihre Marke.
+
+*Absicherung:*
+- **Beraterin-Attribution prominent** auf jeder Kundinnen-Ergebnisseite
+  („Diese Empfehlung ist von Sina Hildmann für dich zusammengestellt.")
+- Damit ist rechtlich klar: Beraterin ist Autorin, VERADEX ist
+  Anzeige-Infrastruktur
+- Kundinnenseite hat ein sichtbares Impressum, aus dem klar wird: Beraterin
+  ist Content-Verantwortliche, VERADEX ist Plattform-Betreiber
+
+**Falle 3 — Team-Sharing als aktive Distribution**
+Bei sehr großen Netzwerken (>50 Downlines pro Upline) könnte MONAT
+argumentieren, VERADEX-Infrastruktur verbreitet Marken systematisch.
+
+*Absicherung (siehe auch Kapitel 2.5):*
+- Pull statt Push — Downlines übernehmen aktiv, kein Auto-Sync
+- Bei jedem Übernehmen aktive Content-Bestätigung („Ich übernehme dieses
+  Sortiment als meine eigene Empfehlung")
+- Content-Verantwortung wandert bei jedem Klick
+
+### Absicherungs-Checkliste vor Launch
+
+**Technisch (im System):**
+- Bibliothek startet leer, keine markenspezifische Vorbelegung
+- Kein Autocomplete/Vorschlagsliste mit Markennamen
+- Kundinnenseite mit prominenter Beraterin-Attribution + Impressum-Verweis
+- Takedown-Endpoint für Marken-Beschwerden (E-Mail-Adresse im Impressum)
+- Team-Sharing-Übernahme mit expliziter Content-Akzeptanz-Klick
+
+**Vertraglich (AGB + Beraterin-Onboarding):**
+- AGB-Klausel: „Content-Verantwortung liegt bei der Beraterin"
+- AGB-Klausel: „Beraterin ist berechtigt, die eingepflegten Marken/Produkte
+  zu verwenden (z. B. als Vertragspartnerin der Marke)"
+- AGB-Klausel: „VERADEX ist neutraler Infrastruktur-Anbieter im Sinne
+  § 10 TMG"
+- AVV (Auftragsverarbeitungsvertrag) mit jeder Beraterin für DSGVO-Basis
+- Bei Team-Sharing-Übernahme: separater Akzeptanz-Klick mit
+  Content-Verantwortungs-Übernahme
+
+**Marketing (öffentliche VERADEX-/Whitelabel-Kommunikation):**
+- Landing-Seite markenneutral
+- Kein „für MONAT-Beraterinnen" oder ähnliche Marken-Bezüge in Werbetexten
+- Keine MONAT-Logos, keine Screenshots mit konkreten Marken-Produkten
+- Testimonials / Case Studies ohne Markennamen der Sortimente
+
+### Rechtsposition gegenüber MONAT bei Beschwerde
+
+Wenn MONAT (oder eine andere Marke) sich beschwert, argumentieren wir:
+
+> „VERADEX ist neutraler SaaS-Anbieter analog Salesforce oder Notion. Wir
+> speichern User-Generated Content unserer Nutzerinnen (Beraterinnen). Die
+> Content-Verantwortung liegt vertraglich bei den Nutzerinnen, die uns
+> gegenüber die Berechtigung zur Verwendung der jeweiligen Marken zugesichert
+> haben. Bei berechtigter Beschwerde einer Marke entfernen wir betroffene
+> Inhalte im Rahmen unseres Takedown-Prozesses."
+
+Diese Position vertreten Salesforce, Notion, Airtable, HubSpot mit Erfolg.
+
+### Grauzone — Anwaltscheck vor Launch nötig
+
+Zwei Punkte bleiben rechtlich Grauzone und brauchen Prüfung:
+
+1. **Kundinnenseite mit Markennamen auf VERADEX-Domain** — Safe-Argument
+   durch Beraterin-Attribution ist stark, aber nicht bulletproof
+2. **Team-Sharing mit sehr großen Netzwerken** — je größer, desto eher
+   Argument „systematische Distribution"
+
+**Absicherung:** einmaliger Anwaltscheck der AGB + der genannten Klauseln
+vor dem ersten zahlenden Kunden. Kosten grob 300–600 €. Nicht heute
+dringend — vor Launch aber Pflicht.
+
+---
+
 ## 3 — Bau-Reihenfolge (angepasst nach Strategie-Umkehr)
 
 Realistischer Weg vom heutigen Stand (n8n-Workflow mit MONAT-Produkten, Landing
@@ -240,6 +335,10 @@ für Konzept-Präsentation) zum Whitelabel-Launch:
 9.a **Team-Sharing** — Team-Code-Generator im Upline-Portal, Import-Flow
    für Downlines beim Setup, Pull-Notification bei Vorlage-Updates
    (siehe Kapitel 2.5)
+9.b **Compliance-Absicherung** — AGB-Klauseln, Takedown-Endpoint, prominente
+   Beraterin-Attribution auf Kundinnen-Ergebnisseite, Content-Akzeptanz-Klick
+   bei Team-Sharing (siehe Kapitel 2.6). Anwaltscheck vor erstem zahlenden
+   Kunden.
 10. **Stripe-Anbindung** für Free-Upgrade auf Basic und Pro-Buchung + Setup-Fee
 11. **Öffentliche Demo** unter dem neuen Namen (`[name].de/demo`) mit
     Analyse-only-Beispiel
