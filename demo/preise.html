@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Preise · myglowmatch</title>
+<style>
+  :root{
+    --bg:#fbf6f0;
+    --blush:#f6e6e1;
+    --ink:#2d2a26;
+    --ink-soft:#5c5651;
+    --muted:#8c857f;
+    --line:#efe5dc;
+    --accent:#e0b1a8;
+    --accent-dark:#c98f84;
+    --accent-deep:#d4a593;
+    --chip-bg:#f5e6dc;
+    --chip-text:#7a5641;
+    --kupfer:#a07560;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.55}
+  h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:var(--ink);margin:0}
+  a{color:inherit}
+
+  .hero{
+    background:linear-gradient(180deg,var(--blush) 0%,var(--bg) 75%);
+    padding:60px 24px 40px;
+  }
+  .hero-inner{max-width:1080px;margin:0 auto}
+  .hero-brand{display:flex;align-items:center;gap:12px;margin-bottom:36px}
+  .brand-dot{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-deep))}
+  .brand-name{font-family:Georgia,serif;font-size:19px;letter-spacing:.03em}
+  .eyebrow{
+    font-size:11px;letter-spacing:.24em;color:var(--kupfer);
+    font-weight:600;text-transform:uppercase;margin-bottom:14px;
+  }
+  h1.title{
+    font-family:Georgia,serif;
+    font-size:38px;
+    line-height:1.2;
+    font-weight:500;
+    color:var(--ink);
+    margin-bottom:14px;
+  }
+  .subtitle{
+    font-size:16px;
+    color:var(--ink-soft);
+    max-width:640px;
+    line-height:1.6;
+  }
+  .subtitle b{color:var(--kupfer);font-weight:600}
+
+  .price-wrap{max-width:1080px;margin:0 auto;padding:24px 24px 8px}
+  .price-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+    margin-bottom:24px;
+  }
+  .price-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:26px 24px 22px;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  .price-card.free{ background:#f9f6f2; }
+  .price-card.pro{
+    border-color:var(--accent-dark);
+    background:linear-gradient(180deg,#fff 0%,#fdf5f1 100%);
+  }
+  .price-badge{
+    position:absolute;
+    top:-11px;
+    left:24px;
+    background:var(--accent-dark);
+    color:#fff;
+    font-size:10px;
+    letter-spacing:.18em;
+    font-weight:700;
+    padding:4px 10px;
+    border-radius:12px;
+    text-transform:uppercase;
+  }
+  .price-eyebrow{
+    font-size:10px;letter-spacing:.22em;color:var(--kupfer);
+    font-weight:700;text-transform:uppercase;margin-bottom:6px;
+  }
+  .price-name{
+    font-family:Georgia,serif;
+    font-size:20px;
+    color:var(--ink);
+    margin-bottom:20px;
+    line-height:1.25;
+  }
+  .price-block{margin-bottom:14px}
+  .price-block .amount{
+    font-family:Georgia,serif;
+    font-size:34px;
+    color:var(--ink);
+    line-height:1;
+  }
+  .price-block .amount .cur{font-size:22px;color:var(--ink-soft);margin-left:4px}
+  .price-block .cycle{
+    font-size:12px;
+    color:var(--muted);
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-top:4px;
+  }
+  .price-alt{
+    font-size:13px;
+    color:var(--ink-soft);
+    padding:10px 0;
+    border-top:1px dashed var(--line);
+    border-bottom:1px dashed var(--line);
+    margin-bottom:14px;
+  }
+  .price-alt b{color:var(--ink);font-weight:600}
+  .price-setup{
+    font-size:13px;
+    color:var(--ink-soft);
+    padding-bottom:14px;
+  }
+  .price-setup b{color:var(--ink);font-weight:600}
+  .price-note{
+    font-size:12.5px;
+    color:var(--muted);
+    line-height:1.5;
+    padding-top:4px;
+    border-top:1px solid var(--line);
+    padding-top:12px;
+  }
+  .price-note.free-note{ color:var(--ink-soft); }
+
+  .fineprint{
+    max-width:1080px;
+    margin:0 auto;
+    padding:8px 24px 24px;
+    font-size:13px;
+    color:var(--ink-soft);
+    line-height:1.6;
+  }
+  .fineprint ul{margin:8px 0 0 20px;padding:0}
+  .fineprint li{margin-bottom:4px}
+  .fineprint b{color:var(--kupfer);font-weight:600}
+
+  .footer{
+    max-width:1080px;
+    margin:0 auto;
+    padding:28px 24px 60px;
+    border-top:1px solid var(--line);
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.6;
+  }
+  .footer a{
+    color:var(--kupfer);
+    text-decoration:underline;
+    text-decoration-color:var(--line);
+    text-underline-offset:3px;
+    font-size:13px;
+  }
+  .footer-cols{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:20px;
+    align-items:center;
+  }
+
+  @media (max-width:820px){
+    .price-grid{grid-template-columns:1fr;gap:20px}
+    .price-card{padding:22px 22px 20px}
+    .hero{padding:44px 20px 32px}
+    h1.title{font-size:30px}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-brand">
+      <div class="brand-dot"></div>
+      <div class="brand-name">myglowmatch</div>
+    </div>
+    <div class="eyebrow">Preise · Arbeitsname MyBeautyKey</div>
+    <h1 class="title">Free, Basic, Pro.</h1>
+    <div class="subtitle">
+      Drei Tarife, klare Grenzen, jederzeit wechselbar. Kein Kleingedrucktes,
+      keine Setup-Falle. Rechnungsstellung direkt durch <b>VERADEX</b>.
+    </div>
+  </div>
+</div>
+
+<div class="price-wrap">
+  <div class="price-grid">
+
+    <div class="price-card free">
+      <div class="price-eyebrow">Free</div>
+      <div class="price-name">Zum Reinkommen</div>
+      <div class="price-block">
+        <div class="amount">0<span class="cur"> €</span></div>
+        <div class="cycle">für immer</div>
+      </div>
+      <div class="price-alt">
+        <b>Kein Login, keine Kreditkarte.</b> Persönlicher Beratungs-Link
+        wird beim ersten Aufruf erzeugt.
+      </div>
+      <div class="price-setup">
+        <b>Kein Setup.</b> Sofort startbereit.
+      </div>
+      <div class="price-note free-note">
+        Analyse-Modus mit Bedarfsprofil in der Ergebnisseite. Limit
+        3 Beratungen pro Monat, Upgrade-Prompt bei Erreichen.
+      </div>
+    </div>
+
+    <div class="price-card">
+      <div class="price-eyebrow">Basic</div>
+      <div class="price-name">Das System zur Beratung</div>
+      <div class="price-block">
+        <div class="amount">9,90<span class="cur"> €</span></div>
+        <div class="cycle">pro Monat</div>
+      </div>
+      <div class="price-alt">
+        Oder <b>99 € / Jahr</b> — Setup entfällt, ~ 25 % Ersparnis
+        gegenüber Monatsabo.
+      </div>
+      <div class="price-setup">
+        <b>Setup einmalig 29,90 €</b> — entfällt bei Jahresabo.
+      </div>
+      <div class="price-note">
+        Portal mit Stammdaten, Beratungs-Mail an die Beraterin,
+        WhatsApp-Kontakt-Button für die Kundin, Kundinnen-Übersicht der
+        letzten zehn Analysen.
+      </div>
+    </div>
+
+    <div class="price-card pro">
+      <div class="price-badge">Empfohlen</div>
+      <div class="price-eyebrow">Pro</div>
+      <div class="price-name">Beratung mit Bibliothek</div>
+      <div class="price-block">
+        <div class="amount">19,90<span class="cur"> €</span></div>
+        <div class="cycle">pro Monat</div>
+      </div>
+      <div class="price-alt">
+        Oder <b>199 € / Jahr</b> — Setup entfällt, ~ 25 % Ersparnis
+        gegenüber Monatsabo.
+      </div>
+      <div class="price-setup">
+        <b>Setup einmalig 29,90 €</b> — entfällt bei Jahresabo.
+      </div>
+      <div class="price-note">
+        Eigene Produkt-Bibliothek mit Team-Sharing per Team-Code,
+        Kundinnen sehen konkrete Produkte, Freitext-Verkaufsbegründung,
+        vollständiges Dashboard, Branding-Bereich (Portrait, Pastellfarben,
+        Grußformel, Deckblatt), Push-Nachricht und PWA-Installation.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="fineprint">
+  <b>Zu allen Tarifen</b>
+  <ul>
+    <li>Alle Preise brutto inkl. 19 % USt. Rechnungsstellung durch VERADEX via
+      Stripe (in Vorbereitung).</li>
+    <li>Wechsel zwischen den Tarifen jederzeit möglich. Upgrade wird
+      zeitanteilig verrechnet, Downgrade läuft zum Ende der bezahlten Periode.</li>
+    <li>Kündigung ohne Fristbindung zum Monatsende (Monatsabo) bzw. Jahresende
+      (Jahresabo). Formlos per Mail.</li>
+    <li>Free-Tarif ohne Ende — nutzen bis Aktivierung eines bezahlten Tarifs.</li>
+  </ul>
+</div>
+
+<div class="footer">
+  <div class="footer-cols">
+    <div>
+      VERADEX · Thomas Fiebig · Bürgermeister-Benz-Straße 13 · 77787 Nordrach<br>
+      info@veradex.de · Rechnungsstellung und Vertragspartner der Beraterinnen
+    </div>
+    <div>
+      <a href="/konzept">← Zurück zur Konzept-Übersicht</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
