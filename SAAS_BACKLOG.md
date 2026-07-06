@@ -140,6 +140,8 @@ schnell profitabel.
 | **Eigene Produkt-Bibliothek** (Beraterin trägt Sortiment ein) | — | — | ✓ |
 | **Kundinnenseite zeigt konkrete Produktnamen** (aus Beraterin-Bibliothek) | — | — | ✓ |
 | **`warum_sinnvoll`-Freitext** pro Produkt (Beraterin schreibt selbst) | — | — | ✓ |
+| **Team-Sharing** — Bibliothek als Vorlage freigeben + Team-Code an Downlines | — | — | ✓ |
+| **Team-Vorlage übernehmen** beim Setup per Team-Code (Kopie, kein Live-Sync) | — | — | ✓ |
 | Vollständiges Dashboard mit allen Beratungen | — | — | ✓ |
 | Branding-Bereich (Portrait, Farbwahl inkl. Pastellpalette, Grußformel, Deckblatt-Austausch) | — | — | ✓ |
 | Push-Benachrichtigung aufs Handy | — | — | ✓ |
@@ -161,6 +163,51 @@ was sie verpasst.
 - Downgrade: keine Erstattung. Pro läuft ab bezahltem Zeitraum weiter und
   wechselt danach in Basic. Produkt-Bibliothek-Daten werden „eingefroren"
   (30 Tage Reaktivierungs-Fenster, DSGVO-Balance).
+
+---
+
+## 2.5 — Team-Sharing (Pro-Feature, kein extra Tier)
+
+**Kernidee:** Uplines pflegen ihre Produkt-Bibliothek einmal, ihre Downlines
+können sie als Startvorlage übernehmen. Reduziert die Onboarding-Hürde für
+Neu-Downlines von 45–90 Minuten auf 30 Sekunden.
+
+**Design-Prinzip: „Kopie beim Setup, Pull statt Push".**
+- Upline generiert im Portal einen 8-stelligen Team-Code (z. B. `SINA-2M8K`)
+- Downline gibt bei Setup den Code ein → Bibliothek wird **einmal kopiert**
+- Ab dann: eigene Bibliothek, unabhängig von der Upline
+- Bei Upline-Änderungen: Downline bekommt Notification „N Änderungen bei
+  deiner Upline. Willst du sie übernehmen?" — aktives Ja/Nein, kein Auto-Sync
+
+**Warum Pull statt Push:**
+- Wenn Live-Sync: VERADEX würde MONAT-Marken automatisch an mehrere
+  Downlines verteilen — Compliance-Risiko, weil VERADEX zum Content-
+  Distributor wird
+- Bei Kopie + aktivem Übernehmen: Content-Verantwortung wandert bei jedem
+  Klick von Upline zu Downline. VERADEX bleibt neutrale Infrastruktur
+- Rechtlich äquivalent zu „Excel-Vorlage weitergeben"
+
+**Setup-Wege für Neu-Beraterinnen (drei Optionen im Onboarding):**
+1. **Leer starten** — komplett eigene Bibliothek aufbauen
+2. **Team-Vorlage übernehmen** — Team-Code eingeben, Bibliothek einmalig
+   kopiert
+3. **CSV-Import** — für Beraterinnen mit eigener Excel-Liste
+
+**Upline-Portal-Zusätze:**
+- Toggle „Als Team-Vorlage freigeben" pro Produkt oder pro Bibliothek
+- Sichtbar: „N Downlines nutzen deine Vorlage" (rein zählend, keine
+  Personennennung)
+- Beim Aktualisieren: Broadcast-Notification an aktive Team-Mitglieder
+
+**Preismodell-Konsequenz:** kein Aufpreis. Standard-Pro-Feature (19,90 €/Monat).
+Grund: senkt die Neu-Downline-Barriere massiv → mehr Basic/Pro-Kunden im Team
+→ mehr Umsatz für VERADEX. Team-Manager-Tier mit Analytics („welche meiner
+Downlines nutzt was am meisten") als möglicher V2-Aufsatz.
+
+**Rechtliches Detail:** beim Übernehmen einer Team-Vorlage bestätigt die
+Downline aktiv „ich übernehme das Sortiment als eigene Empfehlung". Damit
+wandert die Content-Verantwortung auf sie. AGB-Formulierung dazu vor Launch
+finalisieren.
 
 ---
 
@@ -187,8 +234,12 @@ für Konzept-Präsentation) zum Whitelabel-Launch:
 8. **Basic-Modus** — Portal mit Login, Beratermail, Kundinnen-Übersicht,
    ausgegraute Pro-Cards
 9. **Pro-Modus** — Produkt-Bibliothek-UI (Beraterin trägt Sortiment pro Slot
-   ein), `warum_sinnvoll`-Freitext, Matching Bedarfsprofil → Beraterin-Produkte,
+   ein, strukturierte Attribute per Chip-Auswahl aus n8n-Vokabular),
+   `warum_sinnvoll`-Freitext, Matching Bedarfsprofil → Beraterin-Produkte,
    Dashboard, Branding-Bereich, PWA, Push
+9.a **Team-Sharing** — Team-Code-Generator im Upline-Portal, Import-Flow
+   für Downlines beim Setup, Pull-Notification bei Vorlage-Updates
+   (siehe Kapitel 2.5)
 10. **Stripe-Anbindung** für Free-Upgrade auf Basic und Pro-Buchung + Setup-Fee
 11. **Öffentliche Demo** unter dem neuen Namen (`[name].de/demo`) mit
     Analyse-only-Beispiel
