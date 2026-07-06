@@ -207,6 +207,90 @@
     .mail-partner .mp-cta{display:inline-block;background:var(--whatsapp);color:#fff;font-size:14px;font-weight:600;padding:11px 24px;border-radius:50px;text-decoration:none;margin-top:2px}
     .mail-partner .mp-contact{font-size:13px;color:#5C5651;margin-top:12px}
     .mail-footer{padding:20px 24px;text-align:center;color:#8C857F;font-size:11px;line-height:1.6}
+
+    /* ============ MOBILE (Handy / Tablet) ============ */
+    @media (max-width: 900px) {
+      /* Dashboard-Layout aufbrechen: Sidebar wandert nach oben, Main darunter */
+      #dashboard.active{display:block}
+      .sidebar{
+        position:static;
+        height:auto;
+        border-right:0;
+        border-bottom:1px solid var(--line);
+        padding:14px 0 8px;
+      }
+      .sidebar-brand{padding:0 20px 12px;margin-bottom:6px}
+      .nav{display:flex;overflow-x:auto;padding:6px 12px;gap:2px;-webkit-overflow-scrolling:touch}
+      .nav::-webkit-scrollbar{display:none}
+      .nav a{
+        padding:9px 14px;
+        border-left:0;
+        border-bottom:2px solid transparent;
+        white-space:nowrap;
+        font-size:13px;
+      }
+      .nav a.active{
+        border-left:0;
+        border-bottom-color:var(--accent);
+        background:transparent;
+      }
+      .user-box{padding:12px 20px}
+
+      /* Main: kompaktere Paddings */
+      main{padding:22px 18px 60px}
+
+      /* Top-Bereich: vertikal statt horizontal */
+      .top{
+        flex-direction:column;
+        align-items:stretch;
+        gap:14px;
+        margin-bottom:22px;
+      }
+      .hello{font-size:24px}
+      .cta{width:100%;text-align:center}
+
+      /* Grid: alle Cards volle Breite */
+      .grid{gap:12px}
+      .col-3,.col-4,.col-5,.col-6,.col-7,.col-8,.col-12{grid-column:1 / -1}
+
+      /* Cards: weniger Innenpadding */
+      .card{padding:18px}
+      .kpi{font-size:26px}
+
+      /* Kundinnenliste: kompaktere Zeilen */
+      .lead{grid-template-columns:1fr auto;gap:8px 12px}
+      .lead-date{grid-column:2;text-align:right;font-size:12px}
+      .lead-status{grid-column:1 / -1;justify-self:start}
+
+      /* Tabellen: horizontales Scrollen als Fallback */
+      .tbl{font-size:13px;display:block;overflow-x:auto;white-space:nowrap}
+
+      /* Portrait-Upload: vertikal statt nebeneinander */
+      .portrait-upload{flex-direction:column;align-items:flex-start;gap:14px}
+      .portrait-actions{width:100%}
+
+      /* Barchart: kleiner */
+      .bar-chart{height:150px;gap:10px;padding:20px 4px 0}
+
+      /* Login: enger padding */
+      .login-card{padding:32px 24px}
+      .login-title{font-size:22px}
+
+      /* Mail-Preview: nicht scrollen, sondern flow */
+      .mail-preview-wrap{padding:14px;max-height:none}
+      .mail-inner{max-width:100%}
+      .mail-hero{padding:26px 20px 20px}
+      .mail-hero h2{font-size:22px}
+      .mail-body{padding:20px 20px}
+      .mail-step{padding:16px}
+
+      /* Search: input volle Breite */
+      .search{flex-direction:column;align-items:stretch}
+      .search input{width:100%}
+
+      /* Hero-Preview kleiner Border-Radius */
+      .hero-preview{border-radius:10px}
+    }
   </style>
 </head>
 <body>
