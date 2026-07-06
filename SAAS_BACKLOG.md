@@ -306,6 +306,99 @@ dringend — vor Launch aber Pflicht.
 
 ---
 
+## 2.7 — Free-Modus Missbrauchs-Schutz
+
+**Frage aus 2026-07-07:** wie verhindern wir, dass jemand das Free-Modul
+(3 Beratungen/Monat, kein Login-Zwang) dauerhaft mit immer neuen
+E-Mail-Adressen ausnutzt statt Basic zu buchen?
+
+### Ökonomische Vorüberlegung — der stärkste Schutz
+
+Bevor wir bauen: Beraterinnen sind kein Massen-Consumer-Publikum. Um 30
+Beratungen dauerhaft gratis zu bekommen, braucht es 10 Fake-Accounts pro
+Monat — jeder mit neuer Adresse, neuem Slug, neuer Beraterin-Persona,
+Bibliothek-Setup (bei Pro-Versuch), Weiterleitung der Kundinnen zum neuen
+Link. Ersparnis: 9,90 € Basic. **Aufwand pro Fake-Account übersteigt die
+Ersparnis deutlich.** Zielgruppe kommt über Sina-Empfehlung, Reels,
+Multi-Level-Netzwerke — nicht über Betrugsforen.
+
+Konsequenz: technische Verteidigung nach Aufwand, nicht nach maximaler
+Härte. Drei Ebenen, sortiert nach Kosten/Nutzen.
+
+### Ebene 1 — Standard-Hürden (kostenlos, ~2 h Bau, bei Launch dabei)
+
+- **E-Mail-Verifikation** — Klick-Link vor erster Beratung, sonst kein
+  Free-Zugang. Filtert Trivial-Tippfehler und Copy-Paste-Fakes.
+- **Wegwerf-Domain-Blocklist** — `disposable-email-domains` npm-Package
+  (täglich aktualisiert). Schließt `10minutemail.com`, `guerrillamail`,
+  `mailinator`, `tempmail`, etc. Free-Registrierung von diesen Domains
+  wird abgelehnt mit sachlichem Hinweis „bitte eine dauerhafte Adresse".
+- **Rate-Limit pro IP-Adresse** — max. 3 Neu-Registrierungen pro Woche
+  pro IP. Standard-Middleware (Vercel Edge Rate-Limit oder Upstash
+  Redis). Macht Massen-Setup unbequem, VPN-Hoppen kostet Zeit.
+
+### Ebene 2 — Beraterin-Slug als natürlicher Anker (kein Extra-Bau)
+
+Der persönliche Beratungs-Link `[name].de/[Beraterin]` erzwingt einen
+Slug. Wer einen zweiten Free-Slot will, braucht einen zweiten Slug —
+sichtbar in der URL, potenziell peinlich beim Weitergeben an Kundinnen.
+„beauty-mit-lisa" ist einmal frei; „beauty-mit-lisa-2" wirkt unseriös.
+
+**Regeln fürs Slug-Handling:**
+- Numerische Suffixe (`-2`, `-3`, `foo123`) grundsätzlich reservieren und
+  in der UI verweigern — Wahl eines echten Namens erzwingen
+- Kollisions-Vorschläge nur mit Namens-Varianten (`beauty-lisa`,
+  `lisa-beratung`), nicht mit Zahlen
+- Slug einmal vergeben — bei Free-Konto-Reaktivierung wird der Slug frei
+  nach 90 Tagen Inaktivität (DSGVO-Balance)
+
+Das ist bereits Bestandteil des Konzepts, nur die Slug-Regeln müssen
+beim Bau explizit umgesetzt werden.
+
+### Ebene 3 — Fingerprint-Zusammenzug (bei Bedarf, nachträglich)
+
+Server-seitiger Browser-Fingerprint (`fingerprintjs` open-source Version
+oder eigene Kombination aus Canvas-Hash, Timezone, Language, Screen).
+Wenn drei aktive Free-Accounts vom selben Fingerprint kommen: Zusammenzug
+(alle drei zählen als ein Kontingent = 3 Beratungen gesamt statt 3 pro
+Account) oder Sperre bei nachweislichem Muster.
+
+**Bewusst nicht sofort einbauen:**
+- Rechtsfrage — Fingerprinting fällt unter TDDDG § 25 (Cookie-Nachfolger)
+  und braucht saubere Einwilligung oder Ausnahme-Begründung
+- Aufwand ~1–2 Bau-Tage inkl. Datenschutz-Konsultation
+- Erst aktivieren, wenn Logs echte Missbrauchs-Muster zeigen — sonst
+  Overengineering und Rechtsrisiko ohne Gegenwert
+
+### Bewusst nicht getan
+
+- **Kreditkarten-Hinterlegung für Free** — würde die Kaufhürde für
+  ehrliche Interessentinnen zerstören. Free verliert seinen Sinn.
+- **SMS-/Handy-Verifikation** — Betriebskosten (~5 Cent pro SMS bei
+  Twilio o. ä.), zusätzliche personenbezogene Daten, kaum Zusatz-Nutzen
+  bei unserer Zielgruppe.
+- **Captcha auf jedem Registrierungs-Schritt** — nervt ehrliche Nutzer
+  mehr als Betrüger, wenige zusätzliche Sicherheit.
+
+### Umsetzungs-Entscheidung
+
+**Launch-Version:** nur Ebene 1 (E-Mail-Verifikation, Wegwerf-Blocklist,
+IP-Rate-Limit) + strenge Slug-Regeln aus Ebene 2. Zusammen ~2–3 h Bau.
+Ebene 3 als optionaler Add-on aus dem Backlog, aktiviert bei
+messbarem Missbrauch nach Launch.
+
+### Metriken für spätere Beurteilung
+
+Nach Launch beobachten:
+- Free-Accounts pro Woche pro IP-Bereich
+- Free-Accounts pro Fingerprint (auch ohne Zusammenzug — nur zählen)
+- Verhältnis Free → Basic-Upgrade (Zielrichtung 5–15 %, bei viel weniger
+  Verdacht auf Ausnutzung ohne Kaufabsicht)
+- Verhältnis Free-Beratungen zu tatsächlichen WhatsApp-Kontakten (bei
+  echter Nutzung: hoch, bei Ausnutzung: null)
+
+---
+
 ## 3 — Bau-Reihenfolge (angepasst nach Strategie-Umkehr)
 
 Realistischer Weg vom heutigen Stand (n8n-Workflow mit MONAT-Produkten, Landing
