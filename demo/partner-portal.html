@@ -143,12 +143,76 @@
     .portrait-hint{font-size:12px;color:var(--muted);margin-top:8px}
 
     /* Pastell-Farb-Swatches */
-    .color-swatches{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap}
-    .swatch{width:38px;height:38px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px var(--line);cursor:pointer;transition:transform .12s}
-    .swatch:hover{transform:scale(1.08)}
-    .swatch.selected{box-shadow:0 0 0 2px var(--ink)}
-    .swatch-label{display:block;font-size:11px;color:var(--ink-soft);text-align:center;margin-top:6px}
-    .swatch-item{display:flex;flex-direction:column;align-items:center}
+    .color-swatches{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap}
+    .swatch-item{display:flex;flex-direction:column;align-items:center;cursor:pointer;gap:6px}
+    .swatch{width:42px;height:42px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px var(--line);transition:transform .12s}
+    .swatch-item:hover .swatch{transform:scale(1.08)}
+    .swatch-item.selected .swatch{box-shadow:0 0 0 2px var(--ink)}
+    .swatch-label{font-size:11px;color:var(--ink-soft);text-align:center;letter-spacing:.02em}
+    .swatch-item.selected .swatch-label{color:var(--ink);font-weight:600}
+
+    /* Deckblatt-Presets */
+    .cover-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:10px}
+    .cover-option{border:2px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;background:#fff;transition:all .12s;position:relative}
+    .cover-option:hover{border-color:var(--accent-deep)}
+    .cover-option.selected{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+    .cover-thumb{width:100%;aspect-ratio:16/10;background-size:cover;background-position:center;background-color:var(--blush)}
+    .cover-thumb.thumb-rose{background:linear-gradient(135deg,#f6e6e1 0%,#e0b1a8 55%,#c98f84 100%)}
+    .cover-thumb.thumb-minimal{background:linear-gradient(180deg,#fbf6f0 0%,#efe5dc 100%)}
+    .cover-thumb.thumb-elegant{background:linear-gradient(135deg,#322e2d 0%,#5c5651 55%,#8c857f 100%)}
+    .cover-thumb.thumb-natur{background:linear-gradient(135deg,#eef2ea 0%,#c8d6c0 55%,#a0b598 100%)}
+    .cover-thumb.thumb-custom{background:repeating-linear-gradient(45deg,var(--card-tint),var(--card-tint) 8px,#fff 8px,#fff 16px);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.1em}
+    .cover-caption{padding:8px 12px;font-size:12px;color:var(--ink);text-align:center;letter-spacing:.02em;background:#fff;border-top:1px solid var(--line)}
+    .cover-option.selected .cover-caption{background:var(--blush);color:var(--chip-text);font-weight:600}
+
+    /* Fragebogen-Deckblatt-Vorschau */
+    .cover-preview{
+      position:relative;width:100%;aspect-ratio:9/12;border-radius:16px;overflow:hidden;
+      background-size:cover;background-position:center;background-color:var(--blush);
+      display:flex;flex-direction:column;justify-content:space-between;padding:28px 26px;
+      color:var(--ink);border:1px solid var(--line);
+    }
+    .cover-preview.style-rose{background:linear-gradient(160deg,#f6e6e1 0%,#e0b1a8 60%,#c98f84 100%);color:#322e2d}
+    .cover-preview.style-minimal{background:linear-gradient(180deg,#fbf6f0 0%,#efe5dc 100%);color:#322e2d}
+    .cover-preview.style-elegant{background:linear-gradient(160deg,#322e2d 0%,#5c5651 60%,#8c857f 100%);color:#fbf6f0}
+    .cover-preview.style-natur{background:linear-gradient(160deg,#eef2ea 0%,#c8d6c0 60%,#a0b598 100%);color:#2f3a2b}
+    .cover-preview .cp-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+    .cover-preview .cp-brand{font-family:Georgia,serif;font-size:16px;letter-spacing:.06em}
+    .cover-preview .cp-portrait{width:56px;height:56px;border-radius:50%;background:#fff;color:var(--accent-deep);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:20px;font-weight:500;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.15);flex-shrink:0}
+    .cover-preview .cp-portrait img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+    .cover-preview .cp-center{margin-top:auto}
+    .cover-preview .cp-eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;opacity:.75;margin-bottom:10px;font-weight:600}
+    .cover-preview .cp-greeting{font-family:Georgia,serif;font-size:26px;line-height:1.2;font-weight:500;margin-bottom:12px}
+    .cover-preview .cp-intro{font-size:13px;line-height:1.6;opacity:.9;max-width:100%}
+    .cover-preview .cp-bottom{margin-top:22px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+    .cover-preview .cp-partner{font-size:12px;opacity:.85}
+    .cover-preview .cp-partner b{font-family:Georgia,serif;font-weight:500;font-size:14px;display:block;margin-bottom:2px}
+    .cover-preview .cp-start{background:var(--accent);color:var(--ink);font-size:12px;font-weight:600;padding:8px 16px;border-radius:50px;letter-spacing:.02em}
+    .cover-preview.style-elegant .cp-start{background:#fbf6f0}
+    .cover-preview.style-natur .cp-start{background:#fff}
+
+    /* Pro-Bereich Badge + Sperre */
+    .pro-badge{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent-deep));color:#fff;font-size:10px;letter-spacing:.14em;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;margin-left:10px;vertical-align:middle}
+    .section-head{display:flex;align-items:center;margin:22px 0 12px;gap:6px}
+    .section-head:first-child{margin-top:0}
+    .section-head h4{margin:0;font-family:Georgia,serif;font-size:16px;color:var(--ink);font-weight:500}
+    .section-sub{font-size:13px;color:var(--ink-soft);margin:-6px 0 12px}
+
+    .pro-lock{position:relative}
+    .pro-lock.locked > *:not(.lock-overlay){opacity:.45;pointer-events:none;filter:saturate(.6)}
+    .lock-overlay{display:none;position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.75) 0%,rgba(255,255,255,.96) 55%);border-radius:16px;z-index:10;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+    .pro-lock.locked .lock-overlay{display:flex}
+    .lock-overlay .lock-icon{font-size:28px;margin-bottom:8px}
+    .lock-overlay .lock-title{font-family:Georgia,serif;font-size:17px;color:var(--ink);font-weight:500;margin-bottom:4px}
+    .lock-overlay .lock-sub{font-size:13px;color:var(--ink-soft);margin-bottom:14px;max-width:280px;line-height:1.5}
+    .lock-overlay .lock-cta{background:var(--accent);color:var(--ink);border:0;border-radius:50px;padding:10px 20px;font-weight:600;font-size:13px;cursor:pointer}
+    .lock-overlay .lock-cta:hover{background:var(--accent-dark);color:#fff}
+
+    /* Tier-Demo-Toggle (nur Mockup, damit man Basic ↔ Pro sehen kann) */
+    .tier-demo{display:inline-flex;background:var(--card-tint);border:1px solid var(--line);border-radius:50px;padding:4px;gap:2px}
+    .tier-demo button{background:transparent;border:0;font-size:12px;color:var(--ink-soft);padding:6px 14px;border-radius:50px;font-weight:600;letter-spacing:.02em}
+    .tier-demo button.active{background:var(--accent);color:var(--ink)}
+    .tier-hint{font-size:11px;color:var(--muted);font-style:italic;margin-top:4px}
 
     /* Bar chart (CSS only) */
     .bar-chart{display:flex;align-items:flex-end;gap:16px;height:190px;padding:24px 8px 0}
@@ -207,6 +271,47 @@
     .mail-partner .mp-cta{display:inline-block;background:var(--whatsapp);color:#fff;font-size:14px;font-weight:600;padding:11px 24px;border-radius:50px;text-decoration:none;margin-top:2px}
     .mail-partner .mp-contact{font-size:13px;color:#5C5651;margin-top:12px}
     .mail-footer{padding:20px 24px;text-align:center;color:#8C857F;font-size:11px;line-height:1.6}
+
+    /* Mail-Preview: Pastell-Palette-Overrides (Rose = Default) */
+    .mail-preview-wrap.pal-peach .mail-hero{background:linear-gradient(180deg,#fbe4d4 0%,#fff 100%)}
+    .mail-preview-wrap.pal-peach .kupfer-eyebrow,
+    .mail-preview-wrap.pal-peach .mail-section-eyebrow,
+    .mail-preview-wrap.pal-peach .mail-partner .mp-title{color:#b6764a}
+    .mail-preview-wrap.pal-peach .mail-step-chip{background:#fbe4d4;color:#8b5a3d}
+    .mail-preview-wrap.pal-peach .mail-partner{background:#fdf3ec}
+    .mail-preview-wrap.pal-peach .mail-partner .mp-portrait{background:#e39a72}
+
+    .mail-preview-wrap.pal-mint .mail-hero{background:linear-gradient(180deg,#e2f0e8 0%,#fff 100%)}
+    .mail-preview-wrap.pal-mint .kupfer-eyebrow,
+    .mail-preview-wrap.pal-mint .mail-section-eyebrow,
+    .mail-preview-wrap.pal-mint .mail-partner .mp-title{color:#5a7d64}
+    .mail-preview-wrap.pal-mint .mail-step-chip{background:#e2f0e8;color:#3f6a4a}
+    .mail-preview-wrap.pal-mint .mail-partner{background:#eff6f2}
+    .mail-preview-wrap.pal-mint .mail-partner .mp-portrait{background:#8ab89b}
+
+    .mail-preview-wrap.pal-powder .mail-hero{background:linear-gradient(180deg,#e0eaf3 0%,#fff 100%)}
+    .mail-preview-wrap.pal-powder .kupfer-eyebrow,
+    .mail-preview-wrap.pal-powder .mail-section-eyebrow,
+    .mail-preview-wrap.pal-powder .mail-partner .mp-title{color:#5a7591}
+    .mail-preview-wrap.pal-powder .mail-step-chip{background:#e0eaf3;color:#43607d}
+    .mail-preview-wrap.pal-powder .mail-partner{background:#eef3f8}
+    .mail-preview-wrap.pal-powder .mail-partner .mp-portrait{background:#8ea8c2}
+
+    .mail-preview-wrap.pal-vanille .mail-hero{background:linear-gradient(180deg,#f8ecc9 0%,#fff 100%)}
+    .mail-preview-wrap.pal-vanille .kupfer-eyebrow,
+    .mail-preview-wrap.pal-vanille .mail-section-eyebrow,
+    .mail-preview-wrap.pal-vanille .mail-partner .mp-title{color:#9a7a2f}
+    .mail-preview-wrap.pal-vanille .mail-step-chip{background:#f8ecc9;color:#7a5f22}
+    .mail-preview-wrap.pal-vanille .mail-partner{background:#fbf3d9}
+    .mail-preview-wrap.pal-vanille .mail-partner .mp-portrait{background:#d4b96a}
+
+    .mail-preview-wrap.pal-terracotta .mail-hero{background:linear-gradient(180deg,#ecd0c2 0%,#fff 100%)}
+    .mail-preview-wrap.pal-terracotta .kupfer-eyebrow,
+    .mail-preview-wrap.pal-terracotta .mail-section-eyebrow,
+    .mail-preview-wrap.pal-terracotta .mail-partner .mp-title{color:#8a5236}
+    .mail-preview-wrap.pal-terracotta .mail-step-chip{background:#ecd0c2;color:#6f3f26}
+    .mail-preview-wrap.pal-terracotta .mail-partner{background:#f3ddce}
+    .mail-preview-wrap.pal-terracotta .mail-partner .mp-portrait{background:#b0745a}
 
     /* ============ MOBILE (Handy / Tablet) ============ */
     @media (max-width: 900px) {
@@ -505,44 +610,174 @@
           <h1 class="hello">Mein Branding</h1>
           <div class="hello-sub">So sehen dein Fragebogen und die Empfehlungs-Mail für deine Kundinnen aus.</div>
         </div>
-        <button class="cta">Änderungen speichern</button>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <div class="tier-demo" role="group" aria-label="Demo-Ansicht Tier">
+            <button id="tier-basic" onclick="setTier('basic')">Basic-Ansicht</button>
+            <button id="tier-pro" class="active" onclick="setTier('pro')">Pro-Ansicht</button>
+          </div>
+          <div class="tier-hint">Demo-Umschalter — zeigt, wie Basic vs. Pro erscheint</div>
+        </div>
       </div>
 
       <div class="grid">
-        <div class="card col-5">
-          <h3 style="font-size:18px;margin-bottom:18px">Deine Marke</h3>
+        <!-- ========== LINKS: FORM-FELDER ========== -->
+        <div class="col-5" style="display:flex;flex-direction:column;gap:20px">
 
-          <label>Portrait</label>
-          <div class="portrait-upload">
-            <div class="portrait-preview">SH</div>
-            <div class="portrait-actions">
-              <button class="secondary">📷 Bild hochladen</button>
-              <button class="secondary">Entfernen</button>
-              <div class="portrait-hint">Erscheint im Fragebogen-Header und in der Mail-Signatur. Rundes Format, mind. 400×400px, JPG/PNG.</div>
+          <!-- ---- Grundlagen (Basic + Pro) ---- -->
+          <div class="card">
+            <div class="section-head"><h4>Deine Marke</h4></div>
+            <div class="section-sub">Diese Angaben sind für alle Partnerinnen verfügbar.</div>
+
+            <label>Portrait</label>
+            <div class="portrait-upload">
+              <div class="portrait-preview" id="portrait-preview">SH</div>
+              <div class="portrait-actions">
+                <button class="secondary">📷 Bild hochladen</button>
+                <button class="secondary">Entfernen</button>
+                <div class="portrait-hint">Erscheint im Fragebogen-Header, im Deckblatt und in der Mail-Signatur. Rundes Format, mind. 400×400px, JPG/PNG.</div>
+              </div>
+            </div>
+
+            <label>Anzeige-Name</label>
+            <input id="brand-name" type="text" value="Sina Hildmann">
+
+            <label>Slogan / Untertitel (optional)</label>
+            <input id="brand-slogan" type="text" value="Deine Haarpflege-Beraterin">
+
+            <label>Signatur-Zeile für Mails</label>
+            <input id="brand-signatur" type="text" value="Deine Sina · Ich freu mich auf dich!">
+
+            <label>Kontakt-E-Mail (Antworten der Kundinnen)</label>
+            <input type="email" value="sina.hildmann@example.com">
+
+            <label>Telefon / WhatsApp (optional)</label>
+            <input type="text" value="+49 170 1234567">
+          </div>
+
+          <!-- ---- Farbwelt (Pro) ---- -->
+          <div class="card pro-lock" id="lock-palette">
+            <div class="section-head">
+              <h4>Farbwelt</h4>
+              <span class="pro-badge">Pro</span>
+            </div>
+            <div class="section-sub">Wähl den Pastell-Ton, in dem dein Deckblatt und deine Empfehlungs-Mail erscheinen.</div>
+
+            <div class="color-swatches" id="palette-picker">
+              <div class="swatch-item selected" data-pal="rose"><div class="swatch" style="background:linear-gradient(135deg,#f6e6e1,#e0b1a8)"></div><div class="swatch-label">Rosé</div></div>
+              <div class="swatch-item" data-pal="peach"><div class="swatch" style="background:linear-gradient(135deg,#fbe4d4,#f2c1a3)"></div><div class="swatch-label">Peach</div></div>
+              <div class="swatch-item" data-pal="mint"><div class="swatch" style="background:linear-gradient(135deg,#e2f0e8,#b6d8c5)"></div><div class="swatch-label">Mint</div></div>
+              <div class="swatch-item" data-pal="powder"><div class="swatch" style="background:linear-gradient(135deg,#e0eaf3,#b9cde0)"></div><div class="swatch-label">Powder</div></div>
+              <div class="swatch-item" data-pal="vanille"><div class="swatch" style="background:linear-gradient(135deg,#f8ecc9,#ecd9a8)"></div><div class="swatch-label">Vanille</div></div>
+              <div class="swatch-item" data-pal="terracotta"><div class="swatch" style="background:linear-gradient(135deg,#ecd0c2,#c48972)"></div><div class="swatch-label">Terracotta</div></div>
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.5">Alle Paletten sind mit den Marken-Vorgaben abgestimmt (kein Lila-/Lavendel-Ton).</div>
+
+            <div class="lock-overlay">
+              <div class="lock-icon">🔒</div>
+              <div class="lock-title">Farbwahl ist ein Pro-Feature</div>
+              <div class="lock-sub">Wähl aus sechs abgestimmten Pastell-Tönen. Verfügbar ab Pro (29,90 €/Monat oder 359 €/Jahr).</div>
+              <button class="lock-cta">Auf Pro upgraden</button>
             </div>
           </div>
 
-          <label>Anzeige-Name</label>
-          <input type="text" value="Sina Hildmann">
+          <!-- ---- Persönliche Ansprache (Pro) ---- -->
+          <div class="card pro-lock" id="lock-text">
+            <div class="section-head">
+              <h4>Persönliche Ansprache</h4>
+              <span class="pro-badge">Pro</span>
+            </div>
+            <div class="section-sub">Wird auf dem Fragebogen-Deckblatt und in der Empfehlungs-Mail verwendet.</div>
 
-          <label>Slogan / Untertitel (optional)</label>
-          <input type="text" value="Deine Haarpflege-Beraterin">
+            <label>Grußformel (zeigt sich als Titel auf dem Deckblatt)</label>
+            <input id="brand-gruss" type="text" value="Herzlich willkommen">
 
-          <label>Signatur-Zeile für Mails</label>
-          <input type="text" value="Deine Sina · Ich freu mich auf dich!">
+            <label>Vorstellungstext (optional, 1–3 Sätze)</label>
+            <textarea id="brand-intro" rows="4" placeholder="Erzähl deiner Kundin kurz, was sie erwartet …">Schön, dass du da bist. Nimm dir 5 Minuten für dich — ich stelle dir deine perfekte Haarpflege-Routine zusammen, individuell auf dich abgestimmt.</textarea>
 
-          <label>Kontakt-E-Mail (Antworten der Kundinnen)</label>
-          <input type="email" value="sina.hildmann@example.com">
+            <div class="lock-overlay">
+              <div class="lock-icon">🔒</div>
+              <div class="lock-title">Ansprache ist ein Pro-Feature</div>
+              <div class="lock-sub">Grußformel und Vorstellungstext machen deinen Fragebogen persönlich. Verfügbar ab Pro.</div>
+              <button class="lock-cta">Auf Pro upgraden</button>
+            </div>
+          </div>
 
-          <label>Telefon / WhatsApp (optional)</label>
-          <input type="text" value="+49 170 1234567">
+          <!-- ---- Deckblatt-Wahl (Pro) ---- -->
+          <div class="card pro-lock" id="lock-cover">
+            <div class="section-head">
+              <h4>Deckblatt-Design</h4>
+              <span class="pro-badge">Pro</span>
+            </div>
+            <div class="section-sub">Wähl den Look für die Startseite deines Fragebogens.</div>
 
+            <div class="cover-grid" id="cover-picker">
+              <div class="cover-option selected" data-cover="rose">
+                <div class="cover-thumb thumb-rose"></div>
+                <div class="cover-caption">Rosé-Verlauf</div>
+              </div>
+              <div class="cover-option" data-cover="minimal">
+                <div class="cover-thumb thumb-minimal"></div>
+                <div class="cover-caption">Minimal-Champagne</div>
+              </div>
+              <div class="cover-option" data-cover="elegant">
+                <div class="cover-thumb thumb-elegant"></div>
+                <div class="cover-caption">Elegant-Dunkel</div>
+              </div>
+              <div class="cover-option" data-cover="natur">
+                <div class="cover-thumb thumb-natur"></div>
+                <div class="cover-caption">Natur-Sage</div>
+              </div>
+              <div class="cover-option" data-cover="custom" style="grid-column:1 / -1">
+                <div class="cover-thumb thumb-custom">⬆ EIGENES BILD HOCHLADEN</div>
+                <div class="cover-caption">Eigenes Deckblatt (JPG/PNG, 1200×1500)</div>
+              </div>
+            </div>
+
+            <div class="lock-overlay">
+              <div class="lock-icon">🔒</div>
+              <div class="lock-title">Deckblatt-Austausch ist ein Pro-Feature</div>
+              <div class="lock-sub">Vier abgestimmte Presets plus eigenes Bild. Verfügbar ab Pro.</div>
+              <button class="lock-cta">Auf Pro upgraden</button>
+            </div>
+          </div>
+
+          <button class="cta" style="margin-top:4px">Änderungen speichern</button>
         </div>
 
-        <div class="col-7">
+        <!-- ========== RECHTS: LIVE-VORSCHAU ========== -->
+        <div class="col-7" style="display:flex;flex-direction:column;gap:20px">
+
+          <!-- Deckblatt-Vorschau -->
+          <div class="card" style="padding:20px">
+            <h3 style="font-size:18px;margin-bottom:14px">Vorschau · Fragebogen-Deckblatt</h3>
+            <div class="cover-preview style-rose" id="cover-preview">
+              <div class="cp-top">
+                <div>
+                  <div class="cp-brand">myglowmatch</div>
+                  <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin-top:4px">Haaranalyse</div>
+                </div>
+                <div class="cp-portrait" id="cp-portrait">SH</div>
+              </div>
+              <div class="cp-center">
+                <div class="cp-eyebrow">Deine persönliche Analyse</div>
+                <div class="cp-greeting" id="cp-greeting">Herzlich willkommen</div>
+                <div class="cp-intro" id="cp-intro">Schön, dass du da bist. Nimm dir 5 Minuten für dich — ich stelle dir deine perfekte Haarpflege-Routine zusammen, individuell auf dich abgestimmt.</div>
+              </div>
+              <div class="cp-bottom">
+                <div class="cp-partner">
+                  <b id="cp-name">Sina Hildmann</b>
+                  <span id="cp-slogan">Deine Haarpflege-Beraterin</span>
+                </div>
+                <div class="cp-start">Fragebogen starten →</div>
+              </div>
+            </div>
+            <div style="font-size:12px;color:var(--muted);margin-top:10px">Erscheint als erste Seite, bevor deine Kundin mit der Analyse beginnt.</div>
+          </div>
+
+          <!-- Mail-Vorschau -->
           <div class="card" style="padding:20px">
             <h3 style="font-size:18px;margin-bottom:14px">Vorschau · Empfehlungs-Mail an Kundin</h3>
-            <div class="mail-preview-wrap">
+            <div class="mail-preview-wrap" id="mail-preview-wrap">
               <div class="mail-inner">
                 <div class="mail-brand">myglowmatch</div>
                 <div class="mail-card">
@@ -575,11 +810,11 @@
                     </div>
 
                     <div class="mail-partner">
-                      <div class="mp-portrait">SH</div>
+                      <div class="mp-portrait" id="mp-portrait">SH</div>
                       <div class="mp-title">Deine Beraterin</div>
-                      <div class="mp-name">Sina Hildmann</div>
+                      <div class="mp-name" id="mp-name">Sina Hildmann</div>
                       <a href="#" class="mp-cta">Per WhatsApp anschreiben</a>
-                      <div class="mp-contact">Deine Sina · Ich freu mich auf dich!</div>
+                      <div class="mp-contact" id="mp-contact">Deine Sina · Ich freu mich auf dich!</div>
                     </div>
                   </div>
                   <div class="mail-footer">
@@ -760,18 +995,12 @@
   }
   document.addEventListener('click',e=>{
     if(e.target.classList.contains('toggle')) e.target.classList.toggle('on');
-    if(e.target.classList.contains('chip')){
+    if(e.target.classList.contains('chip') && !e.target.closest('.color-swatches')){
       const chips = e.target.parentElement.querySelectorAll('.chip');
       chips.forEach(c=>c.classList.remove('active'));
       e.target.classList.add('active');
     }
-    if(e.target.classList.contains('swatch')){
-      const swatches = document.querySelectorAll('.swatch');
-      swatches.forEach(s=>s.classList.remove('selected'));
-      e.target.classList.add('selected');
-    }
     if(e.target.classList.contains('fu-chip')){
-      // toggle Warenkorb (on) oder Bestellt (on done)
       if(e.target.textContent.includes('Warenkorb')){
         e.target.classList.toggle('on');
       } else if(e.target.textContent.includes('Bestellt')){
@@ -780,6 +1009,72 @@
       }
     }
   });
+
+  /* ===== Branding: Tier-Demo-Toggle ===== */
+  function setTier(tier){
+    document.getElementById('tier-basic').classList.toggle('active', tier==='basic');
+    document.getElementById('tier-pro').classList.toggle('active', tier==='pro');
+    document.querySelectorAll('.pro-lock').forEach(el=>{
+      el.classList.toggle('locked', tier==='basic');
+    });
+  }
+
+  /* ===== Branding: Palette-Picker ===== */
+  const PALETTES = ['rose','peach','mint','powder','vanille','terracotta'];
+  function setPalette(pal){
+    document.querySelectorAll('#palette-picker .swatch-item').forEach(s=>{
+      s.classList.toggle('selected', s.dataset.pal === pal);
+    });
+    const mailWrap = document.getElementById('mail-preview-wrap');
+    PALETTES.forEach(p => mailWrap.classList.remove('pal-'+p));
+    mailWrap.classList.add('pal-'+pal);
+  }
+
+  /* ===== Branding: Cover-Picker ===== */
+  const COVER_STYLES = ['rose','minimal','elegant','natur'];
+  function setCover(cover){
+    document.querySelectorAll('#cover-picker .cover-option').forEach(o=>{
+      o.classList.toggle('selected', o.dataset.cover === cover);
+    });
+    const preview = document.getElementById('cover-preview');
+    COVER_STYLES.forEach(s => preview.classList.remove('style-'+s));
+    if(cover === 'custom'){
+      preview.classList.add('style-rose');
+    } else {
+      preview.classList.add('style-'+cover);
+    }
+  }
+
+  /* ===== Branding: Delegated Clicks (Palette + Cover) ===== */
+  document.addEventListener('click', e=>{
+    const swatchItem = e.target.closest('#palette-picker .swatch-item');
+    if(swatchItem && !swatchItem.closest('.pro-lock.locked')){
+      setPalette(swatchItem.dataset.pal);
+    }
+    const coverOpt = e.target.closest('#cover-picker .cover-option');
+    if(coverOpt && !coverOpt.closest('.pro-lock.locked')){
+      setCover(coverOpt.dataset.cover);
+    }
+  });
+
+  /* ===== Branding: Live-Vorschau (Name, Slogan, Gruss, Intro, Signatur) ===== */
+  function bindLive(id, fn){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.addEventListener('input', ()=>fn(el.value));
+  }
+  bindLive('brand-name', v=>{
+    const initials = v.split(/\s+/).filter(Boolean).slice(0,2).map(s=>s[0]||'').join('').toUpperCase() || '·';
+    document.getElementById('cp-name').textContent = v || '—';
+    document.getElementById('mp-name').textContent = v || '—';
+    document.getElementById('cp-portrait').textContent = initials;
+    document.getElementById('mp-portrait').textContent = initials;
+    document.getElementById('portrait-preview').textContent = initials;
+  });
+  bindLive('brand-slogan', v=>{ document.getElementById('cp-slogan').textContent = v; });
+  bindLive('brand-gruss',  v=>{ document.getElementById('cp-greeting').textContent = v || '—'; });
+  bindLive('brand-intro',  v=>{ document.getElementById('cp-intro').textContent = v; });
+  bindLive('brand-signatur', v=>{ document.getElementById('mp-contact').textContent = v; });
 </script>
 </body>
 </html>
