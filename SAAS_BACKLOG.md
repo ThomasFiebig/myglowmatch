@@ -4,90 +4,195 @@
 Getrennt von `HANDOVER.md` (n8n / Regel-Engine) und `demo/BUILD_SPEC.md` (End-Zustand
 für Partner).
 
-**Stand:** 2026-07-06 (nach Konzept-Landing + Antragsschreiben).
+**Stand:** 2026-07-06 spät (Strategie-Umkehr auf markenneutrale Alternative).
 
 **Rollen:**
 - **Desirée Fiebig** (MONAT-Markenpartnerin Nr. 14038921) — fachliche und technische
   Owner:in: baut, verwaltet, entscheidet inhaltlich.
 - **Thomas Fiebig / VERADEX** (MONAT-Markenpartner Nr. 14074120) — rechtliche Hülle:
-  Vertragspartner der Beraterinnen, Rechnungsstellung, formaler MONAT-Antragsteller,
-  DSGVO-Verantwortlicher, kaufmännischer Betrieb.
+  Vertragspartner der Beraterinnen, Rechnungsstellung, DSGVO-Verantwortlicher,
+  kaufmännischer Betrieb.
 
 ---
 
-## 1 — Preismodell (fixiert 2026-07-06)
+## 0 — Strategie-Umkehr 2026-07-06 spät (aktive Strategie)
+
+**Auslöser:** Marcels Freund (Rechtskenntnis) sagt: MONAT wird die Freigabe
+für ein Fremdanbieter-Tool mit MONAT-Marken-Nennung nicht erteilen (Kern-Argument:
+MONAT kontrolliert Distributionswege eng, hat null Interesse an Dritten die
+„mitverdienen"). Realistische Freigabe-Wahrscheinlichkeit: 15–30 %.
+
+**Neue Strategie: markenneutrale Beratungs-Software (Weg A-hart mit
+Beraterin-eigener Produkt-Bibliothek).**
+
+**Kernidee:**
+- **Kundinnenseite ist markenneutral** — Ergebnis zeigt nur **Bedarfe**
+  („feuchtigkeitsspendendes Shampoo für dickes Haar", „Hitzeschutz wichtig",
+  „Volumen-Styling"), keine Markennamen, keine Produktnamen
+- **Beraterin pflegt in ihrem privaten Portal eine eigene Produkt-Bibliothek**
+  — jede Beraterin trägt ihre eigenen Sortiments-Produkte ein (kann MONAT,
+  Younique, Mary Kay, Kevin Murphy, eigenes Coiffeur-Sortiment sein)
+- **System matched Bedarfe auf die Beraterin-eigenen Produkte** und zeigt ihr
+  die konkreten Empfehlungen für ihre Beratungsarbeit
+- **`warum_sinnvoll`-Argumente schreibt die Beraterin selbst** — Freitext pro
+  Produkt, keine automatisierten Zitate aus fremden Datenblättern
+
+**Rechtliche Konsequenz für VERADEX:**
+- Kein MONAT-Name im System — § 3.2.1, § 3.2.5, § 3.6.1 alle nicht mehr
+  einschlägig
+- VERADEX ist reiner Infrastructure-Anbieter (wie ein CRM oder Notiz-Tool)
+- Content-Verantwortung liegt bei der Beraterin (sie tippt die Produkte selbst
+  ein, sie empfiehlt sie der Kundin persönlich)
+- **Kein MONAT-Antrag mehr nötig** — VERADEX-Anschreiben + Sinas Vorspann
+  bleiben als „nicht abgesendet, aufbewahrt" liegen für den Fall eines späteren
+  MONAT-Deals (Weg B)
+
+**Sofort-Nutzbarkeit ohne Setup:**
+- Beraterin kann direkt nach Buchung loslegen — Analyse-only-Modus zeigt
+  Bedarfe, Beraterin übersetzt persönlich in ihre Markenwelt
+- Erst bei Pro-Upgrade lohnt sich das Anlegen der Produkt-Bibliothek
+
+**Business-Vorteil:**
+- Zielgruppe wächst um Faktor 20–50 (alle Beauty-Beraterinnen, nicht nur
+  MONAT-Partnerinnen)
+- Keine Wartezeit auf MONAT-Freigabe → sofort startfähig nach Namens-Fix
+- Bei späterem MONAT-Deal (Weg B): ihr verhandelt aus Position der Stärke
+  (zahlende Kunden vorweisbar)
+
+**Aufwand für Umstellung des gebauten Systems:**
+- Regel-Engine (Node 04–15): bleibt zu 90 % identisch, arbeitet mit Bedarfsprofil
+  statt konkreten Produkten
+- Node 17 (E-Mail-Rendering): Umbau auf Bedarfsdarstellung + Beraterin-eigene
+  Produktnamen (falls Pro-Modus)
+- Frontend: neuer Bibliothek-Bereich im Beraterin-Portal (Etappe 2)
+
+---
+
+## 0.5 — Projektstruktur (Empfehlung)
+
+Neuer markenneutraler Bau als **Route-Group im bestehenden Repo**:
+
+```
+myglowmatch/
+├── src/app/
+│   ├── (monat)/           # bestehendes MONAT-System (bleibt für n8n-Test aktiv)
+│   └── (whitelabel)/      # NEU — markenneutrale Version
+```
+
+Vercel deployed weiterhin ein Projekt. Später (nach ersten zahlenden Kunden)
+kann in eigenes Repo gesplittet werden via git-filter-repo.
+
+Alternative: separates Repo `mybeautykey` (falls Verkauf/Lizenzierung in
+Aussicht) — für den Start Overkill.
+
+---
+
+## 1 — Preismodell (nach Strategie-Umkehr 2026-07-06 spät)
 
 | | Monat | Jahr | Setup einmalig |
 |---|---|---|---|
-| **Basic** | 14,90 € | 179 € | 49,90 € (entfällt bei Jahresabo) |
-| **Pro** | 29,90 € | 359 € | 49,90 € (entfällt bei Jahresabo) |
+| **Free** | 0 € | 0 € | 0 € |
+| **Basic** | 9,90 € | 99 € | 29,90 € (entfällt bei Jahresabo) |
+| **Pro** | 19,90 € | 199 € | 29,90 € (entfällt bei Jahresabo) |
 
 Alle Preise brutto inkl. 19 % USt. Rechnungsstellung durch VERADEX via Stripe.
 
-**Setup-Fee-Logik:** einheitlich 49,90 € für beide Tiers. Grund: primär
-Cherry-Picking-Schutz gegen Kurzzeit-Buchungen (bei ~8 € Netto-Gewinn pro
-Basic-Monat lohnt sich ein Kunde erst nach dem dritten Monat). Gestaffelte
-Setup-Fee wurde verworfen wegen Arbitrage-Risiko bei Upgrade.
+**Begründung Preisreduktion gegenüber MONAT-Konzept-Preis (14,90/29,90):**
+Beraterin muss ihre Produktbibliothek selbst pflegen — weniger Auto-Magie
+für sie, entsprechend niedrigerer Preis fair. Kompensation über größere
+Zielgruppe (jede Beauty-Beraterin, nicht nur MONAT).
+
+**Free-Tier — Umfang und Limits:**
+- Analyse-only: Beraterin bekommt persönlichen Link, Kundinnen können
+  Fragebogen ausfüllen, Ergebnis zeigt nur Bedarfe
+- Limit: 3 Beratungen pro Monat (Rechenzeit-Schutz gegen Missbrauch)
+- Keine Beratermail, keine persistenten Kundinnen-Daten
+- Upgrade-Prompt bei Erreichen des Limits
+
+**Setup-Fee-Logik:** einheitlich 29,90 € für Basic und Pro. Reduziert
+gegenüber 49,90 € des MONAT-Konzepts, weil Einrichtung pro Beraterin
+schlanker (keine Marken-Verifikation nötig, keine individuelle Konfiguration).
 
 **Jahresabo:** kein zusätzlicher Monatsrabatt, nur Setup-Erlass. Ersparnis
-gegenüber Monatsabo mit Setup: ~22 %. Klares Verkaufsargument ohne
-Marge-Verlust.
+gegenüber Monatsabo mit Setup: ~25 %. Klares Verkaufsargument.
 
-**Fallback-Modell** (nicht aktiv, aber dokumentiert für den Fall, dass Sinas
-Downlines das Setup als Kaufhürde melden): kein Setup, dafür Basic auf
-19,90 €/Monat und Pro auf 34,90 €/Monat anheben. Rechnerisch nach 10 Monaten
-gleicher Umsatz.
+**Break-Even-Rechnung für VERADEX:**
+Bei 30 aktiven Basic-Downlines aus Sinas Team (297 €/Monat MRR) plus
+5 Pro-Upgrades (99,50 €/Monat MRR) = ~400 €/Monat MRR aus dem Sina-Kanal
+allein. Bei praktisch null Betriebskosten (Vercel Free-Tier, Supabase
+Free-Tier, Anthropic API pay-per-use im Cent-Bereich pro Analyse) ist das
+schnell profitabel.
 
 ---
 
-## 2 — Feature-Split Basic ↔ Pro
+## 2 — Feature-Split Free / Basic / Pro (neu nach Strategie-Umkehr)
 
-| Funktion | Basic | Pro |
-|---|---|---|
-| Fragebogen + Analyse-System für Kundinnen | ✓ | ✓ |
-| Ergebnisseite im Browser (Endkundin) | ✓ | ✓ |
-| PDF-Download der Ergebnisseite für Kundin | ✓ | ✓ |
-| WhatsApp-Kontakt-Button (`wa.me`) zur Beraterin | ✓ | ✓ |
-| Beratungs-Mail an die Markenpartnerin nach jeder Analyse | ✓ | ✓ |
-| Portal-Zugang mit Stammdaten (Name, Kontakt, Rechnung) | ✓ | ✓ |
-| Dashboard mit Übersicht aller Beratungen | — | ✓ |
-| Branding-Bereich (Portrait, Farbwahl inkl. Pastellpalette, Grußformel, Deckblatt-Austausch) | — | ✓ |
-| Verkaufsargumentations-Hilfe pro Produkt (`warum_sinnvoll`) | — | ✓ |
-| Push-Benachrichtigung aufs Handy | — | ✓ |
-| Dashboard als App auf den Homebildschirm installieren (PWA) | — | ✓ |
-| Zustellungs-Toggle (Mail / Push / nur Dashboard) | — | ✓ |
+| Funktion | Free | Basic | Pro |
+|---|---|---|---|
+| Fragebogen + Analyse-System für Kundinnen | ✓ | ✓ | ✓ |
+| Ergebnisseite im Browser (Endkundin) — markenneutral, nur Bedarfe | ✓ | ✓ | ✓ |
+| PDF-Download der Ergebnisseite für Kundin | ✓ | ✓ | ✓ |
+| Persönlicher Beratungs-Link (`[name].de/[Beraterin]`) | limit 3/Monat | ✓ | ✓ |
+| WhatsApp-Kontakt-Button zur Beraterin | — | ✓ | ✓ |
+| Beratungs-Mail an die Beraterin nach jeder Analyse | — | ✓ | ✓ |
+| Portal-Zugang mit Stammdaten (Name, Kontakt, Rechnung) | — | ✓ | ✓ |
+| Kundinnen-Übersicht (letzte 10) im Portal | — | ✓ | ✓ |
+| **Eigene Produkt-Bibliothek** (Beraterin trägt Sortiment ein) | — | — | ✓ |
+| **Kundinnenseite zeigt konkrete Produktnamen** (aus Beraterin-Bibliothek) | — | — | ✓ |
+| **`warum_sinnvoll`-Freitext** pro Produkt (Beraterin schreibt selbst) | — | — | ✓ |
+| Vollständiges Dashboard mit allen Beratungen | — | — | ✓ |
+| Branding-Bereich (Portrait, Farbwahl inkl. Pastellpalette, Grußformel, Deckblatt-Austausch) | — | — | ✓ |
+| Push-Benachrichtigung aufs Handy | — | — | ✓ |
+| Dashboard als App auf den Homebildschirm installieren (PWA) | — | — | ✓ |
+| Zustellungs-Toggle (Mail / Push / nur Dashboard) | — | — | ✓ |
+
+**Kernunterschied Basic ↔ Pro (neu):**
+- **Basic:** Kundinnen sehen Bedarfe („feuchtigkeitsspendendes Shampoo für
+  dickes Haar"), Beraterin übersetzt persönlich in ihre Markenwelt
+- **Pro:** Kundinnen sehen konkrete Produkte aus der Beraterin-eigenen
+  Bibliothek („MONAT Renew Shampoo, weil…") — voll automatisiert
 
 **Basic-Portal:** die Pro-Bereiche sind sichtbar, aber deaktiviert (ausgegraut
-mit Upgrade-CTA). Verkaufspsychologisch stark — Basic-Partnerin sieht ständig,
+mit Upgrade-CTA). Verkaufspsychologisch stark — Basic-Beraterin sieht ständig,
 was sie verpasst.
 
 **Upgrade / Downgrade:**
 - Upgrade jederzeit möglich, bezahlte Gebühren werden anteilig verrechnet
 - Downgrade: keine Erstattung. Pro läuft ab bezahltem Zeitraum weiter und
-  wechselt danach in Basic. Dashboard-Daten werden „eingefroren" (30 Tage
-  Reaktivierungs-Fenster, DSGVO-Balance).
+  wechselt danach in Basic. Produkt-Bibliothek-Daten werden „eingefroren"
+  (30 Tage Reaktivierungs-Fenster, DSGVO-Balance).
 
 ---
 
-## 3 — Bau-Reihenfolge nach Namensfreigabe
+## 3 — Bau-Reihenfolge (angepasst nach Strategie-Umkehr)
 
-Realistischer Weg vom heutigen Stand (n8n-Workflow, Landing für Konzept-Präsentation)
-zum Basic-Launch:
+Realistischer Weg vom heutigen Stand (n8n-Workflow mit MONAT-Produkten, Landing
+für Konzept-Präsentation) zum Whitelabel-Launch:
 
-1. **Namensfreigabe** durch Sina / Marcel (aktueller Vorschlag: **MyBeautyKey**)
+1. **Namensfreigabe** durch Sina / Marcel (aktueller Vorschlag: **MyBeautyKey**
+   passt zur markenneutralen Strategie)
 2. **Domain sichern** + neues Logo finalisieren
-3. **Öffentliche Demo** unter dem neuen Namen aufsetzen (`[name].de/demo`)
-4. **Fragebogen + Ergebnisseite** auf neuen Namen umbauen
-5. **Ergebnisseite-Refactor** — Ergebnis erscheint direkt im Browser statt per
-   Mail. Node 17 wird zum HTML-Renderer (Kundinnenseite) + zur Beraterinnen-Mail
-   (unverändert im Basic-Tarif)
-6. **Basic-Version fertigstellen** — Fragebogen, Ergebnisseite,
-   Beratungsmail an Partnerin, Minimal-Portal mit Settings + ausgegrauten
-   Pro-Cards
-7. **Pro-Version obendrauf bauen** — Dashboard, Branding-Bereich,
-   `warum_sinnvoll` (K-04 strikt), Push/PWA, Zustellungs-Toggle
-8. **Stripe-Anbindung** für Basic- und Pro-Buchung + Setup-Fee
-9. **Übergabe der finalen Demo** an die ca. 10 Top-Leaderinnen unter Sina
+3. **Whitelabel-Grundgerüst** als Route-Group `src/app/(whitelabel)/` im
+   bestehenden Repo aufsetzen
+4. **Fragebogen** aus bestehendem System kopieren, MONAT-spezifische
+   Vokabular-Referenzen entfernen (bleibt in `src/data/questions.ts` erhalten,
+   neue Version im whitelabel-Ordner)
+5. **Ergebnisseite markenneutral** — Analyse-Engine liefert Bedarfsprofil
+   (Slot-basierte Empfehlungen wie „shampoo=feuchtigkeit+dickes_haar"),
+   Kundinnenseite zeigt Text ohne Produktnamen
+6. **Regel-Engine (Node 04–15)** wiederverwenden: liefert das Bedarfsprofil,
+   nicht mehr konkrete Produkte
+7. **Free-Modus** implementieren — Beraterin bucht kostenlos, bekommt Link,
+   Limit 3 Beratungen/Monat, Upgrade-Prompt bei Erreichen
+8. **Basic-Modus** — Portal mit Login, Beratermail, Kundinnen-Übersicht,
+   ausgegraute Pro-Cards
+9. **Pro-Modus** — Produkt-Bibliothek-UI (Beraterin trägt Sortiment pro Slot
+   ein), `warum_sinnvoll`-Freitext, Matching Bedarfsprofil → Beraterin-Produkte,
+   Dashboard, Branding-Bereich, PWA, Push
+10. **Stripe-Anbindung** für Free-Upgrade auf Basic und Pro-Buchung + Setup-Fee
+11. **Öffentliche Demo** unter dem neuen Namen (`[name].de/demo`) mit
+    Analyse-only-Beispiel
+12. **Übergabe der finalen Demo** an Sina und die ca. 10 Top-Leaderinnen
 
 **Realistischer Zeitrahmen:** ~14–18 Bau-Tage für Basic-Launch inkl.
 ausgegrautem Dashboard. Pro-Features als V1.1 unmittelbar danach.
@@ -110,15 +215,14 @@ Aktueller Vorschlag: **MyBeautyKey.de**. Alternativen offen. Rückmeldung von
 Sina / Marcel erwartet. **Kein Bau-Schritt vor Fixierung**, sonst
 doppelte Arbeit bei Umbenennung.
 
-### MONAT-DACH-Freigabe (blockierend für Vertrieb)
+### MONAT-DACH-Freigabe — nach Strategie-Umkehr NICHT mehr aktiv
 
-- Antragsstrategie: Variante C (Sinas persönlicher Vorspann + VERADEX-Antrag
-  als PDF-Anhang)
-- Beide Schreiben in `public/konzept/` fertig, Platzhalter für Ansprechpartner
-- Ansprechpartner-Info von Sina erwartet
-- Nach Antragsversand: 4–8 Wochen Wartezeit bis Rückmeldung realistisch
-- **Wichtig:** Live-Demo mit Testzugang wird **nicht** mit dem Erstantrag
-  mitgeschickt — nur auf MONAT-Anfrage im späteren Vorstellungstermin
+Ursprünglich als blockierend eingestuft. Nach Strategie-Umkehr auf
+markenneutrales Konzept (siehe Kapitel 0) **nicht mehr erforderlich**, weil
+das Whitelabel-System keine MONAT-Markenrechte berührt. VERADEX-Anschreiben
+und Sinas Vorspann bleiben unter `public/konzept/` als „nicht abgesendet,
+aufbewahrt" für einen späteren möglichen MONAT-Deal (Weg B — Verkauf/Lizenz
+des Systems an MONAT).
 
 ### DKIM für veradex.de (Pre-Launch-Blocker)
 
@@ -181,26 +285,39 @@ und Kosten-Frage. Ersetzt durch: PDF-Download clientseitig aus dem HTML
 (z. B. jsPDF). Kein Server-Storage, keine DSGVO-Löschpflicht, null
 Betriebskosten.
 
+**MONAT-Freigabe-Antrag (Weg C aus Session 2026-07-06)** — Marcels Freund
+mit Rechtskenntnis identifizierte strukturelles Problem: MONAT hat null
+Interesse Dritte mitverdienen zu lassen, § 3.2.1 gibt MONAT die Handhabe
+ohne Begründung „nein" zu sagen. Realistische Freigabe-Wahrscheinlichkeit
+15–30 %. **2026-07-06 spät verworfen zugunsten markenneutraler Alternative
+(Kapitel 0).** VERADEX-Anschreiben und Sinas Vorspann bleiben unter
+`public/konzept/` liegen für einen späteren möglichen Weg-B-Deal
+(Verkauf/Lizenz an MONAT).
+
+**MONAT-spezifische `warum_sinnvoll`-Spalte mit K-04-strikter Zitate-Regel**
+— nach Strategie-Umkehr nicht mehr sinnvoll. Neue Regel: Beraterin schreibt
+`warum_sinnvoll` selbst als Freitext (Pro-Feature). Für ihre eigene
+Beratungsarbeit, nicht in der Kundinnen-Sicht. Rechtsverantwortung liegt bei
+der Beraterin, nicht bei VERADEX.
+
 ---
 
 ## 6 — Konventionen für den SaaS-Track
 
-### K-VerkaufsargumenteContent (aus Session 2026-07-06)
+### K-Markenneutralität (Kernkonvention nach Strategie-Umkehr 2026-07-06 spät)
 
-Für die neue Sheet-Spalte `warum_sinnvoll` (Pro-Feature) gilt **K-04 strikt**:
-wortwörtliches Zitat aus dem MONAT-Produktdatenblatt mit Quellenverweis. Keine
-Umschreibungen, keine freien Formulierungen. Zusatz-Spalte `warum_sinnvoll_quelle`
-mit „IDEAL-Bullet 3" oder „WARUM Absatz 2" o. ä. für spätere
-Audit-Nachvollziehbarkeit.
+Das VERADEX-System enthält **keine** fremden Markennamen, Produktnamen,
+Datenblatt-Zitate, Logos oder Marketing-Materialien. Weder in Code, Datenbank,
+Kundinnen-Sicht noch in Beraterin-Sicht.
 
-Grund: § 3.6.1 MONAT-Policy verlangt wortlautgetreue Produktclaims. Frei
-formulierte Texte sind Policy-Bruch.
+Ausnahmen (Beraterin-Content, den sie selbst einpflegt):
+- Produkt-Bibliothek pro Beraterin: sie tippt Produktnamen selbst ein
+- `warum_sinnvoll`-Freitext: sie schreibt Verkaufsargumente selbst
+- Diese Inhalte sind rechtlich ihre Verantwortung, nicht die von VERADEX
 
-### K-Rollentrennung Antrag
-
-MONAT gegenüber wird Desirée als **fachliche und technische** Owner:in
-dargestellt, VERADEX als **rechtliche Hülle** (Vertrag, Betrieb formal,
-DSGVO-Verantwortlicher). Formaler Antragsteller ist VERADEX.
+Grund: VERADEX bleibt reiner Infrastruktur-Anbieter, kein Vertriebs-Instrument
+einer Marke. Damit fallen alle Markenpartner-Richtlinien (MONAT §§ 3.2.1,
+3.2.5, 3.6.1) für VERADEX weg.
 
 ### K-Ich-Perspektive Kundinnentexte
 
@@ -209,22 +326,20 @@ Alle Texte, die die Endkundin sieht, sind aus Beraterin-Perspektive geschrieben:
 kann Grußformel + Vorstellungstext im Branding-Bereich (Pro) selbst pflegen,
 sonst Standard-Vorlage.
 
-### K-Compliance-Framing
-
-Trennung im Antragsschreiben und in der Systemdokumentation:
-- **Sichtbar für Endkundin:** Produktnamen + wörtliche Zitate mit Quellenverweis
-  (§ 3.2.5 + § 3.6.1)
-- **Intern als Datengrundlage:** Datenblatt-Auswertung für Auswahl-Logik,
-  Kontraindikationen, Kombinierbarkeit (für Endkundin nicht sichtbar)
-
 ### K-Compliance-Zurückhaltung
 
-Bei rechtlichen Themen im Antrag konservativ formulieren:
+Bei rechtlichen Aussagen konservativ formulieren:
 - **Keine** Selbstfestlegung zu Art. 9 DSGVO („Kopfhautdaten sind keine
   Gesundheitsdaten" — angreifbar). Neutrale Formulierung „mit erhöhter Sorgfalt
   behandelt".
-- **Keine** proaktive Erwähnung von Themen, die MONAT nicht selbst anspricht
-  (Urheberrecht Datenblätter, AVV). Öffnet nur Diskussion.
+- **Keine** proaktive Erwähnung von Themen, die niemand selbst anspricht
+  (Urheberrecht Datenblätter, AVV etc.). Öffnet nur Diskussion.
+
+### K-Rollen-Ownership
+
+- **Desirée** — fachliche und technische Owner:in, baut und verwaltet
+- **Thomas / VERADEX** — rechtliche Hülle, Vertragspartner der Beraterinnen,
+  Rechnungsstellung, DSGVO-Verantwortlicher
 
 ---
 

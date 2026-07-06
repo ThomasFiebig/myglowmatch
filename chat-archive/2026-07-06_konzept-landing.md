@@ -185,3 +185,121 @@ Entscheidungen einordnen.
 
 Wurde am Ende formuliert, mit Link `myglowmatch.de/konzept` und der Bitte
 um zwei Rückmeldungen: Namensfeedback + MONAT-DACH-Ansprechpartner.
+
+---
+
+## Nachtrag 2026-07-06 spät — Strategie-Umkehr auf markenneutrale Alternative
+
+Nach dem ersten Session-Abschluss kamen zwei zusätzliche Diskussions-Runden,
+die die Strategie fundamental umgekippt haben.
+
+### Auslöser
+
+Thomas hatte am Nachmittag Gespräch mit einem Freund mit Rechtskenntnis.
+Kernaussage: „MONAT wird das nicht genehmigen. Aus markentechnischen Gründen —
+die wollen nicht dass jemand mit verdient und werden keinen Grund darin sehen
+das zu genehmigen." Freigabe-Wahrscheinlichkeit realistisch 15–30 %.
+
+### Diskussion durchgespielt
+
+Drei alternative Wege durchdacht:
+
+**Weg A — markenneutrales Konzept:** Kundinnenseite zeigt nur Bedarfe
+(„feuchtigkeitsspendendes Shampoo"), Beraterin übersetzt in ihre Marken.
+
+**Weg B — System an MONAT verkaufen:** Long-Shot, 12–24 Monate Wartezeit,
+niedrige Erfolgsquote.
+
+**Kombiniert:** Weg A jetzt umsetzen, Weg B optional später aus Position
+der Stärke.
+
+### Kern-Entscheidung
+
+**Weg A-hart mit Beraterin-eigener Produkt-Bibliothek gewählt.**
+
+- Kundinnenseite: 100 % markenneutral, nur Bedarfe
+- Beraterin trägt in privatem Portal eigene Produkte ein (kann MONAT sein,
+  aber auch Younique, Kevin Murphy, eigenes Coiffeur-Sortiment)
+- System matched Bedarfe auf die Beraterin-eigenen Produkte
+- `warum_sinnvoll` schreibt die Beraterin selbst als Freitext
+- **VERADEX wird reiner Infrastructure-Anbieter — keine Marken-Compliance mehr
+  einschlägig**
+
+### Zusätzlicher Move — Sofort-Nutzbarkeit ohne Setup
+
+Free-Tier eingeführt:
+- Analyse-only, kein Login nötig
+- Limit 3 Beratungen/Monat
+- Upgrade-Prompt bei Erreichen des Limits
+
+Damit hat jede Beraterin einen kostenlosen Test-Weg direkt ins System.
+
+### Preisanpassung
+
+| | Alt (MONAT-Konzept) | Neu (Whitelabel) |
+|---|---|---|
+| Basic Monat | 14,90 € | 9,90 € |
+| Basic Jahr | 179 € | 99 € |
+| Pro Monat | 29,90 € | 19,90 € |
+| Pro Jahr | 359 € | 199 € |
+| Setup einmalig | 49,90 € | 29,90 € |
+| Free | — | 0 € (3 Beratungen/Monat) |
+
+Reduzierte Preise wegen weniger Auto-Magie für die Beraterin (sie pflegt
+Bibliothek selbst). Kompensation über 20–50-fach größere Zielgruppe.
+
+### Projektstruktur-Empfehlung
+
+**Neuer Whitelabel-Bau als Route-Group `src/app/(whitelabel)/` im
+bestehenden Repo.** Bestehendes MONAT-System bleibt parallel für n8n-Tests
+aktiv. Split in eigenes Repo später möglich (git-filter-repo).
+
+### Was am gebauten Material passiert
+
+**VERADEX-Antrag und Sinas Vorspann:** bleiben liegen unter `public/konzept/`
+als „nicht abgesendet, aufbewahrt". Nicht gelöscht — für den Fall eines
+späteren Weg-B-Deals mit MONAT.
+
+**Konzept-Landing:** bekam einen orangefarbenen Warnhinweis oben („wird
+gerade überarbeitet, bitte kurz warten"). Verhindert dass Sina/Marcel jetzt
+die alte Strategie anschauen.
+
+**SAAS_BACKLOG.md:** wurde grundlegend überarbeitet — neues Kapitel 0
+„Strategie-Umkehr" ganz oben, alle nachfolgenden Kapitel entsprechend
+angepasst (neue Preise, neuer Feature-Split mit 3 Tarifen, neue
+Bau-Reihenfolge, MONAT-Antrag als verworfen dokumentiert, neue Kernkonvention
+K-Markenneutralität).
+
+## Wiedereinstiegs-Prompt für nächste Session (Whitelabel-Konzept-Landing)
+
+> Lies `chat-archive/2026-07-06_konzept-landing.md` (inkl. Nachtrag am Ende)
+> und `SAAS_BACKLOG.md` (aktuelle Version mit Kapitel 0 „Strategie-Umkehr").
+>
+> **Aufgabe der neuen Session:**
+>
+> 1. **Neue Konzept-Landing** unter `myglowmatch.de/konzept` bauen — orange
+>    Warnbanner raus, Karten umbauen auf Whitelabel-Strategie:
+>    - Karte 01: „Neuer Ansatz — markenneutral" (Erklärung des Wegs A-hart)
+>    - Karte 02: „Feature-Split Free / Basic / Pro" mit neuen Preisen
+>    - Karte 03: „Produkt-Bibliothek Konzept" (Beraterin pflegt Sortiment selbst)
+>    - Karte 04: App-Demo (mobil) — bleibt
+>    - Karte 05: Dashboard-Demo (Desktop) — Etappe 2 mit Bibliothek-Sektion angekündigt
+>    - Karte 06: Fragebogen selbst testen — bleibt
+>    - Alte Karten VERADEX-Antrag + Sinas Vorspann in separaten Sektion
+>      „Fallback-Unterlagen (nicht aktiv)" oder komplett rausnehmen
+>
+> 2. **Zoom-Update-HTML** neu schreiben — Rechts-Rücksprache-Kapitel einbauen,
+>    Weg-A-Umschwung erklären, neues Preismodell, neue Bau-Reihenfolge (aus
+>    SAAS_BACKLOG Kapitel 3).
+>
+> 3. **Neue WhatsApp-Nachricht für Marcel** — „nach Rücksprache mit Jurist
+>    haben wir umgestellt auf sauberere Variante ohne MONAT-Freigabepflicht".
+>
+> 4. **PDFs neu generieren** für die aktualisierten Dokumente.
+>
+> Wenn diese Session-Doku und der Backlog gelesen sind, ist der volle
+> Kontext da. Alle Fakten sind persistiert.
+>
+> **Bau des Whitelabel-Systems selbst kommt danach** — erst Konzept-Landing
+> aktualisieren, dann Feedback von Sina/Marcel abwarten, dann Bau starten
+> (Route-Group `src/app/(whitelabel)/`).
