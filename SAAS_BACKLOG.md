@@ -92,10 +92,13 @@ zum Basic-Launch:
 **Realistischer Zeitrahmen:** ~14–18 Bau-Tage für Basic-Launch inkl.
 ausgegrautem Dashboard. Pro-Features als V1.1 unmittelbar danach.
 
-**Etappe 2 aktuell offen:** Dashboard-Update mit Branding-Bereich
-(Portrait-Upload, Farbwahl inkl. Pastellpalette, Grußformel, Deckblatt-Austausch).
-Aktuelle Dashboard-Demo in `demo/partner-portal.html` bzw.
-`public/konzept/partner-portal.html`.
+**Etappe 2 als Demo-Mockup erledigt (2026-07-06):** Branding-Bereich mit
+Portrait-Slot, Farbwahl (6 Pastell-Töne, kein Lila), Grußformel +
+Vorstellungstext, Deckblatt-Wahl (4 Presets + Custom-Slot), zweigeteilte
+Live-Vorschau (Fragebogen-Deckblatt + Empfehlungs-Mail) sowie Basic↔Pro-
+Toggle mit Sperr-Overlay + Upgrade-CTA. Live-Bau der Features (Uploads,
+Persistenz in `partner`-Tabelle, Node-17-Anbindung) folgt nach MONAT-
+Freigabe — Nachzieh-Liste in `chat-archive/2026-07-06_etappe-2-branding.md`.
 
 ---
 
