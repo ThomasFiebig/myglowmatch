@@ -18,6 +18,8 @@
     --accent-deep:#d4a593;
     --chip-bg:#f5e6dc;
     --chip-text:#7a5641;
+    --chip-good-bg:#e2ecd8;
+    --chip-good-text:#4d6a3a;
     --kupfer:#a07560;
     --card:#ffffff;
   }
@@ -55,7 +57,17 @@
   }
   .subtitle b{color:var(--kupfer);font-weight:600}
 
-  .grid-wrap{padding:20px 24px 80px}
+  .lead{
+    max-width:1080px;
+    margin:0 auto;
+    padding:22px 24px 4px;
+    font-size:14px;
+    color:var(--ink-soft);
+    line-height:1.6;
+  }
+  .lead b{color:var(--kupfer);font-weight:600}
+
+  .grid-wrap{padding:20px 24px 40px}
   .grid{
     max-width:1080px;
     margin:0 auto;
@@ -74,6 +86,7 @@
     transition:transform .15s ease, box-shadow .15s ease;
   }
   .card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.06)}
+  .card.pinned{ border-color:var(--accent-dark); background:linear-gradient(180deg,#fff 0%,#fdf5f1 100%); }
   .card-num{
     display:inline-block;
     background:var(--chip-bg);color:var(--chip-text);
@@ -84,6 +97,7 @@
   }
   .card-num.demo{background:#e8dfd2;color:#6e5240}
   .card-num.live{background:#dbecdb;color:#3f6842}
+  .card-num.new{background:var(--chip-good-bg);color:var(--chip-good-text)}
   .card h3{
     font-family:Georgia,serif;
     font-size:22px;
@@ -141,6 +155,60 @@
   }
   .note b{color:var(--kupfer)}
 
+  .fallback-section{
+    max-width:1080px;
+    margin:0 auto;
+    padding:24px 24px 20px;
+  }
+  .fallback-head{
+    font-size:11px;letter-spacing:.22em;color:var(--muted);
+    font-weight:600;text-transform:uppercase;margin-bottom:6px;
+  }
+  .fallback-title{
+    font-family:Georgia,serif;
+    font-size:20px;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .fallback-lead{
+    font-size:13.5px;
+    color:var(--muted);
+    line-height:1.55;
+    max-width:720px;
+    margin-bottom:16px;
+  }
+  .fallback-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:12px;
+  }
+  .fallback-card{
+    background:#f5efe7;
+    border:1px dashed var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+  }
+  .fallback-card h4{
+    font-family:Georgia,serif;
+    font-size:15px;
+    color:var(--ink-soft);
+    margin-bottom:4px;
+  }
+  .fallback-card p{
+    font-size:12.5px;
+    color:var(--muted);
+    line-height:1.5;
+    margin-bottom:10px;
+  }
+  .fallback-card a{
+    font-size:12px;
+    color:var(--kupfer);
+    text-decoration:underline;
+    text-decoration-color:var(--line);
+    text-underline-offset:3px;
+  }
+  .fallback-card a + a{ margin-left:14px; }
+
   .footer{
     max-width:1080px;
     margin:0 auto;
@@ -161,20 +229,12 @@
   @media (max-width:640px){
     .hero{padding:50px 20px 40px}
     h1.title{font-size:32px}
-    .grid-wrap{padding:16px 16px 60px}
+    .grid-wrap{padding:16px 16px 40px}
     .card{padding:20px 20px 18px}
   }
 </style>
 </head>
 <body>
-
-<div style="background:#f2d6c8;color:#8b3f2b;padding:14px 24px;text-align:center;font-size:14px;line-height:1.5;border-bottom:1px solid #c98f84">
-  <b style="letter-spacing:.08em">Hinweis · 6. Juli 2026 abends</b><br>
-  Diese Übersicht wird gerade überarbeitet. Nach einer weiteren
-  Rechts-Rücksprache haben wir das Konzept sauberer neu aufgesetzt (markenneutrale
-  Alternative ohne MONAT-Freigabepflicht). Wir melden uns bei euch mit der
-  aktualisierten Version — bitte kurz mit dem Anschauen warten.
-</div>
 
 <div class="hero">
   <div class="hero-inner">
@@ -182,30 +242,40 @@
       <div class="brand-dot"></div>
       <div class="brand-name">myglowmatch</div>
     </div>
-    <div class="eyebrow">Konzept-Überblick · nach dem Zoom vom 4. Juli 2026</div>
+    <div class="eyebrow">Konzept-Überblick · Stand 6. Juli 2026 abends</div>
     <h1 class="title">Für Sina &amp; Marcel Hildmann.</h1>
     <div class="subtitle">
-      Alle Unterlagen, Anschreiben und Demos an einem Ort — zum Ansehen im
-      Browser oder Herunterladen als PDF. <b>Diese Seite ist nur für euch
-      gedacht und wird nicht öffentlich verlinkt.</b>
+      Nach einer weiteren Rechts-Rücksprache haben wir das Konzept umgestellt
+      auf eine <b>markenneutrale Variante ohne MONAT-Freigabepflicht</b> —
+      sofort startfähig, größere Zielgruppe, kein Risiko für euer Team.
+      Alle Unterlagen und Demos zum Ansehen im Browser oder als PDF.
     </div>
   </div>
+</div>
+
+<div class="lead">
+  <b>Kurzfassung:</b> Kundinnen sehen am Ende des Fragebogens nur Bedarfe,
+  die Beraterin übersetzt persönlich in ihre eigene Markenwelt. Damit fällt
+  das System nicht mehr unter MONAT-Genehmigungspflicht und funktioniert
+  gleichzeitig für jede Beauty-Beraterin — MONAT, andere Marken oder eigenes
+  Coiffeur-Sortiment. Details in Karte 01 · Preise in Karte 02 · Bibliothek
+  in Karte 03.
 </div>
 
 <div class="grid-wrap">
   <div class="grid">
 
-    <!-- 1: Konzept-Übersicht -->
-    <div class="card">
-      <span class="card-num">01 · Übersicht</span>
-      <h3>Konzept-Überblick</h3>
+    <!-- 1: Konzept-Übersicht (neuer Ansatz) -->
+    <div class="card pinned">
+      <span class="card-num new">01 · Neuer Ansatz</span>
+      <h3>Markenneutrale Whitelabel-Strategie</h3>
       <div class="card-desc">
-        Die Zusammenfassung aller Anpassungen an Produkt und Preismodell nach
-        unserem Gespräch — inkl. Namensvorschlag MyBeautyKey, Basic/Pro-Split
-        und geplantem Vorgehen bei MONAT.
+        Warum wir nach einer weiteren Rechts-Rücksprache auf ein markenneutrales
+        System umgestellt haben, was das für Sinas Team konkret bedeutet
+        und wie es weitergeht. Enthält Preise, Feature-Split und Bau-Reihenfolge.
       </div>
       <div class="card-actions">
-        <a class="btn primary" href="/konzept/zoom-2026-07-04-update.html" target="_blank">
+        <a class="btn primary" href="/konzept/zoom-2026-07-06-update.html" target="_blank">
           Im Browser öffnen
         </a>
         <a class="btn secondary" href="/konzept/Konzept-Uebersicht.pdf" target="_blank" download>
@@ -214,9 +284,57 @@
       </div>
     </div>
 
-    <!-- 2: App-Demo -->
+    <!-- 2: Preise (Anchor in Konzept-Übersicht) -->
     <div class="card">
-      <span class="card-num demo">02 · Demo</span>
+      <span class="card-num new">02 · Preismodell</span>
+      <h3>Free · Basic · Pro</h3>
+      <div class="card-desc">
+        Free 0 € (3 Beratungen/Monat), Basic 9,90 €/Monat oder 99 €/Jahr,
+        Pro 19,90 €/Monat oder 199 €/Jahr. Setup einmalig 29,90 € — entfällt
+        bei Jahresabo. Alle Preise brutto inkl. USt.
+      </div>
+      <div class="card-actions">
+        <a class="btn primary" href="/konzept/zoom-2026-07-06-update.html#preise" target="_blank">
+          Zur Preistabelle
+        </a>
+      </div>
+      <div class="note">
+        <b>Warum günstiger als am 4. Juli</b> — statt 14,90 / 29,90 € jetzt
+        9,90 / 19,90 €. Die Beraterin pflegt ihre Produkt-Bibliothek selbst,
+        deswegen weniger Auto-Magie und fairerer Preis. Kompensation kommt
+        über die 20 – 50-fach größere Zielgruppe.
+      </div>
+    </div>
+
+    <!-- 3: Produkt-Bibliothek (Anchor in Konzept-Übersicht) -->
+    <div class="card">
+      <span class="card-num new">03 · Herzstück Pro</span>
+      <h3>Produkt-Bibliothek + Team-Sharing</h3>
+      <div class="card-desc">
+        Pro-Beraterinnen tragen einmalig ihr Sortiment ein — pro Slot ein bis
+        vier Produkte, mit eigener Verkaufsbegründung. Das System matcht
+        Bedarfe automatisch auf die Bibliothek. Kundin sieht persönlich
+        wirkende Empfehlungen, Beraterin bleibt rechtlich verantwortlich für
+        die Formulierung.
+      </div>
+      <div class="card-actions">
+        <a class="btn primary" href="/konzept/zoom-2026-07-06-update.html#bibliothek" target="_blank">
+          Zum Bibliothek-Konzept
+        </a>
+      </div>
+      <div class="note">
+        <b>Team-Sharing für Uplines</b> — Sina kann ihre gepflegte Bibliothek
+        per Team-Code an ihre Downlines freigeben. Die starten dann mit einem
+        kompletten Sortiment in 30 Sekunden statt 45 – 90 Minuten
+        Selbst-Einpflegen. Content-Verantwortung wandert beim aktiven
+        Übernehmen auf die Downline, VERADEX bleibt neutrale Infrastruktur.
+        Enthalten im Pro-Preis, kein Extra-Tier.
+      </div>
+    </div>
+
+    <!-- 4: App-Demo -->
+    <div class="card">
+      <span class="card-num demo">04 · Demo</span>
       <h3>App-Demo (mobil)</h3>
       <div class="card-desc">
         Klickbare Demo der Beraterinnen-App im iPhone-Frame — Übersicht der
@@ -229,13 +347,13 @@
       </div>
     </div>
 
-    <!-- 3: Dashboard-Demo -->
+    <!-- 5: Dashboard-Demo -->
     <div class="card">
-      <span class="card-num demo">03 · Demo</span>
+      <span class="card-num demo">05 · Demo</span>
       <h3>Dashboard-Demo (Desktop)</h3>
       <div class="card-desc">
         Klickbare Demo des Beraterinnen-Portals — Kundinnenübersicht, Auswertung,
-        Branding-Einstellungen. Aktueller Stand.
+        Branding-Einstellungen. Enthält bereits den Basic-/Pro-Umschalter.
       </div>
       <div class="card-actions">
         <a class="btn primary" href="/konzept/partner-portal.html" target="_blank">
@@ -243,22 +361,22 @@
         </a>
       </div>
       <div class="note">
-        <b>Neu · Branding-Bereich</b> — der Menüpunkt „Mein Branding" ist jetzt
-        vollständig ausgebaut: Portrait, Farbwahl aus sechs Pastell-Tönen,
-        Grußformel + Vorstellungstext und vier Deckblatt-Designs für den
-        Fragebogen. Rechts läuft die Live-Vorschau in Echtzeit mit. Ein
-        Basic/Pro-Umschalter oben rechts zeigt, welche Felder für welchen
-        Tarif freigeschaltet sind.
+        <b>Nächster Schritt</b> — der Menüpunkt „Meine Bibliothek" (Karte 03)
+        wird als eigener Bereich in die Pro-Version integriert: pro Bedarfs-Slot
+        die Produkte der Beraterin plus Freitext-Begründung. Bei Basic ist der
+        Bereich sichtbar, aber ausgegraut mit Upgrade-CTA.
       </div>
     </div>
 
-    <!-- 4: Fragebogen -->
+    <!-- 6: Live-Fragebogen -->
     <div class="card">
-      <span class="card-num live">04 · Live</span>
+      <span class="card-num live">06 · Live</span>
       <h3>Fragebogen selbst ausprobieren</h3>
       <div class="card-desc">
         Kein Screenshot, sondern das echte System: klickt euch einmal durch den
         Fragebogen und schaut, was eine Endkundin am Ende zu sehen bekommt.
+        Die markenneutrale Ergebnisseite wird im Zuge des Whitelabel-Umbaus
+        angepasst.
       </div>
       <div class="card-actions">
         <a class="btn primary" href="/desiree" target="_blank">
@@ -267,6 +385,31 @@
       </div>
     </div>
 
+  </div>
+</div>
+
+<div class="fallback-section">
+  <div class="fallback-head">Fallback-Unterlagen · nicht aktiv</div>
+  <div class="fallback-title">MONAT-Antrag &amp; Vorspann</div>
+  <div class="fallback-lead">
+    Die am 4. Juli vorbereiteten Anschreiben liegen weiter bereit, werden
+    aber vorerst <b>nicht abgesendet</b>. Falls sich später ein
+    Direkt-Deal mit MONAT abzeichnet (z. B. Lizenzierung des fertigen Systems),
+    haben wir sie in der Schublade.
+  </div>
+  <div class="fallback-grid">
+    <div class="fallback-card">
+      <h4>VERADEX-Anschreiben an MONAT-DACH</h4>
+      <p>Zweiseitiges Anschreiben mit Compliance-Details. Nicht versendet.</p>
+      <a href="/konzept/veradex-anschreiben-monat.html" target="_blank">Ansehen</a>
+      <a href="/konzept/VERADEX_Antrag_MONAT.pdf" target="_blank" download>PDF</a>
+    </div>
+    <div class="fallback-card">
+      <h4>Sinas persönlicher Vorspann</h4>
+      <p>Wärmerer Vorspann-Text, myglowmatch-Optik. Nicht versendet.</p>
+      <a href="/konzept/sina-vorspann-monat.html" target="_blank">Ansehen</a>
+      <a href="/konzept/Sina-Vorspann_MONAT.pdf" target="_blank" download>PDF</a>
+    </div>
   </div>
 </div>
 

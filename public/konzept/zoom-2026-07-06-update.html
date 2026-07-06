@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Konzept-Update · 6. Juli 2026 · myglowmatch</title>
+<style>
+  @page { size: A4; margin: 12mm; }
+  :root{
+    --bg:#fbf6f0;
+    --blush:#f6e6e1;
+    --ink:#2d2a26;
+    --ink-soft:#5c5651;
+    --muted:#8c857f;
+    --line:#efe5dc;
+    --accent:#e0b1a8;
+    --accent-dark:#c98f84;
+    --accent-deep:#d4a593;
+    --chip-bg:#f5e6dc;
+    --chip-text:#7a5641;
+    --chip-warn-bg:#f2d6c8;
+    --chip-warn-text:#8b3f2b;
+    --chip-good-bg:#e2ecd8;
+    --chip-good-text:#4d6a3a;
+    --kupfer:#a07560;
+    --card:#ffffff;
+    --risk-border:#b26a52;
+    --good-border:#7a9962;
+  }
+  *{box-sizing:border-box;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Helvetica,Arial,sans-serif;font-size:10.5pt;line-height:1.5}
+  h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:var(--ink);margin:0}
+
+  /* Cover */
+  .cover{
+    background:linear-gradient(180deg,var(--blush) 0%,var(--bg) 65%);
+    padding:22mm 12mm 14mm;
+    page-break-after:always;
+  }
+  .cover-brand{display:flex;align-items:center;gap:12px;margin-bottom:24mm}
+  .brand-dot{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-deep))}
+  .brand-name{font-family:Georgia,serif;font-size:22pt;letter-spacing:.03em}
+  .cover-eyebrow{font-size:9pt;letter-spacing:.22em;color:var(--kupfer);font-weight:600;text-transform:uppercase;margin-bottom:12px}
+  .cover-title{font-family:Georgia,serif;font-size:30pt;line-height:1.2;font-weight:500;color:var(--ink);margin-bottom:14px;max-width:150mm}
+  .cover-sub{font-size:13pt;color:var(--ink-soft);max-width:150mm;line-height:1.55;margin-bottom:16px}
+  .cover-meta{display:grid;grid-template-columns:auto 1fr;gap:6px 20px;font-size:10pt;margin-top:20px;max-width:130mm}
+  .cover-meta b{color:var(--kupfer);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:8.5pt;font-family:Helvetica,Arial,sans-serif;align-self:center}
+
+  /* Content */
+  .content{padding:6mm 10mm 10mm}
+  .section-eyebrow{font-size:8.5pt;letter-spacing:.22em;color:var(--kupfer);font-weight:600;text-transform:uppercase;margin-bottom:6px}
+  h1.section{font-size:18pt;margin:0 0 12px;line-height:1.25;scroll-margin-top:20px}
+  h2{font-size:12.5pt;margin:14px 0 6px;line-height:1.3}
+  p{margin:0 0 8px}
+  ul{margin:0 0 10px 18px;padding:0}
+  li{margin-bottom:4px}
+
+  .callout{
+    background:var(--card);
+    border-left:4px solid var(--accent-dark);
+    border-radius:0 10px 10px 0;
+    padding:11px 15px;
+    margin:12px 0;
+    font-size:10pt;
+    page-break-inside:avoid;
+  }
+  .callout.risk{ border-left-color:var(--risk-border); }
+  .callout.good{ border-left-color:var(--good-border); }
+  .callout b{color:var(--kupfer)}
+  .callout .callout-title{font-family:Georgia,serif;font-size:12pt;font-weight:500;color:var(--ink);margin:0 0 4px}
+
+  .item{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:7px;
+    page-break-inside:avoid;
+  }
+  .item-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;gap:12px}
+  .item-num{
+    display:inline-block;
+    background:var(--chip-bg);color:var(--chip-text);
+    font-size:8pt;letter-spacing:.14em;font-weight:700;
+    padding:2px 8px;border-radius:14px;text-transform:uppercase
+  }
+  .item-num.warn{ background:var(--chip-warn-bg); color:var(--chip-warn-text); }
+  .item-num.good{ background:var(--chip-good-bg); color:var(--chip-good-text); }
+  .item-title{font-family:Georgia,serif;font-size:12pt;font-weight:500;color:var(--ink);margin:2px 0 4px}
+  .item-body{font-size:9.8pt;color:var(--ink)}
+  .item-body .quote{
+    display:block;
+    font-family:Georgia,serif;
+    color:var(--kupfer);
+    font-size:9.7pt;
+    line-height:1.5;
+    margin:4px 0 6px;
+    padding-left:10px;
+    border-left:2px solid var(--accent);
+  }
+
+  /* Preistabelle — jetzt drei Karten */
+  .price-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+    margin:12px 0;
+  }
+  .price-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px 14px;
+    page-break-inside:avoid;
+  }
+  .price-card.pro{
+    border-color:var(--accent-dark);
+    background:linear-gradient(180deg,#fff 0%,#fdf5f1 100%);
+  }
+  .price-card.free{
+    background:#f9f6f2;
+  }
+  .price-eyebrow{font-size:8pt;letter-spacing:.2em;color:var(--kupfer);font-weight:700;text-transform:uppercase;margin-bottom:4px}
+  .price-name{font-family:Georgia,serif;font-size:13pt;color:var(--ink);margin-bottom:6px;line-height:1.25}
+  .price-row{display:flex;justify-content:space-between;font-size:9.5pt;padding:3px 0;border-bottom:1px dashed var(--line)}
+  .price-row:last-child{border:none}
+  .price-row .val{font-weight:600;color:var(--ink)}
+  .price-row.big{font-size:10.5pt;padding:6px 0 3px}
+  .price-row.big .val{font-family:Georgia,serif;font-size:12pt}
+  .price-note{font-size:8.5pt;color:var(--muted);margin-top:6px;line-height:1.4}
+
+  /* Feature-Matrix — jetzt drei Spalten */
+  .feat-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:8px 0 12px;
+    font-size:9.6pt;
+  }
+  .feat-table th{
+    background:var(--chip-bg);
+    color:var(--chip-text);
+    font-size:8.5pt;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:700;
+    padding:7px 10px;
+    text-align:left;
+    border-bottom:1px solid var(--line);
+  }
+  .feat-table td{
+    padding:6px 10px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  .feat-table td.check{text-align:center;font-family:Georgia,serif;font-size:12pt;color:var(--accent-dark);width:52px}
+  .feat-table td.check.small{font-size:9pt;color:var(--kupfer);font-family:Helvetica,Arial,sans-serif}
+  .feat-table td.dash{text-align:center;color:var(--muted);font-size:14pt;width:52px}
+  .feat-table tr:last-child td{border:none}
+  .feat-table td.pro-row{font-weight:600}
+
+  .strike-list li{color:var(--ink-soft)}
+  .strike-list li b{color:var(--ink)}
+
+  .signal{
+    background:linear-gradient(135deg,#fbeee6 0%,#f6dcd0 100%);
+    border:1px solid var(--accent-deep);
+    border-radius:12px;
+    padding:14px 18px;
+    margin:16px 0 0;
+    page-break-inside:avoid;
+  }
+  .signal-title{font-family:Georgia,serif;font-size:14pt;color:var(--ink);margin:0 0 6px}
+  .signal-body{font-size:10.5pt;color:var(--ink);line-height:1.55}
+  .signal-body b{color:var(--kupfer)}
+
+  .footer{
+    margin-top:14mm;
+    font-size:8.5pt;
+    color:var(--muted);
+    border-top:1px solid var(--line);
+    padding-top:8px;
+    text-align:center;
+  }
+
+  .lib-visual{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin:10px 0 6px;
+  }
+  .lib-side{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 14px;
+    page-break-inside:avoid;
+  }
+  .lib-side.customer{ background:#f7f2ea; }
+  .lib-side h3{font-family:Georgia,serif;font-size:11.5pt;margin-bottom:6px;color:var(--ink)}
+  .lib-side .lib-eyebrow{font-size:7.5pt;letter-spacing:.18em;color:var(--kupfer);font-weight:700;text-transform:uppercase;margin-bottom:4px}
+  .lib-side ul{margin-left:16px;font-size:9.6pt}
+  .lib-side li{margin-bottom:3px;color:var(--ink-soft)}
+  .lib-side li b{color:var(--ink)}
+  .lib-arrow{
+    text-align:center;
+    font-size:8pt;
+    color:var(--kupfer);
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:700;
+    margin:2px 0 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Cover -->
+<div class="cover">
+  <div class="cover-brand">
+    <div class="brand-dot"></div>
+    <div class="brand-name">myglowmatch</div>
+  </div>
+
+  <div class="cover-eyebrow">Update · 6. Juli 2026 · nach zweiter Rücksprache</div>
+  <div class="cover-title">Wir haben umgestellt.<br>Sauberer Weg,<br>ohne MONAT-Freigabe.</div>
+  <div class="cover-sub">
+    Nach einer weiteren Rechts-Rücksprache haben wir die Strategie geändert:
+    das System wird markenneutral gebaut. Kundinnen sehen ihre Bedarfe,
+    die Beraterin übersetzt in ihre Markenwelt. Kein MONAT-Antrag mehr nötig,
+    Zielgruppe deutlich größer, sofort startfähig.
+  </div>
+
+  <div class="cover-meta">
+    <b>An</b><span>Sina Hildmann · Marcel Hildmann</span>
+    <b>Von</b><span>Desirée · Thomas (VERADEX)</span>
+    <b>Kontext</b><span>Zweites Update nach dem Zoom vom 4. Juli 2026</span>
+    <b>Lesezeit</b><span>ca. 6 Minuten</span>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="content">
+
+  <!-- Punkt 1: Auslöser -->
+  <div class="section-eyebrow">Punkt 1 · Was uns umgestimmt hat</div>
+  <h1 class="section">Zweite Rechts-Rücksprache am 6. Juli</h1>
+  <p>
+    Nach dem ersten Konzept-Entwurf (Stand nach dem Zoom vom 4. Juli) haben wir
+    das Vorhaben nochmal mit einem Juristen im Bekanntenkreis durchgesprochen.
+    Sein Punkt in einem Satz: <b>MONAT wird die Freigabe mit hoher Wahrscheinlichkeit
+    nicht erteilen</b> — nicht aus Compliance-Gründen, sondern aus Markt- und
+    Kontrollmotiven. Realistisch geschätzte Freigabe-Wahrscheinlichkeit: 15 bis 30 %.
+  </p>
+
+  <div class="callout risk">
+    <div class="callout-title">Warum MONAT wahrscheinlich Nein sagt</div>
+    <p style="margin:0 0 6px">
+      MONAT kontrolliert die Distributionswege eng und hat kein Interesse daran, dass
+      ein externer Anbieter im Beratungsablauf mitverdient — auch wenn dieser Anbieter
+      selbst Markenpartner ist. § 3.2.1 gibt MONAT die Handhabe, ohne Begründung „nein"
+      zu sagen. Wir würden Wochen bis Monate auf eine Entscheidung warten, mit hoher
+      Ablehnungs-Chance.
+    </p>
+    <p style="margin:0">
+      Für uns hieß das: <b>Die Freigabe darf nicht der Flaschenhals des ganzen Projekts sein.</b>
+      Wir brauchen einen Weg, der ohne MONAT-Ja funktioniert — und der trotzdem für
+      dein Team maximalen Wert liefert.
+    </p>
+  </div>
+
+  <!-- Punkt 2: Neuer Ansatz -->
+  <div class="section-eyebrow" style="margin-top:16px">Punkt 2 · Neuer Ansatz</div>
+  <h1 class="section">Markenneutrales System</h1>
+  <p>
+    Die Idee ist einfach: <b>Das System nennt keine Marken.</b> Die Kundinnenseite
+    zeigt am Ende des Fragebogens nur Bedarfe — was ihre Haare wirklich brauchen.
+    Die Beraterin übersetzt diese Bedarfe persönlich in ihre eigene Markenwelt.
+  </p>
+
+  <div class="lib-visual">
+    <div class="lib-side customer">
+      <div class="lib-eyebrow">Was die Kundin sieht</div>
+      <h3>Nur Bedarfe, keine Marken</h3>
+      <ul>
+        <li><b>Shampoo:</b> feuchtigkeitsspendend für dickes Haar</li>
+        <li><b>Conditioner:</b> tiefenwirksam, mit Frizz-Kontrolle</li>
+        <li><b>Leave-in:</b> Hitzeschutz, leicht in der Anwendung</li>
+        <li><b>Styling:</b> Volumen ohne Beschwerung</li>
+      </ul>
+    </div>
+    <div class="lib-side">
+      <div class="lib-eyebrow">Was die Beraterin daraus macht</div>
+      <h3>Persönliche Übersetzung in ihr Sortiment</h3>
+      <ul>
+        <li>Beraterin sieht dieselben Bedarfe</li>
+        <li>Sie empfiehlt der Kundin persönlich per WhatsApp konkrete Produkte
+          aus ihrem Sortiment</li>
+        <li>Verkaufsgespräch bleibt in ihrer Hand — ohne dass das System
+          jemandes Marken nennt</li>
+      </ul>
+    </div>
+  </div>
+  <div class="lib-arrow">↓ Beraterin bleibt der Ansprechpartner ↓</div>
+
+  <div class="callout good">
+    <div class="callout-title">Was das rechtlich bedeutet</div>
+    <p style="margin:0">
+      Das VERADEX-System berührt keine MONAT-Markenrechte mehr: keine
+      Produktnamen, keine Datenblatt-Zitate, keine Logos. Damit fallen §§ 3.2.1,
+      3.2.5 und 3.6.1 aus dem Anwendungsbereich. VERADEX ist reiner
+      Infrastruktur-Anbieter — vergleichbar mit einem CRM oder einem
+      Notiz-Tool. Kein MONAT-Antrag mehr nötig, keine Wartezeit auf eine Freigabe.
+    </p>
+  </div>
+
+  <!-- Punkt 3: Vorteile für Sinas Team -->
+  <div class="section-eyebrow" style="margin-top:16px">Punkt 3 · Was das für dein Team bedeutet</div>
+  <h1 class="section">Vorteile im Überblick</h1>
+
+  <div class="item">
+    <div class="item-head"><span class="item-num good">Sofort startfähig</span></div>
+    <div class="item-title">Kein Warten auf MONAT-Antwort</div>
+    <div class="item-body">
+      Sobald der Name und die Domain stehen, können wir bauen. Keine Wochen oder
+      Monate Verzögerung durch ein MONAT-Prüfverfahren. Dein Team hat das Tool,
+      wenn dein Team es braucht — nicht wenn MONAT-DACH Zeit hat.
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="item-num good">Größere Zielgruppe</span></div>
+    <div class="item-title">Nicht nur MONAT-Partnerinnen</div>
+    <div class="item-body">
+      Weil das System markenneutral ist, funktioniert es für <b>jede
+      Beauty-Beraterin</b> — MONAT, Younique, Mary Kay, Kevin Murphy,
+      Coiffeur-Sortimente. Dein Team startet mit dem System, aber die
+      Zielgruppe für zahlende Beraterinnen ist 20–50-mal so groß.
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="item-num good">Kein Risiko fürs Team</span></div>
+    <div class="item-title">Deine Partnerinnen bleiben MONAT-konform</div>
+    <div class="item-body">
+      Weil kein System-Text MONAT-Vokabular verwendet, kann keine Partnerin
+      dafür belangt werden. Was sie ihrer Kundin persönlich per WhatsApp
+      empfiehlt, ist dieselbe Beratungsarbeit wie bisher — nur besser
+      strukturiert.
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="item-num good">Free-Zugang für alle</span></div>
+    <div class="item-title">Neue Beraterinnen können kostenlos testen</div>
+    <div class="item-body">
+      Wir führen einen Free-Tarif ein: 3 Beratungen pro Monat gratis, ohne
+      Anmelde-Hürde. Jede neue Downline kann das System ausprobieren, bevor
+      sie sich entscheidet. Das nimmt die Kaufhürde raus und macht Upgrade-Argumente
+      spürbar.
+    </div>
+  </div>
+
+</div>
+
+<!-- Content Fortsetzung Seite 2: Preise + Bibliothek -->
+<div class="content" style="page-break-before:always;padding-top:10mm">
+
+  <!-- Punkt 4: Preismodell -->
+  <div class="section-eyebrow">Punkt 4 · Preismodell</div>
+  <h1 class="section" id="preise">Free, Basic, Pro im Vergleich</h1>
+
+  <div class="price-grid">
+    <div class="price-card free">
+      <div class="price-eyebrow">Free</div>
+      <div class="price-name">Zum Reinkommen</div>
+      <div class="price-row big"><span>Monatlich</span><span class="val">0 €</span></div>
+      <div class="price-row big"><span>Jährlich</span><span class="val">0 €</span></div>
+      <div class="price-row"><span>Setup</span><span class="val">0 €</span></div>
+      <div class="price-note">Limit: 3 Beratungen pro Monat. Nur Analyse-Modus, kein Portal.</div>
+    </div>
+    <div class="price-card">
+      <div class="price-eyebrow">Basic</div>
+      <div class="price-name">Das System zur Beratung</div>
+      <div class="price-row big"><span>Monatlich</span><span class="val">9,90 €</span></div>
+      <div class="price-row big"><span>Jährlich</span><span class="val">99 €</span></div>
+      <div class="price-row"><span>Setup einmalig</span><span class="val">29,90 €</span></div>
+      <div class="price-note">Bei Jahresabo entfällt die Setup-Gebühr — Ersparnis ~25 %.</div>
+    </div>
+    <div class="price-card pro">
+      <div class="price-eyebrow">Pro</div>
+      <div class="price-name">Beratung mit Bibliothek</div>
+      <div class="price-row big"><span>Monatlich</span><span class="val">19,90 €</span></div>
+      <div class="price-row big"><span>Jährlich</span><span class="val">199 €</span></div>
+      <div class="price-row"><span>Setup einmalig</span><span class="val">29,90 €</span></div>
+      <div class="price-note">Bei Jahresabo entfällt die Setup-Gebühr — Ersparnis ~25 %.</div>
+    </div>
+  </div>
+
+  <p style="font-size:9.5pt;color:var(--ink-soft);margin-top:4px">
+    Alle Preise brutto inkl. 19 % USt. Rechnungsstellung direkt durch VERADEX
+    (Stripe-Anbindung geplant). Die Preise sind gegenüber der ersten
+    Zoom-Version (14,90 € / 29,90 €) reduziert, weil die Beraterin ihre
+    Produkt-Bibliothek selbst pflegt. Kompensation über die deutlich größere
+    Zielgruppe.
+  </p>
+
+  <!-- Punkt 5: Feature-Split -->
+  <div class="section-eyebrow" style="margin-top:14px">Punkt 5 · Feature-Split</div>
+  <h1 class="section">Was jeder Tarif kann</h1>
+
+  <table class="feat-table">
+    <thead>
+      <tr>
+        <th>Funktion</th>
+        <th style="text-align:center">Free</th>
+        <th style="text-align:center">Basic</th>
+        <th style="text-align:center">Pro</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Fragebogen + Bedarfsanalyse für Kundinnen</td>
+        <td class="check">✓</td>
+        <td class="check">✓</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td>Markenneutrale Ergebnisseite (Kundinnen-Sicht)</td>
+        <td class="check">✓</td>
+        <td class="check">✓</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td>PDF-Download der Ergebnisseite für die Kundin</td>
+        <td class="check">✓</td>
+        <td class="check">✓</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td>Persönlicher Beratungs-Link <i>[name].de/[Beraterin]</i></td>
+        <td class="check small">3 / Monat</td>
+        <td class="check">✓</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td>WhatsApp-Kontakt-Button zur Beraterin</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td>Beratungs-Mail an die Beraterin nach jeder Analyse</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td>Portal mit Stammdaten und letzten 10 Beratungen</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td class="pro-row">Eigene Produkt-Bibliothek (Beraterin pflegt Sortiment)</td>
+        <td class="dash">—</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td class="pro-row">Kundinnen sehen konkrete Produkte aus der Bibliothek</td>
+        <td class="dash">—</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td class="pro-row">„Warum dieses Produkt" — Freitext pro Empfehlung</td>
+        <td class="dash">—</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td class="pro-row">Vollständiges Dashboard mit allen Beratungen</td>
+        <td class="dash">—</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td class="pro-row">Branding-Bereich (Portrait, Pastellfarben, Grußformel, Deckblatt)</td>
+        <td class="dash">—</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td class="pro-row">Push-Nachricht + PWA-Installation auf dem Handy</td>
+        <td class="dash">—</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+      </tr>
+      <tr>
+        <td class="pro-row">Team-Sharing — Bibliothek per Team-Code an Downlines</td>
+        <td class="dash">—</td>
+        <td class="dash">—</td>
+        <td class="check">✓</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:9.5pt;color:var(--ink-soft)">
+    <b>Der Kernunterschied Basic ↔ Pro:</b> Basic-Beraterinnen bekommen die
+    Bedarfsanalyse — sie empfehlen persönlich weiter. Pro-Beraterinnen pflegen
+    ihre eigene Produkt-Bibliothek ins Portal ein; das System matcht dann
+    automatisch Bedarf auf konkrete Produkte aus ihrem Sortiment und zeigt der
+    Kundin gleich Namen und Erklärung. Basic-Beraterinnen sehen die Pro-Bereiche
+    ausgegraut mit Upgrade-Hinweis — das ist verkaufspsychologisch stark.
+  </p>
+
+  <!-- Punkt 6: Bibliothek-Konzept -->
+  <div class="section-eyebrow" style="margin-top:16px">Punkt 6 · Herzstück Pro-Tarif</div>
+  <h1 class="section" id="bibliothek">Produkt-Bibliothek — Konzept</h1>
+
+  <p>
+    Für Pro-Beraterinnen ist die Bibliothek der eigentliche Wert des Systems.
+    Die Beraterin trägt einmalig ihr Sortiment ein — geordnet nach den
+    typischen Slots (Shampoo, Conditioner, Leave-in, Maske, Styling, Serum).
+    Zu jedem Produkt schreibt sie eine kurze eigene Verkaufsbegründung.
+    Das ist ihre Handschrift, nicht die von MONAT und nicht die von VERADEX.
+  </p>
+
+  <div class="item">
+    <div class="item-head"><span class="item-num">Schritt 1</span></div>
+    <div class="item-title">Einmal einrichten — pro Slot ein bis vier Produkte</div>
+    <div class="item-body">
+      Die Beraterin öffnet den Bibliothek-Bereich im Pro-Portal und legt pro
+      Bedarfs-Slot (Shampoo für dickes Haar / feines Haar / normales Haar etc.)
+      ihre Wunschprodukte an. Name, Größe, Preis, ihre Bezugsquelle (Link zum
+      MONAT-Shop, zur eigenen Website, in den Salon). Aufwand initial ca.
+      30 – 60 Minuten.
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="item-num">Schritt 2</span></div>
+    <div class="item-title">Eigene Verkaufsbegründung als Freitext</div>
+    <div class="item-body">
+      Zu jedem Produkt ein kurzer Text „Warum dieses Produkt für diesen Bedarf".
+      Die Beraterin formuliert selbst — in ihrer Sprache, in ihrem Stil.
+      Rechtlich verantwortlich für den Text ist die Beraterin, nicht VERADEX.
+      Damit bleibt das System als Anbieter markenrechtlich unbeteiligt.
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="item-num">Schritt 3</span></div>
+    <div class="item-title">Matching läuft automatisch bei jeder Kundinnen-Analyse</div>
+    <div class="item-body">
+      Das System (dieselbe Regel-Engine wie bisher) übersetzt die Fragebogen-Antworten
+      in ein Bedarfsprofil. Für Pro-Beraterinnen matcht es das Profil auf ihre
+      Bibliothek und zeigt der Kundin gleich Produktnamen mit Beraterinnen-eigener
+      Begründung. Kundin sieht nichts von der Mechanik dahinter — nur eine
+      persönlich wirkende Empfehlung.
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="item-num good">Schritt 4 · Team-Sharing</span></div>
+    <div class="item-title">Uplines geben ihre Bibliothek an Downlines weiter</div>
+    <div class="item-body">
+      Der eigentliche Multiplikator-Hebel: Sina pflegt ihre Bibliothek einmal
+      und generiert im Portal einen <b>Team-Code</b> (z. B. <i>SINA-2M8K</i>).
+      Jede Downline, die neu ins Pro-Portal kommt, gibt beim Setup diesen Code
+      ein — die Bibliothek wird <b>einmalig kopiert</b>. Startaufwand: 30
+      Sekunden statt 45 – 90 Minuten Selbst-Einpflegen.
+      <p style="margin:6px 0 0">
+        Wichtig: <b>Kopie, kein Live-Sync.</b> Downlines arbeiten danach mit
+        ihrer eigenen Bibliothek weiter. Wenn Sina später ihr Sortiment ändert,
+        bekommen aktive Team-Mitglieder eine Pull-Notification („N Änderungen
+        bei deiner Upline. Willst du sie übernehmen?"). Erst aktives Ja/Nein
+        übernimmt die Änderung. Damit wandert die Content-Verantwortung bei
+        jedem Klick sauber von Upline zu Downline, VERADEX bleibt neutrale
+        Infrastruktur.
+      </p>
+    </div>
+  </div>
+
+  <div class="callout good">
+    <div class="callout-title">Strategischer Wert für Sinas Team</div>
+    <p style="margin:0 0 6px">
+      Die Onboarding-Hürde für Neu-Downlines fällt praktisch weg. Wer sich
+      bisher gescheut hat, weil „nochmal Stunden Produkte einpflegen" abschreckend
+      war, ist mit einem Team-Code sofort startbereit. Das macht aus Sina eine
+      <b>aktive Team-Multiplikatorin</b>, nicht mehr nur eine Botschafterin —
+      sie liefert nicht nur den Impuls, sondern gleich das komplette
+      Beratungs-Setup.
+    </p>
+    <p style="margin:0">
+      Team-Sharing ist Standard-Pro-Feature (19,90 €/Monat), kein Extra-Tier.
+      Grund: jede neu aktivierte Downline im Pro-Modus zahlt selbst — der Hebel
+      liegt in der Menge der zahlenden Beraterinnen, nicht in der Einzelmarge.
+    </p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Warum das der zentrale Verkaufsargumentations-Punkt ist</div>
+    <p style="margin:0">
+      Neue Beraterinnen tun sich mit „Warum genau dieses Produkt" oft schwer.
+      Die Bibliothek zwingt sie einmal, das für ihr Sortiment schriftlich zu
+      formulieren — und dann läuft es bei jeder Beratung wie von selbst mit.
+      Für erfahrene Beraterinnen ist es eine <b>Zeitersparnis in
+      Aktions-Wochen</b>: die Empfehlung ist in Sekunden fertig, nicht in
+      Minuten. Das war Sinas ursprüngliches Kern-Argument im Zoom — es bleibt
+      unverändert gültig, jetzt nur ohne MONAT-Hürde.
+    </p>
+  </div>
+
+</div>
+
+<!-- Content Fortsetzung Seite 3: Bau-Reihenfolge + Signal -->
+<div class="content" style="page-break-before:always;padding-top:10mm">
+
+  <!-- Punkt 7: Bau-Reihenfolge -->
+  <div class="section-eyebrow">Punkt 7 · Wie es weitergeht</div>
+  <h1 class="section">Bau-Reihenfolge</h1>
+
+  <p>
+    Kein separates Repo, keine doppelte Infrastruktur: der neue markenneutrale
+    Aufbau wird als eigener Bereich im bestehenden Projekt gebaut. Die
+    aktuelle MONAT-Version bleibt parallel liegen — für den unwahrscheinlichen
+    Fall, dass MONAT später doch selbst zugreifen möchte.
+  </p>
+
+  <ol style="margin-left:20px;padding:0;font-size:10pt">
+    <li style="margin-bottom:5px"><b>Namensfreigabe</b> durch euch (aktueller Vorschlag: MyBeautyKey)</li>
+    <li style="margin-bottom:5px"><b>Domain sichern</b> + Logo unter neuem Namen finalisieren</li>
+    <li style="margin-bottom:5px"><b>Fragebogen</b> aus bestehendem System übernehmen, MONAT-Vokabular streichen</li>
+    <li style="margin-bottom:5px"><b>Ergebnisseite markenneutral</b> — Bedarfsprofil statt Produkte</li>
+    <li style="margin-bottom:5px"><b>Regel-Engine wiederverwenden</b> — liefert das Bedarfsprofil</li>
+    <li style="margin-bottom:5px"><b>Free-Modus</b> live schalten — 3 Beratungen pro Monat, Upgrade-Prompt</li>
+    <li style="margin-bottom:5px"><b>Basic-Modus</b> — Portal, Beratermail, Kundinnen-Übersicht, ausgegraute Pro-Bereiche</li>
+    <li style="margin-bottom:5px"><b>Pro-Modus</b> — Bibliothek, Freitext-Begründungen, Dashboard, Branding, Push, PWA</li>
+    <li style="margin-bottom:5px"><b>Stripe-Anbindung</b> für Upgrade + Setup-Fee</li>
+    <li style="margin-bottom:5px"><b>Öffentliche Demo</b> unter dem neuen Namen (<i>[name].de/demo</i>)</li>
+    <li style="margin-bottom:0"><b>Übergabe an Sina + Top-Leaderinnen</b></li>
+  </ol>
+
+  <p style="font-size:9.5pt;color:var(--ink-soft);margin-top:8px">
+    Realistischer Zeitrahmen für den Basic-Launch inkl. ausgegrautem Dashboard:
+    <b>ca. 14 – 18 Bau-Tage.</b> Die Pro-Features als V1.1 direkt danach.
+    Wir bauen ab dem Moment, in dem der Name fix ist.
+  </p>
+
+  <!-- Punkt 8: Namensfrage -->
+  <div class="section-eyebrow" style="margin-top:14px">Punkt 8 · Name</div>
+  <h1 class="section">Vorschlag bleibt: MyBeautyKey</h1>
+
+  <p>
+    Der Vorschlag <b>MyBeautyKey.de</b> passt zur neuen Strategie noch besser als
+    zur alten: er ist ausdrücklich markenneutral gehalten, öffnet die Tür für
+    Beraterinnen jenseits von MONAT und bleibt im Beauty-Umfeld eindeutig
+    zuzuordnen. Farbwelt und Logo bleiben in Champagne, Rosé und warmem Kupfer.
+  </p>
+
+  <div class="callout">
+    <div class="callout-title">Wir brauchen eure Rückmeldung zum Namen</div>
+    Sobald ihr grünes Licht gebt (oder eine Alternative vorschlagt), sichern
+    wir die Domain und legen los. Jeder Bauschritt vor der Namensfreigabe würde
+    doppelte Arbeit erzeugen.
+  </div>
+
+  <!-- Punkt 9: MONAT-Antrag-Status -->
+  <div class="section-eyebrow" style="margin-top:14px">Punkt 9 · Was mit dem MONAT-Antrag passiert</div>
+  <h1 class="section">Bleibt liegen — als Reserve</h1>
+
+  <p>
+    Der VERADEX-Antrag an MONAT-DACH und Sinas persönlicher Vorspann bleiben
+    in unserer Ablage liegen. <b>Nicht versendet, aber aufbewahrt.</b> Falls
+    sich das Bild in ein paar Monaten dreht (z. B. Weg B: MONAT möchte das
+    System selbst lizenzieren, sobald wir zahlende Kundinnen und ein
+    funktionierendes Produkt vorweisen), können wir beide Schreiben mit
+    minimalem Aufwand aktivieren. Aus einer Position der Stärke.
+  </p>
+
+  <div class="signal">
+    <div class="signal-title">Was wir jetzt von euch brauchen</div>
+    <div class="signal-body">
+      Zwei Rückmeldungen, dann läuft der Bau an:
+      <ol style="margin:6px 0 0 20px;padding:0">
+        <li><b>Namensfreigabe</b> — MyBeautyKey oder eine Alternative.</li>
+        <li><b>Feedback zum neuen Konzept</b> — passt der markenneutrale
+          Ansatz zu eurem Team? Wenn ja, geht's los.</li>
+      </ol>
+      <p style="margin:8px 0 0">
+        Der MONAT-DACH-Ansprechpartner ist mit der neuen Strategie nicht mehr
+        akut. Wenn ihr uns den Namen trotzdem gelegentlich nennen wollt, tun
+        wir uns bei einem späteren Weg-B-Deal leichter — dringend ist es nicht.
+      </p>
+    </div>
+  </div>
+
+  <div class="footer">
+    Erstellt am 6. Juli 2026 abends im Nachgang zur zweiten Rechts-Rücksprache · myglowmatch (Arbeitsname MyBeautyKey)
+  </div>
+
+</div>
+
+</body>
+</html>
