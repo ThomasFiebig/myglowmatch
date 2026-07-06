@@ -135,13 +135,18 @@
   }
   .anhang b{color:var(--blue-gray);font-weight:400;font-size:7pt;letter-spacing:.20em;text-transform:uppercase;display:block;margin-bottom:3px}
 
-  /* Bildschirm-Vorschau: helle Umgebung, Seiten-Trenner */
-  @media screen{
+  /* Bildschirm-Vorschau: helle Umgebung nur auf Desktop */
+  @media screen and (min-width: 900px){
     body{background:var(--light-gray);padding:20px 0}
     .page{
       margin:0 auto 20px;
       box-shadow:0 4px 24px rgba(0,0,0,.12);
     }
+  }
+  /* Mobile: Body weiß, kein Schatten — keine sichtbare Kante beim Scrollen */
+  @media screen and (max-width: 899px){
+    body{background:#fff;padding:0}
+    .page{margin:0 auto;box-shadow:none}
   }
 
   /* Print — exakt A4 pro .page, keine Ränder außen herum */
