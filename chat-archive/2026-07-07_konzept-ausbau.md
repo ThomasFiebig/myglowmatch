@@ -186,6 +186,44 @@ und stellt heraus, dass Thomas Sina die Bibliothek vorpflegt — Sina hat
 null Aufwand, kann per Team-Code übernehmen und an Downlines weitergeben.
 MONAT-DACH-Ansprechpartner nicht mehr dringend.
 
+### Phase 12 — „Empfehlungs-Mail an Kundin" durchgängig ersetzt
+
+Textinkonsistenz aufgefallen: die Demos beschreiben noch die alte UX
+(Kundin bekommt Empfehlung per E-Mail), obwohl die Konzept-Übersicht
+Punkt 4 die neue UX festgehalten hat (Ergebnis direkt im Browser +
+WhatsApp-Kontakt zur Beraterin).
+
+- **App-Demo** (`partner-app.html`): Home-View „So läuft's ab" Schritt 3
+  auf Ergebnis-im-Browser umgeschrieben, Schritt 4 klargestellt als
+  Mail-Kopie an die Beraterin.
+- **Dashboard-Portal** (`partner-portal.html`): sieben Textreferenzen
+  angepasst (Übersicht, Beratung-starten-Ablauf, Branding-Kopf +
+  drei Section-Subs, Vorschau-Karten-Titel, Einstellungen-Toggle).
+  Zusätzlich obsoleten Toggle „Empfehlungs-Mail automatisch an Kundin
+  senden" entfernt und „Kopie an dich" zu „Beratungs-Mail an dich"
+  umformuliert. Beratung-Schritt 2 nebenbei markenneutral gemacht
+  („aus dem MONAT-Produktkatalog" → „im Pro-Tarif aus deiner eigenen
+  Bibliothek").
+
+### Phase 13 — § 3.2.1 auf Grauzone + Eigen-Verantwortung differenziert
+
+Feedback von Thomas: der § 3.2.1-Block in Punkt 1 der Konzept-Übersicht
+war zu absolut formuliert („verletzt jede teilnehmende Partnerin ihren
+MONAT-Vertrag"). Bei der markenneutralen Whitelabel-Variante ist der
+Paragraf **nicht mehr sauber einschlägig**, weil er primär auf marken-
+spezifische Instrumente zielt. Aber MONAT könnte im Einzelfall auch
+neutrale Tools als „Geschäftsinstrument" auslegen — juristische Grauzone.
+
+Neuer Text im § 3.2.1-Block stellt die Trennung klar:
+- Beim ursprünglichen Konzept (mit MONAT-Datenblatt-Datenbank) war
+  § 3.2.1 klar einschlägig.
+- Bei der markenneutralen Variante liegt die Einsatz-Entscheidung bei
+  der Partnerin selbst — VERADEX gibt keine Rechtsempfehlung.
+
+Damit ist Punkt 1 asymmetrisch, aber inhaltlich präzise: § 3.2.5 und
+§ 3.6.1 sind durch Markenneutralität klar erledigt, § 3.2.1 bleibt
+Grauzone → Eigen-Prüfung durch die Partnerin.
+
 ## Neue Artefakte
 
 - `demo/preise.html` + `public/konzept/preise.html` — kompakte
@@ -219,6 +257,15 @@ MONAT-DACH-Ansprechpartner nicht mehr dringend.
   bleibt möglich"
 - `c3ce94d` fix(konzept): „Kein Risiko fürs Team" ersetzt, Demo-Rolle
   geschärft
+- `057c750` docs: Session-Doku 2026-07-07 — Konzept-Ausbau
+- `1d71a6e` docs(session): Vor-Analyse für n8n-Umbau an Session-Doku
+  angehängt
+- `c9e4b39` fix(demo-app): „Empfehlungs-Mail an Kundin" → Ergebnis im
+  Browser
+- `db5d3aa` fix(demo-portal): „Empfehlungs-Mail an Kundin" durchgängig
+  ersetzt
+- `ef1ccd6` docs(konzept): § 3.2.1 auf Eigen-Verantwortung der Partnerin
+  umformuliert
 
 ## Bewusst NICHT in dieser Session gemacht
 
@@ -271,6 +318,20 @@ inkl. ausgegrautem Pro-Dashboard.
   markenneutrale Ansatz klang wie „nur noch Bedarfsanalyse" — die
   Klarstellung „vollständige MONAT-Empfehlung bleibt möglich" musste
   extra vorne eingesetzt werden.
+
+- **Juristische Grauzonen differenziert benennen.** Wenn ein Paragraf
+  in einer Version klar greift und in einer anderen nur potenziell,
+  keine pauschale Aussage machen. § 3.2.1 in Punkt 1 zeigt das
+  Muster: „hätte gegolten beim ursprünglichen Konzept" + „liegt in
+  Eigen-Verantwortung der Partnerin bei der neutralen Variante" +
+  „VERADEX gibt keine Rechtsempfehlung". Damit umgehen wir sowohl
+  Bagatellisierung als auch übertriebene Warnung.
+
+- **UX-Änderungen an einer Stelle → alle Referenzen prüfen.** Als
+  Punkt 4 der Konzept-Übersicht auf „Ergebnis im Browser" umgestellt
+  wurde, standen in beiden Demos noch acht Referenzen auf die alte
+  Mail-UX. Bei jeder UX-Kern-Änderung `grep` auf die Vorher-
+  Formulierung über alle demo-Dateien laufen lassen.
 
 ## Vor-Analyse für den n8n-Umbau (Kontext für nächste Session)
 
