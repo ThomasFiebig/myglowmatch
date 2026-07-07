@@ -496,7 +496,7 @@
             <button class="secondary">📱 WhatsApp</button>
             <button class="secondary">📷 QR-Code</button>
           </div>
-          <div style="margin-top:14px;font-size:13px;color:var(--ink-soft)">Deine Kundinnen füllen dort den Fragebogen aus. Du bekommst Lead + Empfehlungs-Mail automatisch als Kopie.</div>
+          <div style="margin-top:14px;font-size:13px;color:var(--ink-soft)">Deine Kundinnen füllen dort den Fragebogen aus, sehen das Ergebnis direkt im Browser und kontaktieren dich per WhatsApp. Du bekommst Lead + Empfehlung als Mail-Kopie.</div>
         </div>
       </div>
     </section>
@@ -596,9 +596,9 @@
           <h3 style="font-size:18px;margin-bottom:14px">Was passiert nach dem Ausfüllen?</h3>
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;font-size:14px">
             <div><div class="uppercase-kupfer" style="margin-bottom:6px">Schritt 1</div><b style="color:var(--ink)">Fragebogen</b><br><span style="color:var(--ink-soft)">Deine Kundin füllt ~15 Fragen aus (5-8 Min).</span></div>
-            <div><div class="uppercase-kupfer" style="margin-bottom:6px">Schritt 2</div><b style="color:var(--ink)">Empfehlung</b><br><span style="color:var(--ink-soft)">System berechnet individuelle Routine aus dem MONAT-Produktkatalog.</span></div>
-            <div><div class="uppercase-kupfer" style="margin-bottom:6px">Schritt 3</div><b style="color:var(--ink)">Mail an Kundin</b><br><span style="color:var(--ink-soft)">Kundin bekommt die Empfehlungs-Mail (kann in Einstellungen deaktiviert werden).</span></div>
-            <div><div class="uppercase-kupfer" style="margin-bottom:6px">Schritt 4</div><b style="color:var(--ink)">Mail an dich</b><br><span style="color:var(--ink-soft)">Du bekommst Lead + Empfehlung als Kopie, um nachzufassen.</span></div>
+            <div><div class="uppercase-kupfer" style="margin-bottom:6px">Schritt 2</div><b style="color:var(--ink)">Empfehlung</b><br><span style="color:var(--ink-soft)">System berechnet die individuelle Routine — im Pro-Tarif aus deiner eigenen Produkt-Bibliothek.</span></div>
+            <div><div class="uppercase-kupfer" style="margin-bottom:6px">Schritt 3</div><b style="color:var(--ink)">Ergebnis im Browser</b><br><span style="color:var(--ink-soft)">Kundin sieht die Empfehlung sofort im Browser, mit WhatsApp-Button für den Kontakt zu dir.</span></div>
+            <div><div class="uppercase-kupfer" style="margin-bottom:6px">Schritt 4</div><b style="color:var(--ink)">Mail an dich</b><br><span style="color:var(--ink-soft)">Du bekommst Lead + Empfehlung als Mail-Kopie, um nachzufassen.</span></div>
           </div>
         </div>
       </div>
@@ -772,7 +772,7 @@
       <div class="top">
         <div>
           <h1 class="hello">Mein Branding</h1>
-          <div class="hello-sub">So sehen dein Fragebogen und die Empfehlungs-Mail für deine Kundinnen aus.</div>
+          <div class="hello-sub">So sehen dein Fragebogen-Deckblatt und die Ergebnisseite für deine Kundinnen aus.</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
           <div class="tier-demo" role="group" aria-label="Demo-Ansicht Tier">
@@ -824,7 +824,7 @@
               <h4>Farbwelt</h4>
               <span class="pro-badge">Pro</span>
             </div>
-            <div class="section-sub">Wähl den Pastell-Ton, in dem dein Deckblatt und deine Empfehlungs-Mail erscheinen.</div>
+            <div class="section-sub">Wähl den Pastell-Ton, in dem dein Deckblatt und die Ergebnisseite deiner Kundinnen erscheinen.</div>
 
             <div class="color-swatches" id="palette-picker">
               <div class="swatch-item selected" data-pal="rose"><div class="swatch" style="background:linear-gradient(135deg,#f6e6e1,#e0b1a8)"></div><div class="swatch-label">Rosé</div></div>
@@ -850,7 +850,7 @@
               <h4>Persönliche Ansprache</h4>
               <span class="pro-badge">Pro</span>
             </div>
-            <div class="section-sub">Wird auf dem Fragebogen-Deckblatt und in der Empfehlungs-Mail verwendet.</div>
+            <div class="section-sub">Wird auf dem Fragebogen-Deckblatt und auf der Ergebnisseite deiner Kundinnen verwendet.</div>
 
             <label>Grußformel (zeigt sich als Titel auf dem Deckblatt)</label>
             <input id="brand-gruss" type="text" value="Herzlich willkommen">
@@ -938,9 +938,9 @@
             <div style="font-size:12px;color:var(--muted);margin-top:10px">Erscheint als erste Seite, bevor deine Kundin mit der Analyse beginnt.</div>
           </div>
 
-          <!-- Mail-Vorschau -->
+          <!-- Ergebnisseite-Vorschau -->
           <div class="card" style="padding:20px">
-            <h3 style="font-size:18px;margin-bottom:14px">Vorschau · Empfehlungs-Mail an Kundin</h3>
+            <h3 style="font-size:18px;margin-bottom:14px">Vorschau · Ergebnisseite deiner Kundin</h3>
             <div class="mail-preview-wrap" id="mail-preview-wrap">
               <div class="mail-inner">
                 <div class="mail-brand">myglowmatch</div>
@@ -1119,11 +1119,7 @@
         <div class="card col-12">
           <h3 style="font-size:18px;margin-bottom:8px">Benachrichtigungen</h3>
           <div class="setting-row">
-            <div><div class="setting-label">Empfehlungs-Mail automatisch an Kundin senden</div><div class="setting-desc">Wenn aus, bekommst nur du die Mail zum Review und leitest sie manuell an die Kundin weiter</div></div>
-            <div class="toggle on"></div>
-          </div>
-          <div class="setting-row">
-            <div><div class="setting-label">Kopie der Kundinnen-Mail an dich</div><div class="setting-desc">Damit du weißt, was die Kundin bekommen hat</div></div>
+            <div><div class="setting-label">Beratungs-Mail an dich nach jeder Analyse</div><div class="setting-desc">Enthält Lead + vollständige Empfehlung, damit du sofort nachfassen kannst</div></div>
             <div class="toggle on"></div>
           </div>
           <div class="setting-row">
