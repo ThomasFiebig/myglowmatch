@@ -8,11 +8,16 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.2.79"],
 
   async rewrites() {
-    return [
-      // Kurze Team-URL für Sinas Top-Leaderinnen-Vorschau.
-      // Verhindert, dass die dynamische [partner]-Route "team" als Beraterin-Slug interpretiert.
-      { source: "/team", destination: "/konzept/leaderinnen-vorschau.html" },
-    ];
+    // beforeFiles nötig, damit /team NICHT von der dynamischen [partner]-Route
+    // als Beraterin-Slug interpretiert wird. afterFiles-Array-Form würde
+    // erst nach dem Dynamic-Route-Matching feuern und damit nie greifen.
+    return {
+      beforeFiles: [
+        { source: "/team", destination: "/konzept/leaderinnen-vorschau.html" },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
   },
 };
 
