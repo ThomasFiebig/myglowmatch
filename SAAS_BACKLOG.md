@@ -106,7 +106,7 @@ Zielgruppe (jede Beauty-Beraterin, nicht nur MONAT).
 **Free-Tier — Umfang und Limits:**
 - Analyse-only: Beraterin bekommt persönlichen Link, Kundinnen können
   Fragebogen ausfüllen, Ergebnis zeigt nur Bedarfe
-- Limit: 3 Beratungen pro Monat (Rechenzeit-Schutz gegen Missbrauch)
+- Limit: 2 Beratungen pro Monat (Rechenzeit-Schutz gegen Missbrauch)
 - Keine Beratermail, keine persistenten Kundinnen-Daten
 - Upgrade-Prompt bei Erreichen des Limits
 
@@ -310,7 +310,7 @@ dringend — vor Launch aber Pflicht.
 ## 2.7 — Free-Modus Missbrauchs-Schutz
 
 **Frage aus 2026-07-07:** wie verhindern wir, dass jemand das Free-Modul
-(3 Beratungen/Monat, kein Login-Zwang) dauerhaft mit immer neuen
+(2 Beratungen/Monat, kein Login-Zwang) dauerhaft mit immer neuen
 E-Mail-Adressen ausnutzt statt Basic zu buchen?
 
 ### Ökonomische Vorüberlegung — der stärkste Schutz
@@ -361,7 +361,7 @@ beim Bau explizit umgesetzt werden.
 Server-seitiger Browser-Fingerprint (`fingerprintjs` open-source Version
 oder eigene Kombination aus Canvas-Hash, Timezone, Language, Screen).
 Wenn drei aktive Free-Accounts vom selben Fingerprint kommen: Zusammenzug
-(alle drei zählen als ein Kontingent = 3 Beratungen gesamt statt 3 pro
+(alle drei zählen als ein Kontingent = 2 Beratungen gesamt statt 2 pro
 Account) oder Sperre bei nachweislichem Muster.
 
 **Bewusst nicht sofort einbauen:**
@@ -427,7 +427,7 @@ für Konzept-Präsentation) zum Whitelabel-Launch:
    strukturell durch die UI-Konsolidierung der 4 Sub-Slots erklärt
    (`isomorphie_report.md`, `chat-archive/2026-07-07_wl-adapter-isomorphie.md`).
 7. **Free-Modus** implementieren — Beraterin bucht kostenlos, bekommt Link,
-   Limit 3 Beratungen/Monat, Upgrade-Prompt bei Erreichen
+   Limit 2 Beratungen/Monat, Upgrade-Prompt bei Erreichen
 8. **Basic-Modus** — Portal mit Login, Beratermail, Kundinnen-Übersicht,
    ausgegraute Pro-Cards
 9. **Pro-Modus** — Produkt-Bibliothek-UI (Beraterin trägt Sortiment pro Slot

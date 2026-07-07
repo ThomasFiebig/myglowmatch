@@ -480,25 +480,62 @@ export default function DemoResultScreen({
       </div>
 
       <div className="relative z-10 w-full max-w-3xl">
-        {/* Kopfleiste + Demo-Chip */}
-        <div className="mb-6 flex flex-col items-center gap-3 text-center">
-          <div className="font-serif text-2xl text-ink">MyBeautyKey</div>
+        {/* Demo-Chip */}
+        <div className="mb-4 flex justify-center">
           <div className="inline-flex items-center gap-2 rounded-full bg-rosegold/20 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-rosegold-dark">
             <span aria-hidden="true">⚠</span> Demo · nicht das Endergebnis
           </div>
         </div>
 
-        {/* Persönliche Begrüßung + Body wie in der Kundinnen-Mail */}
-        <section className="mb-6 rounded-2xl border border-blush bg-white/95 px-5 py-6 shadow-sm md:px-8">
-          <h1 className="mb-4 font-serif text-2xl font-semibold text-ink md:text-3xl">
-            Deine persönliche Haaranalyse ist da, {displayName} ✨
-          </h1>
-          <div className="space-y-3 text-[15px] leading-relaxed text-ink-soft">
-            <p>Hallo {displayName},</p>
-            <p>wie schön, dass du dir die Zeit genommen hast – jetzt kommt das Ergebnis!</p>
-            <p>{problemSatz}</p>
-            <p>{levelSatz}</p>
-            {strukturSatz && <p>{strukturSatz}</p>}
+        {/* Hero mit Farbverlauf (analog zur echten Kundinnen-Mail) */}
+        <section
+          className="mb-6 overflow-hidden rounded-2xl border border-blush shadow-sm"
+          style={{
+            background:
+              "linear-gradient(180deg, #F6E6E1 0%, #FBF5EE 60%, #FFFFFF 100%)",
+          }}
+        >
+          <div className="px-5 pb-8 pt-9 text-center md:px-10 md:pb-10 md:pt-12">
+            <div
+              className="font-serif text-3xl md:text-4xl"
+              style={{
+                letterSpacing: "0.03em",
+                color: "#5A4A3F",
+                fontWeight: 400,
+              }}
+            >
+              MyBeautyKey
+            </div>
+            <div
+              className="mt-2 text-[10px] font-bold uppercase md:text-[11px]"
+              style={{
+                letterSpacing: "0.22em",
+                color: "#A07560",
+              }}
+            >
+              Deine persönliche Haaranalyse
+            </div>
+          </div>
+          <div className="px-5 pb-7 md:px-10 md:pb-9">
+            <h1
+              className="mb-4 font-serif text-2xl font-semibold md:text-3xl"
+              style={{ color: "#2D2A26", lineHeight: 1.25 }}
+            >
+              Deine persönliche Haaranalyse ist da, {displayName} ✨
+            </h1>
+            <div
+              className="space-y-3 text-[15px] leading-relaxed"
+              style={{ color: "#5C5651" }}
+            >
+              <p>Hallo {displayName},</p>
+              <p>
+                wie schön, dass du dir die Zeit genommen hast – jetzt kommt
+                das Ergebnis!
+              </p>
+              <p>{problemSatz}</p>
+              <p>{levelSatz}</p>
+              {strukturSatz && <p>{strukturSatz}</p>}
+            </div>
           </div>
         </section>
 
