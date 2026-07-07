@@ -42,7 +42,9 @@ RESPONSE_BODY_EXPR = (
     "final_routine: $('15 Routine sortieren').item.json.final_routine, "
     "routine_count: $('15 Routine sortieren').item.json.routine_count, "
     "normalized: $('15 Routine sortieren').item.json.normalized, "
-    "partner_id: $('15 Routine sortieren').item.json.partner_id "
+    "partner_id: $('15 Routine sortieren').item.json.partner_id, "
+    "pflegelevel: $('15 Routine sortieren').item.json.pflegelevel, "
+    "priorities: $('15 Routine sortieren').item.json.priorities "
     "}) }}"
 )
 

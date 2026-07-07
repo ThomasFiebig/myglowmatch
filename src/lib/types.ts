@@ -191,9 +191,22 @@ export type NormalizedAnswers = {
   curl_priority?: string | null;
 };
 
+export type PflegelevelInfo = {
+  pflegelevel_final?: string; // "LOW" | "MID" | "HIGH"
+  max_products?: number;
+};
+
+export type PrioritiesInfo = {
+  primary_hair_condition?: string;
+  primary_scalp_state?: string;
+  hair_condition_cleaned?: string[];
+};
+
 export type RecommendationResult = {
   final_routine?: RecommendationProduct[];
   routine_count?: number;
   normalized?: NormalizedAnswers;
   partner_id?: string;
+  pflegelevel?: PflegelevelInfo;
+  priorities?: PrioritiesInfo;
 };
