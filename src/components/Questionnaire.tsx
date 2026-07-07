@@ -11,7 +11,12 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
-import type { Answers, AnswerValue, Step } from "@/lib/types";
+import type {
+  Answers,
+  AnswerValue,
+  RecommendationResult,
+  Step,
+} from "@/lib/types";
 import { formSteps } from "@/data/questions";
 import { isStepVisible } from "@/lib/conditional";
 import { isStepValid } from "@/lib/validation";
@@ -55,6 +60,12 @@ export default function Questionnaire({ partnerId }: QuestionnaireProps) {
 
   // State 4: Richtung der letzten Navigation (für die Animation).
   const [direction, setDirection] = useState(1);
+
+  // State 5: Empfehlungs-Antwort von n8n (falls Respond-to-Webhook-Node
+  // aktiv ist). Bei null zeigt DemoResultScreen Fake-Daten.
+  const [recommendation, setRecommendation] = useState<RecommendationResult | null>(
+    null,
+  );
 
   const totalSteps = formSteps.length;
 
@@ -106,6 +117,14 @@ export default function Questionnaire({ partnerId }: QuestionnaireProps) {
       if (!response.ok) {
         throw new Error("Antwort war nicht ok");
       }
+      // Antwort auslesen und Empfehlung speichern, falls vorhanden.
+      const data = (await response.json()) as {
+        ok?: boolean;
+        recommendation?: RecommendationResult | null;
+      };
+      if (data.recommendation) {
+        setRecommendation(data.recommendation);
+      }
       setSubmitState("success");
     } catch {
       setSubmitState("error");
@@ -118,7 +137,16 @@ export default function Questionnaire({ partnerId }: QuestionnaireProps) {
   if (submitState === "success") {
     const firstName =
       typeof answers.first_name === "string" ? answers.first_name : "";
-    return <DemoResultScreen firstName={firstName} />;
+    const phone =
+      typeof answers.phone === "string" ? answers.phone : "";
+    return (
+      <DemoResultScreen
+        firstName={firstName}
+        phone={phone}
+        answers={answers}
+        recommendation={recommendation}
+      />
+    );
   }
 
   const currentStep = formSteps[currentIndex];

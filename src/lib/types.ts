@@ -155,3 +155,45 @@ export type AnswerValue = string | string[] | boolean;
 // Noch nicht beantwortete Felder fehlen einfach.
 // -------------------------------------------------------------------
 export type Answers = Record<string, AnswerValue>;
+
+// -------------------------------------------------------------------
+// Antwort-Format des n8n-Workflows (via Respond-to-Webhook-Node).
+// Nur die Felder, die das Frontend zum Rendern der Ergebnisseite braucht.
+// Alle Felder optional, damit graceful degradation möglich ist, falls
+// n8n noch kein Response-Node hat oder Antwort-Format fehlerhaft.
+// -------------------------------------------------------------------
+export type RecommendationProduct = {
+  produkt_key?: string;
+  produktname_de?: string;
+  slot_typ?: string;
+  routine_schritt?: number;
+  anwendungs_schritt?: number;
+  priority?: string;
+  hauptfunktion?: string;
+  produktlinie?: string;
+};
+
+export type NormalizedAnswers = {
+  first_name?: string;
+  phone?: string;
+  hair_structure?: string;
+  hair_thickness?: string;
+  hair_condition?: string[];
+  scalp_status?: string[];
+  hair_treatments?: string;
+  heat_frequency?: string;
+  wash_frequency?: string;
+  care_goals?: string[];
+  routine_preference?: string;
+  time_commitment?: string;
+  styling_effort?: string;
+  ends_condition?: string | null;
+  curl_priority?: string | null;
+};
+
+export type RecommendationResult = {
+  final_routine?: RecommendationProduct[];
+  routine_count?: number;
+  normalized?: NormalizedAnswers;
+  partner_id?: string;
+};

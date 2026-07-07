@@ -69,8 +69,22 @@ export async function POST(request: Request) {
       );
     }
 
-    // Erfolg.
-    return NextResponse.json({ ok: true });
+    // n8n-Response (falls „Respond to Webhook"-Node im Workflow steckt)
+    // durchreichen, damit das Frontend die tatsächliche Empfehlung
+    // rendern kann. Falls n8n nur `{ ok: true }` oder gar nichts schickt,
+    // zeigt das Frontend Fake-Daten als Fallback.
+    let recommendation: unknown = null;
+    try {
+      const text = await n8nResponse.text();
+      if (text) {
+        recommendation = JSON.parse(text);
+      }
+    } catch {
+      // Body kein gültiges JSON — Fallback zu Fake-Daten im Frontend.
+      recommendation = null;
+    }
+
+    return NextResponse.json({ ok: true, recommendation });
   } catch {
     return NextResponse.json(
       { error: "n8n konnte nicht erreicht werden." },
