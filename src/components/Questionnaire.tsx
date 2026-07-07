@@ -20,7 +20,7 @@ import { fade, spring } from "@/lib/animations";
 import ProgressBar from "@/components/ProgressBar";
 import IntroScreen from "@/components/IntroScreen";
 import QuestionScreen from "@/components/QuestionScreen";
-import ThankYouScreen from "@/components/ThankYouScreen";
+import DemoResultScreen from "@/components/DemoResultScreen";
 import MotionButton from "@/components/MotionButton";
 import Spinner from "@/components/Spinner";
 import Logo from "@/components/Logo";
@@ -112,11 +112,13 @@ export default function Questionnaire({ partnerId }: QuestionnaireProps) {
     }
   }
 
-  // --- Fall A: erfolgreich abgesendet -> Danke-Seite ----------------
+  // --- Fall A: erfolgreich abgesendet -> Demo-Ergebnisseite ---------
+  //  Zeigt Basic-Ansicht + Pro-Ansicht + Beispielmail für die Beraterin,
+  //  überlagert mit DEMO-Wasserzeichen.
   if (submitState === "success") {
     const firstName =
       typeof answers.first_name === "string" ? answers.first_name : "";
-    return <ThankYouScreen firstName={firstName} />;
+    return <DemoResultScreen firstName={firstName} />;
   }
 
   const currentStep = formSteps[currentIndex];
