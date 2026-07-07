@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
   // Ohne diesen Eintrag blockiert Next.js 16 alles außer "localhost" –
   // Symptom: HTML & CSS laden, aber JS nicht -> Seite bleibt leer.
   allowedDevOrigins: ["192.168.2.79"],
+
+  async rewrites() {
+    return [
+      // Kurze Team-URL für Sinas Top-Leaderinnen-Vorschau.
+      // Verhindert, dass die dynamische [partner]-Route "team" als Beraterin-Slug interpretiert.
+      { source: "/team", destination: "/konzept/leaderinnen-vorschau.html" },
+    ];
+  },
 };
 
 export default nextConfig;
