@@ -4,8 +4,8 @@
 Getrennt von `HANDOVER.md` (n8n / Regel-Engine) und `demo/BUILD_SPEC.md` (End-Zustand
 für Partner).
 
-**Stand:** 2026-07-07 (WL-Adapter belegt, Regel-Engine bleibt unverändert —
-Kapitel 3 Punkt 6 nachgeschärft).
+**Stand:** 2026-07-08 (Infrastruktur & Tooling als Kapitel 3.5 eingefügt,
+Anthropic-Klarstellung: nur Bau-Werkzeug, keine Laufzeit-Komponente).
 
 **Rollen:**
 - **Desirée Fiebig** (MONAT-Markenpartnerin Nr. 14038921) — fachliche und technische
@@ -456,6 +456,174 @@ Live-Vorschau (Fragebogen-Deckblatt + Empfehlungs-Mail) sowie Basic↔Pro-
 Toggle mit Sperr-Overlay + Upgrade-CTA. Live-Bau der Features (Uploads,
 Persistenz in `partner`-Tabelle, Node-17-Anbindung) folgt nach MONAT-
 Freigabe — Nachzieh-Liste in `chat-archive/2026-07-06_etappe-2-branding.md`.
+
+---
+
+## 3.5 — Infrastruktur & Tooling (Stand 2026-07-08)
+
+**Prinzip — hart, nicht verhandelbar:** vor Markteintritt (erster zahlender
+Kunde außerhalb Desirée) muss die gesamte Datenverarbeitung DSGVO-konform
+und auf EU-Regionen konfiguriert sein. VERADEX darf bei einer Beschwerde
+nicht angreifbar sein. Wir bauen sauber von Anfang an, nachträgliche
+Region-Migrationen sind teuer bis unmöglich (Supabase-Region z. B. ist
+irreversibel).
+
+### Klarstellung Anthropic — nur Bau-Werkzeug, keine Laufzeit-Komponente
+
+Der laufende n8n-Workflow ruft KEIN LLM auf. Der Node „17 Claude E-Mail
+formulieren" ist Typ `n8n-nodes-base.code` — deterministisches HTML-
+Templating aus vorgegebenen Feldern. Der Name „Claude" ist Legacy (Claude
+hat beim Bau des Templates mitgeholfen, der Node selbst ist reine
+JavaScript-String-Konkatenation). Verifiziert 2026-07-08 durch Scan aller
+Node-Types im `workflow_live_now.json`: 0× Anthropic-Referenz, 0× lmChat,
+0× langchain, 0× `api.anthropic.com`.
+
+Konsequenz: Anthropic ist bei uns ausschließlich **Bau-Werkzeug** (Claude
+Code im Terminal, Konzept-Assistenz), nicht Teil des produktiven
+Datenflusses. DSGVO-neutral, kein Enterprise-Deal, kein PII-Prompt-Umbau
+nötig. Regel-Engine liefert deterministische, nachvollziehbare Empfehlungen
+— für DSGVO-Auskunftspflicht sogar besser als ein LLM.
+
+### Laufzeit-Toolchain
+
+| Kategorie | Tool | Firma | Region | DPA/SCC | Kosten V1 |
+|---|---|---|---|---|---|
+| Frontend-Hosting | Vercel | US | `fra1` pinnen | DPA | Free-Tier |
+| App-Framework | Next.js | OSS | eigenes Deployment | — | — |
+| DB | Supabase | US | `eu-central-1` (Frankfurt) | DPA | Free-Tier |
+| Workflow-Engine | n8n.cloud | DE (n8n GmbH) | EU-Instanz verifizieren | Inhouse-EU | ~20 €/Monat |
+| Bezahlsystem | Paddle | UK (Merchant of Record) | EU-Zahlungsströme | DPA | ~5% + Fee |
+| Rechnungen (V1) | Paddle-Portal | UK | via Paddle | via DPA | inkl. |
+| Rechnungen (V2) | sevDesk / lexoffice | DE | DE | inhouse-DE | ~15 €/Monat |
+| Transactional Mail | Brevo | FR | EU | inhouse-EU | Free bis 300/Tag |
+| Domain | Strato | DE | DE | inhouse-DE | ~1 €/Monat |
+| Analytics | Plausible | EE (Estland) | EU | inhouse-EU | ~9 €/Monat |
+| Error-Tracking | Sentry | US | EU-Region | DPA | Free-Tier |
+| Business-Mail | Google Workspace | US | EU-DPA | DPA | ~6 €/Monat |
+
+Geschätzte laufende Kosten V1 (ohne Umsatz-abhängige Paddle-Fee):
+~50 €/Monat. Break-Even laut Kapitel 1 bei ~400 €/Monat MRR.
+
+### Bau-Werkzeuge (kein Kunden-Datenzugriff)
+
+- **Claude Code** (Anthropic, US) — Coding-Assistent im Terminal, sieht
+  Code aber keine echten Kundinnen-Daten
+- **GitHub** (US, EU-Server verfügbar) — privates Repo unter
+  `fiebig-projects/`
+- **macOS lokal** — Entwicklungsumgebung
+
+DSGVO-neutral, weil kein Kundinnen-Datenzugriff. Wenn wir künftig doch mal
+Testdaten mit realen PII verwenden würden, wird das explizit dokumentiert.
+
+### Kritische Konfigurations-Punkte vor Markteintritt
+
+**Region-Pinning (heute nachziehbar, kostet nichts, teilweise irreversibel):**
+- Vercel-Projekt: Region auf `fra1` fixieren
+- Supabase-Projekt: bei Erstellung `eu-central-1` wählen (nachträglich
+  nicht änderbar — deshalb JETZT richtig entscheiden)
+- n8n.cloud-Instanz-URL prüfen (aktuell `veradex.app.n8n.cloud`),
+  ggf. auf EU-Instanz migrieren
+- Sentry-Projekt bei Anlage EU-Region wählen
+- Plausible EU-Server (Standard)
+
+**Data Processing Addenda unterschreiben (jeweils ~10 Min via Dashboard):**
+- Vercel DPA
+- Supabase DPA
+- Paddle DPA
+- Google Workspace DPA (bei Business-Plan automatisch)
+- Sentry DPA
+- Brevo DPA
+
+**Compliance-Dokumente vor Launch (Pflicht):**
+- Datenschutzerklärung WL-System (eigenständig, nicht Copy von veradex.de)
+- Impressum WL-Domain
+- AGB WL (mit Klauseln aus Kapitel 2.6 — Content-Verantwortung liegt bei
+  Beraterin, § 10 TMG-Neutralität)
+- AVV-Vorlage als PDF (Bitkom-Muster als Basis, Anwaltscheck)
+- TOM (Technische und Organisatorische Maßnahmen) als AVV-Anlage
+- VVT (Verzeichnis von Verarbeitungstätigkeiten) — internes Dokument
+- Löschkonzept (Kundinnen-Daten nach Beratungsende + Frist)
+- Cookie-Banner nur wenn tracking-Cookies (bei Plausible NEIN — dann kein
+  Banner nötig, das ist ein echter DSGVO-Vorteil)
+
+**Anwaltscheck vor erstem zahlenden Kunden (~300–600 €):**
+- AGB + AVV auf Compliance mit Kapitel 2.6 prüfen
+- Prüfung der Klick-Wrap-AVV-Konstruktion für unsere Zielgruppe
+- Klärung: Betriebs-Haftpflicht für SaaS-Anbieter?
+
+### AVV-Modus: Klick-Wrap ist ausreichend
+
+Art. 28 DSGVO verlangt „schriftlich oder elektronisch". Häkchen im Signup
+mit vorher sichtbarem PDF-Link zum AVV gilt als elektronisch dokumentiert
+— Marktstandard bei Salesforce, HubSpot, Notion, Slack. Voraussetzungen:
+
+- Häkchen darf NICHT vorgehäkelt sein (aktive Zustimmung)
+- PDF-Link muss vor dem Klick geöffnet werden können
+- Zustimmung wird mit Zeitstempel + IP protokolliert (in Supabase)
+- Downloadbare Kopie im Beraterin-Portal
+
+Kein DocuSign nötig für unsere Zielgruppe (Beraterinnen als
+Einzelnutzerinnen). Enterprise-Kunden würden echte Unterschrift verlangen,
+die sind aber nicht die Zielgruppe.
+
+### Bezahl-System: Paddle statt Stripe für V1
+
+**Paddle als Merchant of Record** wickelt USt für alle EU-Länder ab. Wir
+kriegen netto ausgezahlt, Paddle handelt die Voranmeldungen. Kostet ~5% +
+Fixed Fee statt Stripes ~1,4% + 25c — bei ~400 €/Monat MRR sind das ~15 €
+Mehrkosten, dafür entfällt die OSS-Registrierung und die
+länderspezifischen USt-Voranmeldungen. Ab ~5.000 €/Monat MRR Wechsel auf
+Stripe prüfen (dann rechnet sich der Buchhaltungs-Overhead).
+
+### Was NICHT gebraucht wird (bewusst nicht)
+
+- **Anthropic Enterprise / EU-Deployment** — Workflow nutzt kein LLM zur
+  Laufzeit (heute verifiziert).
+- **Stripe für V1** — Paddle als MoR spart USt-Voranmeldungen.
+- **DocuSign für AVV** — Klick-Wrap reicht (siehe oben).
+- **SMS-Verifikation** — Kosten- und PII-Nachteile, siehe Kapitel 2.7.
+- **Google Analytics** — Plausible EU-first ohne Cookie-Banner-Pflicht.
+- **Eigenes Custom-Domain-Setup pro Beraterin** — siehe Kapitel 5
+  „Verworfene Ideen".
+- **Klarnamen der Kundinnen in externen APIs** — trifft bei uns nicht zu,
+  da kein LLM zur Laufzeit. Dokumentiert für den Fall künftiger
+  LLM-Ergänzungen (dann PII-Prompt-Redaction einbauen).
+
+### Prioritäten für die Umsetzung
+
+Sortiert nach Blocker-Wirkung und Zeit bis Effekt:
+
+1. **Domain sichern** (`mybeautykey.de` oder Alternative bei Strato) —
+   30 Min, blockiert alles andere
+2. **Supabase-Projekt in `eu-central-1`** anlegen — 15 Min, Region ist
+   IRREVERSIBEL, deshalb früh und richtig
+3. **Vercel-Projekt** WL-Deployment auf `fra1` konfigurieren — 5 Min
+4. **Paddle-Account** anlegen und Business-Verifikation starten — 30 Min
+   Antrag + ~1 Woche Wartezeit auf Freigabe
+5. **DKIM/SPF/DMARC** für WL-Domain bei Strato einrichten (Zwischen-Blocker
+   aus HANDOVER 🔴) — 30 Min
+6. **Brevo-Account** anlegen, Domain verifizieren, API-Key in n8n binden
+   — 30 Min
+7. **AVV-Muster** aus Bitkom-Vorlage vorbereiten — 60 Min
+8. **Datenschutzerklärung + Impressum + AGB** entwerfen — 3–4 h
+   eigenständig, danach Anwaltscheck ~300 € vor Launch
+9. **DPAs unterschreiben** (Vercel, Supabase, Paddle, Sentry, Brevo) —
+   Paket-Abend, ~1 h insgesamt
+
+Punkte 1–3 lassen sich diese Woche machen und blockieren nichts anderes
+mehr. Punkt 4 hat die längste Wartezeit — deshalb früh anwerfen.
+
+### Metriken für DSGVO-Bereitschaft (interner Check vor Launch)
+
+- Alle Region-Pinnings gesetzt und dokumentiert
+- Alle DPAs unterschrieben und Kopien im `docs/dpa/`-Ordner
+- Datenschutzerklärung / Impressum / AGB live und verlinkt
+- AVV-PDF im Signup-Flow verlinkt und Häkchen-Test durchgeführt
+- Anwaltscheck bestanden
+- Löschkonzept dokumentiert und im Portal umsetzbar
+- Auskunftsanfrage-Prozess getestet (Test-Account, Datenexport binnen 30 Tagen)
+
+Wenn alle acht Haken gesetzt: Markteintritt möglich.
 
 ---
 
