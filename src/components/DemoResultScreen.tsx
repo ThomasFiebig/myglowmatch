@@ -39,6 +39,7 @@ type Partner = {
   whatsapp: string;
   title: string;
   initials: string;
+  photo_url?: string;
 };
 
 const PARTNERS: Record<string, Partner> = {
@@ -50,6 +51,7 @@ const PARTNERS: Record<string, Partner> = {
     whatsapp: "491753742698",
     title: "Deine MONAT Markenpartnerin",
     initials: "DF",
+    photo_url: "/partners/desiree.jpg",
   },
   DEFAULT: {
     name: "Deine Beraterin",
@@ -571,16 +573,29 @@ export default function DemoResultScreen({
         {/* Beraterinnen-Karte */}
         <section className="mb-6 rounded-2xl border border-blush bg-white px-5 py-5 shadow-sm md:px-8 md:py-6">
           <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-center md:text-left">
-            <div
-              className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full font-serif text-2xl font-medium text-white"
-              style={{
-                background: "linear-gradient(135deg, #D4A593, #A07560)",
-                border: "3px solid #FFFFFF",
-                boxShadow: "0 4px 12px rgba(160, 117, 96, 0.2)",
-              }}
-            >
-              {partner.initials}
-            </div>
+            {partner.photo_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={partner.photo_url}
+                alt={partner.name}
+                className="h-20 w-20 shrink-0 rounded-full object-cover"
+                style={{
+                  border: "3px solid #FFFFFF",
+                  boxShadow: "0 4px 12px rgba(160, 117, 96, 0.2)",
+                }}
+              />
+            ) : (
+              <div
+                className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full font-serif text-2xl font-medium text-white"
+                style={{
+                  background: "linear-gradient(135deg, #D4A593, #A07560)",
+                  border: "3px solid #FFFFFF",
+                  boxShadow: "0 4px 12px rgba(160, 117, 96, 0.2)",
+                }}
+              >
+                {partner.initials}
+              </div>
+            )}
             <div className="flex-1">
               <p className="text-[10px] font-bold uppercase tracking-widest text-rosegold-dark">
                 {partner.title}
