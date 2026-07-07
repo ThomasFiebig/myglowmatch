@@ -4,7 +4,8 @@
 Getrennt von `HANDOVER.md` (n8n / Regel-Engine) und `demo/BUILD_SPEC.md` (End-Zustand
 für Partner).
 
-**Stand:** 2026-07-06 spät (Strategie-Umkehr auf markenneutrale Alternative).
+**Stand:** 2026-07-07 (WL-Adapter belegt, Regel-Engine bleibt unverändert —
+Kapitel 3 Punkt 6 nachgeschärft).
 
 **Rollen:**
 - **Desirée Fiebig** (MONAT-Markenpartnerin Nr. 14038921) — fachliche und technische
@@ -416,7 +417,15 @@ für Konzept-Präsentation) zum Whitelabel-Launch:
    (Slot-basierte Empfehlungen wie „shampoo=feuchtigkeit+dickes_haar"),
    Kundinnenseite zeigt Text ohne Produktnamen
 6. **Regel-Engine (Node 04–15)** wiederverwenden: liefert das Bedarfsprofil,
-   nicht mehr konkrete Produkte
+   nicht mehr konkrete Produkte. **Update 2026-07-07 (Bau-Session):** seit
+   Migration #27 arbeitet die Regel-Engine bereits abstrakt gegen strukturierte
+   Produktattribute — kein Umbau nötig. Der WL-Umbau reduziert sich auf einen
+   Daten-Adapter zwischen Beraterin-UI und dem 25-Spalten-Format der
+   `produktdatenbank`. Adapter existiert (`wl_adapter.py`), Isomorphie-Test
+   gegen die 37 MONAT-Produkte belegt: 12-Felder-UI (11 Mockup-Chips + Chip-
+   Multi „Pflegelevel") trägt Desirées Sortiment mit 5/162 harten Δ, alle
+   strukturell durch die UI-Konsolidierung der 4 Sub-Slots erklärt
+   (`isomorphie_report.md`, `chat-archive/2026-07-07_wl-adapter-isomorphie.md`).
 7. **Free-Modus** implementieren — Beraterin bucht kostenlos, bekommt Link,
    Limit 3 Beratungen/Monat, Upgrade-Prompt bei Erreichen
 8. **Basic-Modus** — Portal mit Login, Beratermail, Kundinnen-Übersicht,
