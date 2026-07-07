@@ -171,6 +171,7 @@ export type RecommendationProduct = {
   priority?: string;
   hauptfunktion?: string;
   produktlinie?: string;
+  anwendung?: string;
 };
 
 export type NormalizedAnswers = {

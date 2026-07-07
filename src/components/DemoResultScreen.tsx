@@ -1,14 +1,16 @@
 "use client";
 
 // =====================================================================
-// DemoResultScreen — Vorschau-Ergebnisseite für die Test-Version.
+// DemoResultScreen — Ergebnisseite für die Demo-Version.
 //
-// Zeigt zwei Ergebnis-Ansichten (Basic links: Bedarfsprofil, Pro rechts:
-// konkrete Produkte) plus eine originalgetreue Vorschau der Beraterin-
-// Mail. Wenn n8n via Respond-to-Webhook-Node echte Daten liefert, wird
-// dynamisch gerendert. Sonst Fake-Fallback.
+// Aufbau wie eine Kundinnen-Mail:
+//   1) Persönliche Begrüßung ("Danke, [Name]!") + Body-Text
+//   2) Basic + Pro Split-Ansicht mit den echten Empfehlungen
+//   3) Beraterinnen-Karte mit Foto + WhatsApp-Button
+//   4) Beispielmail an die Beraterin (Vollständiges Layout wie Node 17)
 //
-// Wasserzeichen "DEMO" liegt semi-transparent über allem.
+// Produkt-Texte kommen echt aus der Produktdatenbank (Feld `anwendung`).
+// DEMO-Wasserzeichen als Overlay.
 // =====================================================================
 
 import Link from "next/link";
@@ -18,8 +20,6 @@ import type {
   RecommendationProduct,
   RecommendationResult,
 } from "@/lib/types";
-import Logo from "@/components/Logo";
-import SiteFooter from "@/components/SiteFooter";
 
 type DemoResultScreenProps = {
   firstName: string;
@@ -29,9 +29,41 @@ type DemoResultScreenProps = {
 };
 
 // ---------------------------------------------------------------
-// Anzeige-Wörterbücher (Enum-Werte → menschenlesbare Labels)
-// Deckt sich mit der `readable()`-Funktion in n8n Node 17, damit die
-// Antworten-Tabelle in der Mail-Vorschau identisch klingt.
+// Partner-Datenbank (nachgebildet aus n8n Node 17)
+// ---------------------------------------------------------------
+type Partner = {
+  name: string;
+  first_name: string;
+  email: string;
+  phone: string;
+  whatsapp: string;
+  title: string;
+  initials: string;
+};
+
+const PARTNERS: Record<string, Partner> = {
+  desiree: {
+    name: "Desirée Fiebig",
+    first_name: "Desirée",
+    email: "beratung@veradex.de",
+    phone: "0175 / 3742698",
+    whatsapp: "491753742698",
+    title: "Deine MONAT Markenpartnerin",
+    initials: "DF",
+  },
+  DEFAULT: {
+    name: "Deine Beraterin",
+    first_name: "Deine Beraterin",
+    email: "info@mybeautykey.de",
+    phone: "",
+    whatsapp: "",
+    title: "MyBeautyKey Beratung",
+    initials: "MK",
+  },
+};
+
+// ---------------------------------------------------------------
+// Enum-Labels — deckungsgleich mit n8n Node 17.
 // ---------------------------------------------------------------
 const LABELS: Record<string, string> = {
   juckend_empfindlich: "juckend / empfindlich",
@@ -54,9 +86,6 @@ const LABELS: Record<string, string> = {
   glanzlos: "glanzlos",
   kraftlos: "kraftlos / wenig Volumen",
   duenn: "dünner werdendes Haar",
-  weich_normal: "weich und normal",
-  leicht_trocken: "leicht trocken",
-  deutlich_trocken: "deutlich trocken / spröde",
   nein: "unbehandelt",
   gefaerbt: "gefärbt",
   blondiert: "blondiert",
@@ -78,7 +107,6 @@ const LABELS: Record<string, string> = {
   mehr_feuchtigkeit: "mehr Feuchtigkeit",
   feuchtigkeit: "mehr Feuchtigkeit",
   weniger_frizz: "weniger Frizz",
-  frizz_reduktion: "weniger Frizz",
   mehr_glanz: "mehr Glanz",
   glanz: "mehr Glanz",
   farb_erhalt: "Farb-Erhalt",
@@ -87,7 +115,6 @@ const LABELS: Record<string, string> = {
   gesunde_kopfhaut: "gesunde Kopfhaut",
   kopfhaut_pflege: "Kopfhaut-Pflege",
   schnellere_haarwaesche: "seltener waschen",
-  verdichtend: "volleres Haar",
   minimal: "so wenige Produkte wie möglich",
   ausgewogen: "ausgewogene Routine",
   bestmoeglich: "bestmögliches Ergebnis",
@@ -99,15 +126,11 @@ function label(value: string | undefined | null): string {
   if (!value) return "–";
   return LABELS[value] || value;
 }
-
 function labelList(arr: string[] | undefined): string {
   if (!arr || arr.length === 0) return "–";
   return arr.map((v) => label(v)).join(", ");
 }
 
-// ---------------------------------------------------------------
-// Slot-Typ → menschenlesbarer Slot-Label + Sortier-Reihenfolge.
-// ---------------------------------------------------------------
 const SLOT_LABEL: Record<string, string> = {
   shampoo: "Shampoo",
   spuelung: "Spülung",
@@ -134,9 +157,45 @@ const SLOT_ORDER = [
 ];
 
 // ---------------------------------------------------------------
-// Bedarfsprofil pro Slot ableiten (für Basic-Ansicht).
-// Liefert null zurück, wenn kein spezifischer Bedarf ableitbar ist —
-// dann wird der Slot in der Ansicht ausgelassen.
+// Body-Textbausteine (deckungsgleich mit Node 17 Kundinnen-Mail)
+// ---------------------------------------------------------------
+function buildProblemSatz(primary: string | undefined): string {
+  switch (primary) {
+    case "stark_geschaedigt":
+      return "Dein Haar braucht gerade besonders viel Liebe und intensive Pflege – wir haben genau das Richtige für dich zusammengestellt.";
+    case "trocken":
+      return "Trockenes Haar kennt man – und wie schön, dass du dir jetzt die Zeit nimmst, es wirklich gut zu versorgen.";
+    case "haarbruch":
+      return "Haarbruch ist oft ein Zeichen, dass das Haar etwas mehr Unterstützung braucht – und genau dabei möchten wir dir helfen.";
+    case "frizz":
+      return "Frizz kann so nervig sein – aber keine Sorge, wir haben eine Routine für dich, die genau das in den Griff bekommt.";
+    case "kraftlos":
+      return "Mehr Volumen und Lebendigkeit für dein Haar – das klingt gut, oder? Genau darauf ist deine Routine ausgerichtet.";
+    case "duenn":
+      return "Dein Haar soll sich wieder voll und kräftig anfühlen – mit der richtigen Pflege ist das absolut möglich.";
+    default:
+      return "Wir haben uns deine Antworten genau angeschaut und eine Routine zusammengestellt, die wirklich zu dir und deinem Haar passt.";
+  }
+}
+function buildLevelSatz(level: string | undefined): string {
+  if (level === "LOW")
+    return "Deine Routine ist schön unkompliziert – wenige, dafür wirkungsvolle Produkte, die du schnell in deinen Alltag integrieren kannst.";
+  if (level === "HIGH")
+    return "Deine Routine ist etwas umfangreicher – aber dein Haar verdient diese intensive Zuwendung, und du wirst den Unterschied sehen und fühlen.";
+  return "Deine Routine ist ausgewogen – nicht zu viel, nicht zu wenig. Genau richtig für sichtbare Ergebnisse ohne großen Aufwand.";
+}
+function buildStrukturSatz(structure: string | undefined): string | null {
+  if (structure === "lockig" || structure === "kraus")
+    return "Für deine wunderschönen Locken haben wir besonders darauf geachtet, dass jedes Produkt Feuchtigkeit spendet und die Struktur unterstützt.";
+  if (structure === "wellig")
+    return "Für deine welligen Strähnen haben wir Produkte gewählt, die deine natürliche Textur betonen und gleichzeitig pflegen.";
+  if (structure === "glatt")
+    return "Für dein glattes Haar haben wir Produkte ausgewählt, die Glanz und Geschmeidigkeit fördern, ohne zu beschweren.";
+  return null;
+}
+
+// ---------------------------------------------------------------
+// Bedarfsprofil pro Slot (für Basic-Ansicht). null = Slot auslassen.
 // ---------------------------------------------------------------
 function buildBedarf(slotTyp: string, n: NormalizedAnswers): string | null {
   const parts: string[] = [];
@@ -149,10 +208,7 @@ function buildBedarf(slotTyp: string, n: NormalizedAnswers): string | null {
   if (slotTyp === "shampoo") {
     if (goals.includes("mehr_feuchtigkeit") || conditions.includes("trocken"))
       parts.push("feuchtigkeitsspendend");
-    if (
-      conditions.includes("stark_geschaedigt") ||
-      goals.includes("reparatur")
-    )
+    if (conditions.includes("stark_geschaedigt") || goals.includes("reparatur"))
       parts.push("reparierend");
     if (goals.includes("farb_erhalt") || n.hair_treatments === "gefaerbt")
       parts.push("farb-erhaltend");
@@ -164,8 +220,7 @@ function buildBedarf(slotTyp: string, n: NormalizedAnswers): string | null {
     if (scalp.includes("juckend_empfindlich")) parts.push("kopfhaut-beruhigend");
   } else if (slotTyp === "spuelung") {
     if (conditions.includes("frizz")) parts.push("Frizz-kontrollierend");
-    if (["wellig", "lockig", "kraus"].includes(structure))
-      parts.push("entwirrend");
+    if (["wellig", "lockig", "kraus"].includes(structure)) parts.push("entwirrend");
     if (goals.includes("mehr_feuchtigkeit") || conditions.includes("trocken"))
       parts.push("tief feuchtigkeitsspendend");
     if (goals.includes("reparatur") || conditions.includes("haarbruch"))
@@ -173,10 +228,7 @@ function buildBedarf(slotTyp: string, n: NormalizedAnswers): string | null {
   } else if (slotTyp === "maske") {
     if (goals.includes("reparatur") || conditions.includes("stark_geschaedigt"))
       parts.push("intensive Reparatur");
-    else if (
-      goals.includes("mehr_feuchtigkeit") ||
-      conditions.includes("trocken")
-    )
+    else if (goals.includes("mehr_feuchtigkeit") || conditions.includes("trocken"))
       parts.push("tiefe Feuchtigkeitskur");
     if (n.hair_treatments === "gefaerbt" || n.hair_treatments === "blondiert")
       parts.push("Coloriertes-Haar-Pflege");
@@ -188,23 +240,14 @@ function buildBedarf(slotTyp: string, n: NormalizedAnswers): string | null {
       parts.push("Feuchtigkeits-Boost für den Tag");
     if (goals.includes("reparatur") || conditions.includes("haarbruch"))
       parts.push("Bonding-Stärkung");
-  } else if (
-    slotTyp === "styling_1" ||
-    slotTyp === "styling_2" ||
-    slotTyp === "styling_3"
-  ) {
+  } else if (slotTyp === "styling_1" || slotTyp === "styling_2" || slotTyp === "styling_3") {
     if (goals.includes("mehr_volumen") || conditions.includes("kraftlos"))
       parts.push("Volumen ohne Beschwerung");
-    if (["lockig", "kraus"].includes(structure))
-      parts.push("Locken-definierend");
+    if (["lockig", "kraus"].includes(structure)) parts.push("Locken-definierend");
     if (n.curl_priority === "mehr_definition") parts.push("Curl-Definition");
-    if (n.heat_frequency && n.heat_frequency !== "nie_selten")
-      parts.push("Hitzeschutz");
+    if (n.heat_frequency && n.heat_frequency !== "nie_selten") parts.push("Hitzeschutz");
     if (conditions.includes("frizz")) parts.push("Frizz-reduzierend");
-    if (
-      n.styling_effort === "aufwendiges_styling" ||
-      n.styling_effort === "regelmaessiges_styling"
-    )
+    if (n.styling_effort === "aufwendiges_styling" || n.styling_effort === "regelmaessiges_styling")
       parts.push("Halt & Formung");
   } else if (slotTyp === "scalp" || slotTyp === "nacht_serum") {
     if (scalp.includes("juckend_empfindlich"))
@@ -212,8 +255,7 @@ function buildBedarf(slotTyp: string, n: NormalizedAnswers): string | null {
     if (scalp.includes("fettig") || scalp.includes("schnell_nachfettender_ansatz"))
       parts.push("balancierend");
     if (scalp.includes("schuppig")) parts.push("gegen Schuppen");
-    if (conditions.includes("duenn"))
-      parts.push("Kopfhaut-Serum für volleres Haar");
+    if (conditions.includes("duenn")) parts.push("Kopfhaut-Serum für volleres Haar");
   } else if (slotTyp === "serum") {
     if (conditions.includes("spliss") || conditions.includes("haarbruch"))
       parts.push("Spitzen-Pflege gegen Spliss");
@@ -223,8 +265,6 @@ function buildBedarf(slotTyp: string, n: NormalizedAnswers): string | null {
 
   if (parts.length === 0) return null;
 
-  // Struktur/Stärke nur bei Waschprodukten anhängen (dort ist es wirklich
-  // relevant für die Passung).
   if (["shampoo", "spuelung", "maske"].includes(slotTyp)) {
     const suffix: string[] = [];
     if (structure) suffix.push(`${label(structure)}es Haar`);
@@ -235,13 +275,9 @@ function buildBedarf(slotTyp: string, n: NormalizedAnswers): string | null {
     }
     if (suffix.length) return `${parts.join(", ")} · für ${suffix.join(", ")}`;
   }
-
   return parts.join(", ");
 }
 
-// ---------------------------------------------------------------
-// Verkaufstipp aus hauptproblem — deckungsgleich mit Node 17.
-// ---------------------------------------------------------------
 function buildVerkaufstipp(primary: string | undefined): string {
   switch (primary) {
     case "stark_geschaedigt":
@@ -260,7 +296,6 @@ function buildVerkaufstipp(primary: string | undefined): string {
       return 'Bedanke dich für ihr Interesse und biete eine persönliche Beratung an. Beispiel: „Schön, dass du die Analyse gemacht hast – wenn du Fragen zu den Produkten hast, melde dich gerne."';
   }
 }
-
 function buildLevelTipp(level: string | undefined): string {
   if (level === "LOW")
     return "Sie möchte eine schlanke Routine. Konzentriere dich auf die Hauptprodukte, biete keine Zusatzartikel beim Erstkontakt an.";
@@ -270,38 +305,41 @@ function buildLevelTipp(level: string | undefined): string {
 }
 
 // ---------------------------------------------------------------
-// Fake-Fallback-Daten (wenn n8n keine Response liefert).
+// Fake-Fallback-Daten (nur wenn n8n keine Response schickt).
 // ---------------------------------------------------------------
 const FAKE_ROUTINE: RecommendationProduct[] = [
-  { produktname_de: "Renew Shampoo", slot_typ: "shampoo", anwendungs_schritt: 1 },
+  {
+    produktname_de: "Renew™ Hydrating Shampoo",
+    slot_typ: "shampoo",
+    anwendungs_schritt: 1,
+    anwendung:
+      "In den Händen aufemulgieren und auf das nasse Haar und die Kopfhaut auftragen. 2–3 Minuten einwirken lassen.",
+  },
   {
     produktname_de: "Erweiterte Feuchtigkeits-Spülung",
     slot_typ: "spuelung",
     anwendungs_schritt: 2,
+    anwendung: "Nach dem Shampoo in Längen und Spitzen einarbeiten, kurz einwirken und ausspülen.",
   },
   {
     produktname_de: "Super-Feuchtigkeitsmaske",
     slot_typ: "maske",
     anwendungs_schritt: 3,
+    anwendung: "1× wöchentlich statt der Spülung, 5–10 Minuten einwirken lassen.",
   },
-  { produktname_de: "Bond IQ Leave-in", slot_typ: "leave_in", anwendungs_schritt: 4 },
-  { produktname_de: "Moxie Mousse", slot_typ: "styling_1", anwendungs_schritt: 5 },
+  {
+    produktname_de: "Bond IQ Leave-in",
+    slot_typ: "leave_in",
+    anwendungs_schritt: 4,
+    anwendung: "Auf handtuchtrockenes Haar sprühen, nicht ausspülen. Föhnen oder lufttrocknen.",
+  },
+  {
+    produktname_de: "Moxie Mousse",
+    slot_typ: "styling_1",
+    anwendungs_schritt: 5,
+    anwendung: "Golfballgroße Menge auf feuchtem Haar verteilen, ansetzen und stylen.",
+  },
 ];
-const FAKE_WARUM: Record<string, string> = {
-  shampoo:
-    "Speziell für coloriertes, trockenes Haar. Schützt die Farbe und versorgt tief mit Feuchtigkeit.",
-  spuelung:
-    "Perfekter Partner zum Shampoo. Entwirrt sofort und macht das Kämmen leicht.",
-  maske:
-    "1× wöchentlich für die volle Regeneration. Nach 4 Wochen sichtbarer Unterschied.",
-  leave_in:
-    "Hitzeschutz + Reparatur in einem. Ideal wenn du regelmäßig föhnst.",
-  styling_1:
-    "Volumen ohne Beschwerung. Definiert die Struktur und hält den ganzen Tag.",
-  styling_2: "Formung mit sanftem Halt.",
-  scalp: "Beruhigt die Kopfhaut und bringt sie in Balance.",
-  serum: "Gezielte Behandlung für die Spitzen.",
-};
 
 // =====================================================================
 // Haupt-Komponente
@@ -332,30 +370,20 @@ export default function DemoResultScreen({
         ? (answers.scalp_status as string[])
         : [],
       hair_treatments:
-        typeof answers.hair_treatments === "string"
-          ? answers.hair_treatments
-          : "",
+        typeof answers.hair_treatments === "string" ? answers.hair_treatments : "",
       heat_frequency:
         typeof answers.heat_frequency === "string" ? answers.heat_frequency : "",
       wash_frequency:
         typeof answers.wash_frequency === "string" ? answers.wash_frequency : "",
-      care_goals: Array.isArray(answers.care_goals)
-        ? (answers.care_goals as string[])
-        : [],
+      care_goals: Array.isArray(answers.care_goals) ? (answers.care_goals as string[]) : [],
       routine_preference:
-        typeof answers.routine_preference === "string"
-          ? answers.routine_preference
-          : "",
+        typeof answers.routine_preference === "string" ? answers.routine_preference : "",
       styling_effort:
         typeof answers.styling_effort === "string" ? answers.styling_effort : "",
       curl_priority:
-        typeof answers.curl_priority === "string"
-          ? answers.curl_priority
-          : null,
+        typeof answers.curl_priority === "string" ? answers.curl_priority : null,
       ends_condition:
-        typeof answers.ends_condition === "string"
-          ? answers.ends_condition
-          : null,
+        typeof answers.ends_condition === "string" ? answers.ends_condition : null,
     };
 
   const routine: RecommendationProduct[] = hasRealData
@@ -364,8 +392,6 @@ export default function DemoResultScreen({
       )
     : FAKE_ROUTINE;
 
-  // Basic: nur Slots mit ableitbarem konkretem Bedarf. Slots ohne
-  // spezifisches Profil (buildBedarf === null) werden ausgelassen.
   const basicRows: Array<{ slot: string; bedarf: string }> = Array.from(
     new Set(routine.map((p) => p.slot_typ ?? "").filter(Boolean)),
   )
@@ -374,22 +400,33 @@ export default function DemoResultScreen({
     .filter((r) => r.bedarf.length > 0)
     .map((r) => ({ slot: SLOT_LABEL[r.slot] || r.slot, bedarf: r.bedarf }));
 
-  // Verkaufstipp aus n8n-priorities oder aus der ersten hair_condition.
   const primaryCondition =
     recommendation?.priorities?.primary_hair_condition ??
     (normalized.hair_condition && normalized.hair_condition[0]) ??
     "";
-  const verkaufstipp = buildVerkaufstipp(primaryCondition);
   const pflegelevelFinal =
     recommendation?.pflegelevel?.pflegelevel_final ??
     (routine.length >= 6 ? "HIGH" : routine.length >= 4 ? "MID" : "LOW");
+  const verkaufstipp = buildVerkaufstipp(primaryCondition);
   const levelTipp = buildLevelTipp(pflegelevelFinal);
+  const problemSatz = buildProblemSatz(primaryCondition);
+  const levelSatz = buildLevelSatz(pflegelevelFinal);
+  const strukturSatz = buildStrukturSatz(normalized.hair_structure);
+
+  const partnerId = recommendation?.partner_id || "DEFAULT";
+  const partner = PARTNERS[partnerId] || PARTNERS.DEFAULT;
+  const waText = encodeURIComponent(
+    `Hallo ${partner.first_name}, ich habe gerade meine Haaranalyse bei MyBeautyKey gemacht und würde gerne mehr zu meinen Produkten erfahren.`,
+  );
+  const waHref = partner.whatsapp
+    ? `https://wa.me/${partner.whatsapp}?text=${waText}`
+    : `mailto:${partner.email}`;
 
   const phoneDisplay = phone && phone.trim() ? phone : "keine Angabe";
   const hasPhone = Boolean(phone && phone.trim());
 
   return (
-    <main className="relative flex flex-1 flex-col items-center px-4 py-10 md:px-8">
+    <main className="relative flex flex-1 flex-col items-center px-3 py-6 md:px-8 md:py-10">
       {/* Diagonales DEMO-Wasserzeichen */}
       <div
         aria-hidden="true"
@@ -399,7 +436,7 @@ export default function DemoResultScreen({
           {Array.from({ length: 30 }).map((_, i) => (
             <span
               key={i}
-              className="whitespace-nowrap font-serif text-6xl font-bold uppercase tracking-widest text-rosegold-dark md:text-8xl"
+              className="whitespace-nowrap font-serif text-5xl font-bold uppercase tracking-widest text-rosegold-dark md:text-8xl"
             >
               Demo · nicht echt
             </span>
@@ -407,486 +444,392 @@ export default function DemoResultScreen({
         </div>
       </div>
 
-      <div className="relative z-10 w-full max-w-6xl">
-        {/* Kopfleiste */}
-        <div className="mb-8 flex flex-col items-center gap-4 text-center">
-          <Logo width={180} />
-          <div className="inline-flex items-center gap-2 rounded-full bg-rosegold/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-rosegold-dark">
-            <span aria-hidden="true">⚠</span> Demo-Version · Vorschau für
-            das Test-Team
+      <div className="relative z-10 w-full max-w-3xl">
+        {/* Kopfleiste + Demo-Chip */}
+        <div className="mb-6 flex flex-col items-center gap-3 text-center">
+          <div className="font-serif text-2xl text-ink">MyBeautyKey</div>
+          <div className="inline-flex items-center gap-2 rounded-full bg-rosegold/20 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-rosegold-dark">
+            <span aria-hidden="true">⚠</span> Demo · nicht das Endergebnis
           </div>
-          <h1 className="font-serif text-3xl font-semibold text-ink md:text-4xl">
-            Danke, {displayName}!
-          </h1>
-          <p className="max-w-2xl leading-relaxed text-ink-soft">
-            Deine Analyse ist durch. Zur Vorschau siehst du gleich beide
-            Varianten nebeneinander — links das schlanke <b>Basic</b>-Ergebnis,
-            rechts die volle <b>Pro</b>-Empfehlung. Unten die Original-Mail,
-            die deine Beraterin bekommt.
-          </p>
-          {!hasRealData && (
-            <p className="text-xs italic text-ink-soft/70">
-              Hinweis: n8n-Response-Node ist noch nicht aktiv — es werden
-              Beispiel-Produkte gezeigt.
-            </p>
-          )}
         </div>
 
-        {/* Zwei-Spalten: Basic + Pro */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {/* -------- BASIC -------- */}
-          <div className="rounded-2xl border border-blush bg-white/95 p-6 shadow-sm">
-            <div className="mb-5 flex items-baseline justify-between">
-              <h2 className="font-serif text-xl font-semibold text-ink">
-                Basic-Ansicht
-              </h2>
-              <span className="rounded-full bg-blush/60 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-rosegold-dark">
+        {/* Persönliche Begrüßung + Body wie in der Kundinnen-Mail */}
+        <section className="mb-6 rounded-2xl border border-blush bg-white/95 px-5 py-6 shadow-sm md:px-8">
+          <h1 className="mb-4 font-serif text-2xl font-semibold text-ink md:text-3xl">
+            Deine persönliche Haaranalyse ist da, {displayName} ✨
+          </h1>
+          <div className="space-y-3 text-[15px] leading-relaxed text-ink-soft">
+            <p>Hallo {displayName},</p>
+            <p>wie schön, dass du dir die Zeit genommen hast – jetzt kommt das Ergebnis!</p>
+            <p>{problemSatz}</p>
+            <p>{levelSatz}</p>
+            {strukturSatz && <p>{strukturSatz}</p>}
+          </div>
+        </section>
+
+        {/* Basic + Pro Split */}
+        <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+          {/* Basic */}
+          <div className="rounded-2xl border border-blush bg-white/95 p-5 shadow-sm">
+            <div className="mb-4 flex items-baseline justify-between">
+              <h2 className="font-serif text-lg font-semibold text-ink">Basic-Ansicht</h2>
+              <span className="rounded-full bg-blush/60 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-rosegold-dark">
                 Bedarfsprofil
               </span>
             </div>
-            <p className="mb-4 text-sm text-ink-soft">
-              Für {displayName}s Haar empfehlen wir folgende Routine — die
-              Beraterin ordnet dir konkrete Produkte aus ihrem Sortiment zu:
+            <p className="mb-3 text-xs text-ink-soft">
+              Die Beraterin bekommt dieses Profil und empfiehlt dir persönlich
+              die passenden Produkte aus ihrer Markenwelt.
             </p>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
               {basicRows.map((row) => (
-                <BasicRow key={row.slot} slot={row.slot} bedarf={row.bedarf} />
+                <div
+                  key={row.slot}
+                  className="rounded-xl border border-blush/60 bg-white p-3"
+                >
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-rosegold-dark">
+                    {row.slot}
+                  </div>
+                  <div className="mt-1 text-[13px] text-ink">{row.bedarf}</div>
+                </div>
               ))}
-            </div>
-            <div className="mt-5 rounded-xl bg-blush/40 p-4 text-xs leading-relaxed text-ink-soft">
-              <b className="text-rosegold-dark">So funktioniert Basic:</b> Die
-              Beraterin bekommt dieses Profil und empfiehlt dir persönlich per
-              WhatsApp die passenden Produkte aus ihrer Markenwelt.
             </div>
           </div>
 
-          {/* -------- PRO -------- */}
-          <div className="rounded-2xl border-2 border-rosegold-dark/60 bg-gradient-to-b from-white to-blush/30 p-6 shadow-md">
-            <div className="mb-5 flex items-baseline justify-between">
-              <h2 className="font-serif text-xl font-semibold text-ink">
-                Pro-Ansicht
-              </h2>
-              <span className="rounded-full bg-rosegold-dark px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white">
-                Konkrete Empfehlung
+          {/* Pro */}
+          <div className="rounded-2xl border-2 border-rosegold-dark/60 bg-gradient-to-b from-white to-blush/30 p-5 shadow-md">
+            <div className="mb-4 flex items-baseline justify-between">
+              <h2 className="font-serif text-lg font-semibold text-ink">Pro-Ansicht</h2>
+              <span className="rounded-full bg-rosegold-dark px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">
+                Deine Routine
               </span>
             </div>
-            <p className="mb-4 text-sm text-ink-soft">
-              Aus der Bibliothek deiner Beraterin — mit ihrer persönlichen
-              Verkaufsbegründung pro Produkt:
+            <p className="mb-3 text-xs text-ink-soft">
+              Aus dem Sortiment deiner Beraterin — Schritt für Schritt.
             </p>
             <div className="flex flex-col gap-3">
-              {routine.map((prod, idx) => (
-                <ProRow
-                  key={`${prod.produkt_key || idx}-${prod.slot_typ}`}
-                  slot={SLOT_LABEL[prod.slot_typ ?? ""] || prod.slot_typ || ""}
-                  product={prod.produktname_de || "—"}
-                  warum={
-                    FAKE_WARUM[prod.slot_typ ?? ""] ||
-                    "Ideal für deinen individuellen Bedarf."
-                  }
-                />
-              ))}
-            </div>
-            <div className="mt-5 rounded-xl bg-white/70 p-4 text-xs leading-relaxed text-ink-soft ring-1 ring-rosegold/40">
-              <b className="text-rosegold-dark">So funktioniert Pro:</b> Die
-              Beraterin hat einmalig ihr Sortiment mit Chip-Auswahl gepflegt.
-              Ab dann matcht das System bei jeder Analyse automatisch das
-              richtige Produkt.
-            </div>
-          </div>
-        </div>
-
-        {/* ================================================== */}
-        {/* Original-Mail an die Beraterin */}
-        {/* ================================================== */}
-        <div className="mt-10">
-          <div className="mb-4 flex items-center gap-3">
-            <div className="h-px flex-1 bg-blush" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-rosegold-dark">
-              Original · Beratungsmail an die Beraterin
-            </span>
-            <div className="h-px flex-1 bg-blush" />
-          </div>
-
-          <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-blush bg-white shadow-md">
-            {/* Mail-Header (Von/An/Betreff) */}
-            <div className="border-b border-blush bg-[#FBF5EE] px-6 py-4 text-xs">
-              <div className="flex gap-3">
-                <span className="w-16 shrink-0 font-bold uppercase tracking-widest text-rosegold-dark">
-                  Von
-                </span>
-                <span className="text-ink">
-                  myglowmatch &lt;beratung@myglowmatch.de&gt;
-                </span>
-              </div>
-              <div className="mt-1 flex gap-3">
-                <span className="w-16 shrink-0 font-bold uppercase tracking-widest text-rosegold-dark">
-                  An
-                </span>
-                <span className="text-ink">deine Beraterin</span>
-              </div>
-              <div className="mt-1 flex gap-3">
-                <span className="w-16 shrink-0 font-bold uppercase tracking-widest text-rosegold-dark">
-                  Betreff
-                </span>
-                <span className="font-semibold text-ink">
-                  🎉 Neuer Lead via myglowmatch: {displayName}
-                </span>
-              </div>
-            </div>
-
-            {/* Mail-Body — nachgebaut nach Node 17 */}
-            <div
-              className="px-6 py-6"
-              style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
-            >
-              {/* Headline */}
-              <h3
-                className="text-center"
-                style={{
-                  fontFamily: "Georgia, serif",
-                  fontSize: "22px",
-                  color: "#2D2A26",
-                  fontWeight: 600,
-                  margin: "0 0 6px",
-                }}
-              >
-                Neuer Lead via myglowmatch
-              </h3>
-              <p
-                className="text-center"
-                style={{
-                  fontSize: "13px",
-                  color: "#5C5651",
-                  margin: "0 0 24px",
-                  lineHeight: 1.6,
-                }}
-              >
-                {displayName} hat soeben deinen Fragebogen ausgefüllt.
-              </p>
-
-              {/* Kontakt-Karte */}
-              <div
-                style={{
-                  background: "#FFFFFF",
-                  border: "1px solid #EFE5DC",
-                  borderRadius: "14px",
-                  padding: "18px 20px",
-                  marginBottom: "18px",
-                }}
-              >
-                <p
-                  style={{
-                    margin: "0 0 8px",
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    letterSpacing: "1.5px",
-                    color: "#A07560",
-                    textTransform: "uppercase",
-                  }}
+              {routine.map((prod, i) => (
+                <div
+                  key={`${prod.produkt_key || i}`}
+                  className="rounded-xl border border-blush/60 bg-white p-3"
                 >
-                  Kontakt
-                </p>
-                <p
-                  style={{
-                    margin: "4px 0",
-                    fontSize: "15px",
-                    color: "#2D2A26",
-                    fontWeight: 600,
-                  }}
-                >
-                  {displayName}
-                </p>
-                <p
-                  style={{ margin: "4px 0", fontSize: "14px", color: "#5C5651" }}
-                >
-                  Telefon: {phoneDisplay}
-                  {hasPhone && (
-                    <span
-                      style={{
-                        display: "inline-block",
-                        marginLeft: "8px",
-                        background: "#25D366",
-                        color: "#FFF",
-                        padding: "2px 10px",
-                        borderRadius: "12px",
-                        fontSize: "11px",
-                        fontWeight: 600,
-                      }}
-                    >
-                      → Per WhatsApp antworten
-                    </span>
-                  )}
-                </p>
-              </div>
-
-              {/* Antworten-Tabelle */}
-              <p
-                style={{
-                  margin: "0 0 10px",
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  letterSpacing: "1.5px",
-                  color: "#A07560",
-                  textTransform: "uppercase",
-                }}
-              >
-                Ihre Antworten
-              </p>
-              <table className="w-full" style={{ fontSize: "13.5px" }}>
-                <tbody>
-                  {AnswerRow("Struktur", label(normalized.hair_structure))}
-                  {AnswerRow("Stärke", label(normalized.hair_thickness))}
-                  {AnswerRow(
-                    "Zustand",
-                    labelList(normalized.hair_condition),
-                  )}
-                  {AnswerRow("Kopfhaut", labelList(normalized.scalp_status))}
-                  {AnswerRow(
-                    "Behandlungen",
-                    label(normalized.hair_treatments),
-                  )}
-                  {AnswerRow("Hitze-Styling", label(normalized.heat_frequency))}
-                  {AnswerRow(
-                    "Waschfrequenz",
-                    label(normalized.wash_frequency),
-                  )}
-                  {AnswerRow(
-                    "Styling-Aufwand",
-                    label(normalized.styling_effort),
-                  )}
-                  {AnswerRow("Ziele", labelList(normalized.care_goals), true)}
-                </tbody>
-              </table>
-
-              {/* Empfohlene Produkte */}
-              <p
-                style={{
-                  margin: "24px 0 10px",
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  letterSpacing: "1.5px",
-                  color: "#A07560",
-                  textTransform: "uppercase",
-                }}
-              >
-                Empfohlene Produkte
-              </p>
-              <div>
-                {routine.map((prod, i) => (
-                  <div
-                    key={`m-${i}`}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      padding: "10px 0",
-                      borderBottom:
-                        i < routine.length - 1 ? "1px solid #EFE5DC" : "none",
-                    }}
-                  >
-                    <span
-                      style={{
-                        background: "#F5E6DC",
-                        color: "#7A5641",
-                        fontSize: "10px",
-                        fontWeight: 700,
-                        letterSpacing: "1px",
-                        padding: "3px 8px",
-                        borderRadius: "12px",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
+                  <div className="flex items-baseline justify-between gap-2">
+                    <span className="rounded-full bg-blush px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-rosegold-dark">
                       Schritt {prod.anwendungs_schritt ?? i + 1}
                     </span>
-                    <span
-                      style={{
-                        fontSize: "14px",
-                        color: "#2D2A26",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {prod.produktname_de}
+                    <span className="text-[10px] uppercase tracking-widest text-ink-soft/60">
+                      {SLOT_LABEL[prod.slot_typ ?? ""] || prod.slot_typ}
                     </span>
                   </div>
-                ))}
-              </div>
+                  <div className="mt-1.5 font-serif text-[15px] font-semibold text-ink">
+                    {prod.produktname_de}
+                  </div>
+                  {prod.anwendung && (
+                    <div className="mt-1.5 text-[12.5px] leading-relaxed text-ink-soft">
+                      {prod.anwendung}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
-              {/* Profi-Tipp */}
-              <div
-                style={{
-                  marginTop: "24px",
-                  background: "#FBF5EE",
-                  borderRadius: "14px",
-                  padding: "20px 22px",
-                }}
-              >
-                <p
-                  style={{
-                    margin: "0 0 10px",
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    letterSpacing: "1.5px",
-                    color: "#A07560",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  💡 Profi-Tipp für deinen Erstkontakt
+        {/* Beraterinnen-Karte */}
+        <section className="mb-6 rounded-2xl border border-blush bg-white px-5 py-5 shadow-sm md:px-8 md:py-6">
+          <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-center md:text-left">
+            <div
+              className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full font-serif text-2xl font-medium text-white"
+              style={{
+                background: "linear-gradient(135deg, #D4A593, #A07560)",
+                border: "3px solid #FFFFFF",
+                boxShadow: "0 4px 12px rgba(160, 117, 96, 0.2)",
+              }}
+            >
+              {partner.initials}
+            </div>
+            <div className="flex-1">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-rosegold-dark">
+                {partner.title}
+              </p>
+              <p className="mt-1 font-serif text-xl text-ink">{partner.name}</p>
+              {partner.email && (
+                <p className="mt-1 text-sm text-ink-soft break-all">
+                  {partner.email}
                 </p>
-                <p
-                  style={{
-                    margin: "0 0 12px",
-                    fontSize: "14px",
-                    lineHeight: 1.6,
-                    color: "#3D3935",
-                  }}
-                >
-                  {verkaufstipp}
-                </p>
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: "13px",
-                    lineHeight: 1.6,
-                    color: "#5C5651",
-                    fontStyle: "italic",
-                  }}
-                >
-                  {levelTipp}
-                </p>
-              </div>
+              )}
+              {partner.phone && (
+                <p className="mt-0.5 text-sm text-ink-soft">{partner.phone}</p>
+              )}
+            </div>
+          </div>
+          <div className="mt-5 text-center">
+            <a
+              href={waHref}
+              target={partner.whatsapp ? "_blank" : undefined}
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#22b459]"
+            >
+              💬 &nbsp; Per WhatsApp anschreiben
+            </a>
+          </div>
+        </section>
 
-              {/* Nächste Schritte */}
+        {/* Zwischen-Info: das war der Kundinnen-Blick */}
+        <div className="mb-6 rounded-xl border border-dashed border-rosegold-dark/40 bg-white/70 p-4 text-center text-xs italic text-ink-soft">
+          ↑ So sieht deine Kundin ihre Empfehlung im Browser. ↓ Zusätzlich
+          bekommst du als Beraterin diese Mail:
+        </div>
+
+        {/* Original Beraterinnen-Mail-Preview */}
+        <section className="mb-6 overflow-hidden rounded-2xl border border-blush bg-white shadow-md">
+          <div className="border-b border-blush bg-[#FBF5EE] px-4 py-3 text-[11px] md:px-6">
+            <div className="flex gap-2">
+              <span className="w-14 shrink-0 font-bold uppercase tracking-widest text-rosegold-dark">
+                Von
+              </span>
+              <span className="text-ink">MyBeautyKey &lt;beratung@mybeautykey.de&gt;</span>
+            </div>
+            <div className="mt-0.5 flex gap-2">
+              <span className="w-14 shrink-0 font-bold uppercase tracking-widest text-rosegold-dark">
+                An
+              </span>
+              <span className="text-ink break-all">{partner.email}</span>
+            </div>
+            <div className="mt-0.5 flex gap-2">
+              <span className="w-14 shrink-0 font-bold uppercase tracking-widest text-rosegold-dark">
+                Betreff
+              </span>
+              <span className="font-semibold text-ink">
+                🎉 Neuer Lead via MyBeautyKey: {displayName}
+              </span>
+            </div>
+          </div>
+          <div
+            className="px-4 py-5 md:px-6"
+            style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
+          >
+            <h3
+              className="text-center"
+              style={{
+                fontFamily: "Georgia, serif",
+                fontSize: "20px",
+                color: "#2D2A26",
+                fontWeight: 600,
+                margin: "0 0 6px",
+              }}
+            >
+              Neuer Lead via MyBeautyKey
+            </h3>
+            <p
+              className="text-center"
+              style={{
+                fontSize: "13px",
+                color: "#5C5651",
+                margin: "0 0 20px",
+                lineHeight: 1.6,
+              }}
+            >
+              {displayName} hat soeben deinen Fragebogen ausgefüllt.
+            </p>
+
+            <div
+              style={{
+                background: "#FFFFFF",
+                border: "1px solid #EFE5DC",
+                borderRadius: "14px",
+                padding: "16px 18px",
+                marginBottom: "16px",
+              }}
+            >
               <p
                 style={{
-                  margin: "24px 0 10px",
-                  fontSize: "11px",
+                  margin: "0 0 6px",
+                  fontSize: "10px",
                   fontWeight: 700,
                   letterSpacing: "1.5px",
                   color: "#A07560",
                   textTransform: "uppercase",
                 }}
               >
-                Nächste Schritte
+                Kontakt
               </p>
-              <ol
-                style={{
-                  paddingLeft: "18px",
-                  fontSize: "14px",
-                  color: "#3D3935",
-                  lineHeight: 1.7,
-                  margin: 0,
-                }}
-              >
-                <li>
-                  {displayName} hat die Empfehlung gerade im Browser bekommen.
-                </li>
-                <li>
-                  In der Ergebnisseite ist ein WhatsApp-Button zu dir — sie kann
-                  sich direkt melden.
-                </li>
-                <li>
-                  {hasPhone
-                    ? `Tipp: ${displayName} hat ihre Nummer hinterlegt — du kannst sie direkt per WhatsApp kontaktieren.`
-                    : `Falls sie sich nicht in 24h meldet: schreib ihr aktiv an. Das ist deine Conversion-Chance.`}
-                </li>
-              </ol>
-
-              {/* Footer */}
-              <p
-                className="text-center"
-                style={{
-                  margin: "28px 0 0",
-                  fontSize: "11px",
-                  color: "#8C857F",
-                  lineHeight: 1.7,
-                }}
-              >
-                Diese E-Mail wurde automatisch durch myglowmatch generiert, da
-                eine Kundin den Fragebogen über deinen Partner-Link ausgefüllt
-                hat.
+              <p style={{ margin: "3px 0", fontSize: "14px", color: "#2D2A26", fontWeight: 600 }}>
+                {displayName}
+              </p>
+              <p style={{ margin: "3px 0", fontSize: "13px", color: "#5C5651" }}>
+                Telefon: {phoneDisplay}
+                {hasPhone && (
+                  <span
+                    style={{
+                      display: "inline-block",
+                      marginLeft: "8px",
+                      background: "#25D366",
+                      color: "#FFF",
+                      padding: "2px 9px",
+                      borderRadius: "12px",
+                      fontSize: "10.5px",
+                      fontWeight: 600,
+                    }}
+                  >
+                    → WhatsApp
+                  </span>
+                )}
               </p>
             </div>
-          </div>
-        </div>
 
-        {/* Hinweis + zurück zur Vorschau */}
-        <div className="mt-10 rounded-2xl bg-blush/30 p-6 text-center">
-          <p className="text-sm leading-relaxed text-ink">
-            <b className="text-rosegold-dark">Wichtig:</b> Diese Ansicht ist
-            eine Demo-Vorschau. In der finalen Version sieht die Kundin nur
-            eine der beiden Ansichten — je nachdem, welchen Tarif ihre
-            Beraterin gebucht hat.
-          </p>
-          <Link
-            href="/team"
-            className="mt-4 inline-block rounded-full bg-ink px-6 py-3 text-sm font-medium text-white transition hover:bg-ink/90"
-          >
-            ← Zurück zur Vorschau-Landing
+            <p
+              style={{
+                margin: "0 0 8px",
+                fontSize: "10px",
+                fontWeight: 700,
+                letterSpacing: "1.5px",
+                color: "#A07560",
+                textTransform: "uppercase",
+              }}
+            >
+              Ihre Antworten
+            </p>
+            <table className="w-full" style={{ fontSize: "12.5px" }}>
+              <tbody>
+                {AnswerRow("Struktur", label(normalized.hair_structure))}
+                {AnswerRow("Stärke", label(normalized.hair_thickness))}
+                {AnswerRow("Zustand", labelList(normalized.hair_condition))}
+                {AnswerRow("Kopfhaut", labelList(normalized.scalp_status))}
+                {AnswerRow("Behandlungen", label(normalized.hair_treatments))}
+                {AnswerRow("Hitze-Styling", label(normalized.heat_frequency))}
+                {AnswerRow("Waschfrequenz", label(normalized.wash_frequency))}
+                {AnswerRow("Styling-Aufwand", label(normalized.styling_effort))}
+                {AnswerRow("Ziele", labelList(normalized.care_goals), true)}
+              </tbody>
+            </table>
+
+            <p
+              style={{
+                margin: "20px 0 8px",
+                fontSize: "10px",
+                fontWeight: 700,
+                letterSpacing: "1.5px",
+                color: "#A07560",
+                textTransform: "uppercase",
+              }}
+            >
+              Empfohlene Produkte
+            </p>
+            <div>
+              {routine.map((prod, i) => (
+                <div
+                  key={`m-${i}`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    padding: "9px 0",
+                    borderBottom: i < routine.length - 1 ? "1px solid #EFE5DC" : "none",
+                  }}
+                >
+                  <span
+                    style={{
+                      background: "#F5E6DC",
+                      color: "#7A5641",
+                      fontSize: "9.5px",
+                      fontWeight: 700,
+                      letterSpacing: "1px",
+                      padding: "3px 8px",
+                      borderRadius: "12px",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    Schritt {prod.anwendungs_schritt ?? i + 1}
+                  </span>
+                  <span style={{ fontSize: "13px", color: "#2D2A26", fontWeight: 600 }}>
+                    {prod.produktname_de}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div
+              style={{
+                marginTop: "20px",
+                background: "#FBF5EE",
+                borderRadius: "14px",
+                padding: "18px 20px",
+              }}
+            >
+              <p
+                style={{
+                  margin: "0 0 8px",
+                  fontSize: "10px",
+                  fontWeight: 700,
+                  letterSpacing: "1.5px",
+                  color: "#A07560",
+                  textTransform: "uppercase",
+                }}
+              >
+                💡 Profi-Tipp für deinen Erstkontakt
+              </p>
+              <p style={{ margin: "0 0 10px", fontSize: "13px", lineHeight: 1.6, color: "#3D3935" }}>
+                {verkaufstipp}
+              </p>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "12.5px",
+                  lineHeight: 1.6,
+                  color: "#5C5651",
+                  fontStyle: "italic",
+                }}
+              >
+                {levelTipp}
+              </p>
+            </div>
+
+            <p
+              style={{
+                margin: "20px 0 8px",
+                fontSize: "10px",
+                fontWeight: 700,
+                letterSpacing: "1.5px",
+                color: "#A07560",
+                textTransform: "uppercase",
+              }}
+            >
+              Nächste Schritte
+            </p>
+            <ol style={{ paddingLeft: "18px", fontSize: "13px", color: "#3D3935", lineHeight: 1.7, margin: 0 }}>
+              <li>{displayName} hat die Empfehlung gerade im Browser bekommen.</li>
+              <li>In der Ergebnisseite ist ein WhatsApp-Button zu dir — sie kann sich direkt melden.</li>
+              <li>
+                {hasPhone
+                  ? `Tipp: ${displayName} hat ihre Nummer hinterlegt — du kannst sie direkt per WhatsApp kontaktieren.`
+                  : `Falls sie sich nicht in 24h meldet: schreib ihr aktiv an. Das ist deine Conversion-Chance.`}
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <div className="rounded-xl bg-blush/30 p-4 text-center text-xs italic text-ink-soft">
+          Diese Ansicht ist eine Demo-Vorschau. Produktdaten kommen aus der
+          echten Produktdatenbank, Layout ist im Aufbau.{" "}
+          <Link href="/team" className="underline underline-offset-2">
+            Zurück zur Vorschau-Landing
           </Link>
         </div>
-
-        <SiteFooter className="mt-10" />
       </div>
     </main>
   );
 }
 
-// ------------------------------------------------------------
-// Basic-Row: Slot + Bedarfstext, keine Produktnamen
-// ------------------------------------------------------------
-function BasicRow({ slot, bedarf }: { slot: string; bedarf: string }) {
-  return (
-    <div className="rounded-xl border border-blush/60 bg-white p-4">
-      <div className="text-[10px] font-bold uppercase tracking-widest text-rosegold-dark">
-        {slot}
-      </div>
-      <div className="mt-1 text-sm text-ink">{bedarf}</div>
-    </div>
-  );
-}
-
-// ------------------------------------------------------------
-// Pro-Row: Slot + Produktname + Verkaufsbegründung
-// ------------------------------------------------------------
-function ProRow({
-  slot,
-  product,
-  warum,
-}: {
-  slot: string;
-  product: string;
-  warum: string;
-}) {
-  return (
-    <div className="rounded-xl border border-blush/60 bg-white p-4">
-      <div>
-        <div className="text-[10px] font-bold uppercase tracking-widest text-rosegold-dark">
-          {slot}
-        </div>
-        <div className="mt-0.5 font-serif text-base font-semibold text-ink">
-          {product}
-        </div>
-      </div>
-      <div className="mt-2 text-xs italic leading-relaxed text-ink-soft">
-        &bdquo;{warum}&ldquo;
-      </div>
-    </div>
-  );
-}
-
-// ------------------------------------------------------------
-// Ihre-Antworten-Zeile (JSX-Helper für die Mail-Tabelle)
-// ------------------------------------------------------------
 function AnswerRow(labelText: string, value: string, isLast = false) {
   const border = isLast ? "" : "1px solid #EFE5DC";
   return (
     <tr key={labelText}>
       <td
         style={{
-          padding: "6px 0",
+          padding: "5px 0",
           borderBottom: border,
-          width: "40%",
+          width: "42%",
           verticalAlign: "top",
           color: "#5C5651",
           fontWeight: 600,
@@ -896,7 +839,7 @@ function AnswerRow(labelText: string, value: string, isLast = false) {
       </td>
       <td
         style={{
-          padding: "6px 0",
+          padding: "5px 0",
           borderBottom: border,
           verticalAlign: "top",
           color: "#3D3935",

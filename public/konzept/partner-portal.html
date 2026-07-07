@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>myglowmatch — Partnerbereich (Demo-Mockup)</title>
+  <title>MyBeautyKey — Partnerbereich (Demo-Mockup)</title>
   <style>
     :root{
       --bg:#fbf6f0;          /* Champagne */
@@ -313,6 +313,14 @@
     .mail-preview-wrap.pal-terracotta .mail-partner{background:#f3ddce}
     .mail-preview-wrap.pal-terracotta .mail-partner .mp-portrait{background:#b0745a}
 
+    .mail-preview-wrap.pal-lavendel .mail-hero{background:linear-gradient(180deg,#ece1f0 0%,#fff 100%)}
+    .mail-preview-wrap.pal-lavendel .kupfer-eyebrow,
+    .mail-preview-wrap.pal-lavendel .mail-section-eyebrow,
+    .mail-preview-wrap.pal-lavendel .mail-partner .mp-title{color:#6f4d84}
+    .mail-preview-wrap.pal-lavendel .mail-step-chip{background:#ece1f0;color:#553965}
+    .mail-preview-wrap.pal-lavendel .mail-partner{background:#f3ecf5}
+    .mail-preview-wrap.pal-lavendel .mail-partner .mp-portrait{background:#9d84b5}
+
     /* ============ MOBILE (Handy / Tablet) ============ */
     @media (max-width: 900px) {
       /* Dashboard-Layout aufbrechen: Sidebar wandert nach oben, Main darunter */
@@ -400,12 +408,16 @@
 </head>
 <body>
 
+<div style="position:sticky;top:0;z-index:9999;background:#f7ede0;border-bottom:1px solid var(--accent);padding:8px 20px;text-align:center;font-size:12px;line-height:1.5;color:var(--kupfer)">
+  <b style="letter-spacing:.08em;color:var(--ink);text-transform:uppercase;font-size:10px;margin-right:6px">Nur Demo</b>Diese Ansicht ist im Aufbau und stellt <b>nicht das Endergebnis</b> dar. Reine Vorschau, keine Interaktion.
+</div>
+
 <!-- ============ LOGIN ============ -->
 <section id="login">
   <div class="login-card">
     <div class="brand">
       <div class="brand-dot"></div>
-      <div class="brand-name">myglowmatch <span style="color:var(--ink-soft);font-size:14px">| Partnerbereich</span></div>
+      <div class="brand-name">MyBeautyKey <span style="color:var(--ink-soft);font-size:14px">| Partnerbereich</span></div>
     </div>
     <div class="login-title serif">Willkommen zurück</div>
     <div class="login-sub">Melde dich mit deinem Partner-Zugang an.</div>
@@ -431,7 +443,7 @@
       <div class="sidebar-brand">
         <div class="brand">
           <div class="brand-dot"></div>
-          <div class="brand-name">myglowmatch</div>
+          <div class="brand-name">MyBeautyKey</div>
         </div>
         <div style="color:var(--ink-soft);font-size:12px;margin-top:4px;letter-spacing:.02em">Partnerbereich</div>
       </div>
@@ -461,7 +473,7 @@
       <div class="top">
         <div>
           <h1 class="hello">Hallo Sina 👋</h1>
-          <div class="hello-sub">Dein persönlicher Beratungs-Link: <b>myglowmatch.de/sina</b> · <a href="#">kopieren</a></div>
+          <div class="hello-sub">Dein persönlicher Beratungs-Link: <b>mybeautykey.de/sina</b> · <a href="#">kopieren</a></div>
         </div>
         <button class="cta" onclick="showView('beratung',document.querySelector('.nav a:nth-child(3)'))">+ Neue Beratung starten</button>
       </div>
@@ -490,7 +502,7 @@
 
         <div class="card col-4">
           <h3 style="font-size:18px;margin-bottom:14px">Beratungs-Link teilen</h3>
-          <div class="link-box">https://myglowmatch.de/sina</div>
+          <div class="link-box">https://mybeautykey.de/sina</div>
           <div class="copy-row">
             <button class="secondary">🔗 Kopieren</button>
             <button class="secondary">📱 WhatsApp</button>
@@ -563,7 +575,7 @@
           <div style="font-size:36px;margin-bottom:12px">🔗</div>
           <h3 style="font-size:20px;margin-bottom:10px">Link teilen</h3>
           <p style="color:var(--ink-soft);font-size:14px;margin-bottom:14px">Für Fern-Beratung: sende deinen persönlichen Link per WhatsApp, E-Mail oder Instagram.</p>
-          <div class="link-box">myglowmatch.de/sina</div>
+          <div class="link-box">mybeautykey.de/sina</div>
           <div class="copy-row">
             <button class="secondary">🔗 Kopieren</button>
             <button class="secondary">📱 WhatsApp</button>
@@ -824,7 +836,7 @@
               <h4>Farbwelt</h4>
               <span class="pro-badge">Pro</span>
             </div>
-            <div class="section-sub">Wähl den Pastell-Ton, in dem dein Deckblatt und die Ergebnisseite deiner Kundinnen erscheinen.</div>
+            <div class="section-sub">Wähl den Pastell-Ton, in dem sowohl dein Fragebogen-Deckblatt als auch die Ergebnisseite deiner Kundinnen erscheinen.</div>
 
             <div class="color-swatches" id="palette-picker">
               <div class="swatch-item selected" data-pal="rose"><div class="swatch" style="background:linear-gradient(135deg,#f6e6e1,#e0b1a8)"></div><div class="swatch-label">Rosé</div></div>
@@ -833,8 +845,8 @@
               <div class="swatch-item" data-pal="powder"><div class="swatch" style="background:linear-gradient(135deg,#e0eaf3,#b9cde0)"></div><div class="swatch-label">Powder</div></div>
               <div class="swatch-item" data-pal="vanille"><div class="swatch" style="background:linear-gradient(135deg,#f8ecc9,#ecd9a8)"></div><div class="swatch-label">Vanille</div></div>
               <div class="swatch-item" data-pal="terracotta"><div class="swatch" style="background:linear-gradient(135deg,#ecd0c2,#c48972)"></div><div class="swatch-label">Terracotta</div></div>
+              <div class="swatch-item" data-pal="lavendel"><div class="swatch" style="background:linear-gradient(135deg,#ece1f0,#c6b3d6)"></div><div class="swatch-label">Lavendel</div></div>
             </div>
-            <div style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.5">Alle Paletten sind mit den Marken-Vorgaben abgestimmt (kein Lila-/Lavendel-Ton).</div>
 
             <div class="lock-overlay">
               <div class="lock-icon">🔒</div>
@@ -917,7 +929,7 @@
             <div class="cover-preview style-rose" id="cover-preview">
               <div class="cp-top">
                 <div>
-                  <div class="cp-brand">myglowmatch</div>
+                  <div class="cp-brand">MyBeautyKey</div>
                   <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin-top:4px">Haaranalyse</div>
                 </div>
                 <div class="cp-portrait" id="cp-portrait">SH</div>
@@ -943,7 +955,7 @@
             <h3 style="font-size:18px;margin-bottom:14px">Vorschau · Ergebnisseite deiner Kundin</h3>
             <div class="mail-preview-wrap" id="mail-preview-wrap">
               <div class="mail-inner">
-                <div class="mail-brand">myglowmatch</div>
+                <div class="mail-brand">MyBeautyKey</div>
                 <div class="mail-card">
                   <div class="mail-hero">
                     <div class="kupfer-eyebrow">Deine persönliche Empfehlung</div>
@@ -982,7 +994,7 @@
                     </div>
                   </div>
                   <div class="mail-footer">
-                    Du hast diese E-Mail erhalten, weil du die Haaranalyse auf myglowmatch.de durchgeführt hast.<br>
+                    Du hast diese E-Mail erhalten, weil du die Haaranalyse auf mybeautykey.de durchgeführt hast.<br>
                     <a href="#" style="color:#8C857F;text-decoration:underline">Impressum</a> · <a href="#" style="color:#8C857F;text-decoration:underline">Datenschutz</a>
                   </div>
                 </div>
@@ -1127,7 +1139,7 @@
             <div class="toggle on"></div>
           </div>
           <div class="setting-row">
-            <div><div class="setting-label">Neuigkeiten von myglowmatch</div><div class="setting-desc">Produkt-Updates, neue Features</div></div>
+            <div><div class="setting-label">Neuigkeiten von MyBeautyKey</div><div class="setting-desc">Produkt-Updates, neue Features</div></div>
             <div class="toggle"></div>
           </div>
         </div>
@@ -1180,7 +1192,7 @@
   }
 
   /* ===== Branding: Palette-Picker ===== */
-  const PALETTES = ['rose','peach','mint','powder','vanille','terracotta'];
+  const PALETTES = ['rose','peach','mint','powder','vanille','terracotta','lavendel'];
   function setPalette(pal){
     document.querySelectorAll('#palette-picker .swatch-item').forEach(s=>{
       s.classList.toggle('selected', s.dataset.pal === pal);
