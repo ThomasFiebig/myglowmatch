@@ -271,3 +271,92 @@ inkl. ausgegrautem Pro-Dashboard.
   markenneutrale Ansatz klang wie „nur noch Bedarfsanalyse" — die
   Klarstellung „vollständige MONAT-Empfehlung bleibt möglich" musste
   extra vorne eingesetzt werden.
+
+## Vor-Analyse für den n8n-Umbau (Kontext für nächste Session)
+
+Am Ende dieser Session wurde die Frage diskutiert: **können am Ende die
+gleichen qualitativen Empfehlungen ausgesprochen werden wie im
+bisherigen System?** Antwort: prinzipiell ja, unter vier Bedingungen,
+die vor dem Bau geklärt werden müssen.
+
+### Was ohne Qualitätsverlust bleibt
+
+- **Analyse der Kundin** ist zu 100 % identisch. Die Regel-Engine wertet
+  dieselben 15 Fragebogen-Fragen aus, produziert dasselbe normalisierte
+  Profil und dieselben Flags. Nur der Output-Layer wechselt von
+  „konkreter Produkt-Key" auf „Bedarfsprofil pro Slot".
+- **Pro-Modus mit voll gepflegter Bibliothek**: identisches Ergebnis wie
+  heute. Wenn Sina alle 37 MONAT-Produkte mit sauberen Chip-Werten
+  einträgt, matcht das System exakt wie im aktuellen MONAT-System. Für
+  Downlines via Team-Code läuft dieselbe Bibliothek 1:1 mit.
+
+### Vier Risiko-Faktoren für Qualitätsverlust
+
+1. **Chip-Vokabular-Tiefe.** Die `produktdatenbank` hat 25 Spalten
+   (u. a. `ist_bonding`, `ist_scalp_focus`, `locken_geeignet`,
+   `kombinationen`, `kombi_optional`, `pflegelevel`, `intensitaet`,
+   `ausschluss_bei`, `hauptfunktion`, `nebenfunktionen`,
+   `haarstruktur`, `haarstaerke`, `haarzustand`, `kopfhaut`,
+   `routine_schritt`, `produktlinie`). Die 11-Feld-Bibliothek-UI im
+   Konzept-Mockup (`demo/bibliothek.html`) reicht dafür nicht — muss
+   auf mindestens ~15 relevante Felder erweitert werden, sonst
+   verlieren wir Ranking-Präzision an Node-12-Stufen 6 (`haarstruktur_exakt`),
+   8 (`haarstaerke_exakt`) und 11 (`intensitaet`).
+
+2. **Konflikt-Regeln und `ausschluss_bei`.** Die 6 aktiven CON-Regeln
+   (CON-02/07/09/11/12/13) und `ausschluss_bei`-Zellen müssen mit dem
+   neuen Datenmodell weiter greifen. Machbar, weil die Regel-Engine
+   bereits sheet-getrieben ist (Migration #27 Loader-Cleanup) — sie
+   muss „nur" gegen die Bibliotheks-Struktur laufen statt gegen die
+   MONAT-Sheet.
+
+3. **Freitext-Verkaufsbegründung ersetzt PDF-Zitate.** Bei Sina
+   voraussichtlich exzellent, bei Downlines mit weniger Ausbildung
+   möglicherweise schwächer. Kompensation: Sinas Begründungen kommen
+   per Team-Code automatisch mit — der Downline-Nachteil ist
+   minimal, weil sie den Text der Upline nutzen können.
+
+4. **Bibliotheks-Pflege-Aufwand.** 37 Produkte × ~9 Chip-Felder ≈ 330
+   Klicks. Sina macht es einmal, Downlines nie. Aber wenn Sina
+   abkürzt („passt zu allem"), sinkt die Präzision. Gegenmaßnahme:
+   Pflichtfelder für kritische Attribute (Slot, Haupt-Nutzen,
+   mindestens ein Haar-Zustand, mindestens eine Haarstruktur).
+
+### Konkrete Konsequenzen für den n8n-Umbau
+
+1. **Chip-Vokabular ausbauen.** `demo/bibliothek.html` bekommt
+   zusätzliche Felder: `ist_bonding`, `ist_scalp_focus`,
+   `locken_geeignet`, `kombinationen` (welche anderen Produkte gut
+   zusammenpassen), `pflegelevel`, `produktlinie`.
+2. **Regel-Engine entkoppeln.** Nodes 04–15 müssen so umgebaut werden,
+   dass sie gegen jedes Bibliotheks-Datenmodell laufen — nicht hart
+   gegen `produktdatenbank`. Node 07 (Sheet-Loader) durch eine
+   Bibliotheks-API ersetzen.
+3. **Node 17 Rendering-Modi.** Bibliotheksmodus (Pro) + reines
+   Bedarfsprofil (Free/Basic).
+4. **Test-Baseline erweitern.** Synthetische Bibliothek „Sinas 37" als
+   Test-Fixture bauen und die 13 Test-Profile gegen die Whitelabel-
+   Pipeline laufen lassen. Ziel: 0/36 Slot-Drift wie im MONAT-System.
+
+### Empfehlung Parallelbetrieb
+
+**Fork-Nodes mit `_wl`-Suffix** neben den bestehenden MONAT-Nodes.
+Alter Workflow bleibt für die aktive Test-Suite intakt (schützt die
+0/36-Drift-Baseline), Route-Switch über Input-Parameter. Zwei
+Alternativen (Feature-Flag im gleichen Node, kompletter Workflow-Klon)
+haben höhere Risiken für Regression bzw. Wartungsaufwand.
+
+### Wiedereinstiegs-Prompt für neuen Tab (n8n-Umbau)
+
+> Lies `HANDOVER.md`, `SAAS_BACKLOG.md` (Kapitel 0, 2.5, 3),
+> `chat-archive/2026-07-07_konzept-ausbau.md` (v. a. Abschnitt
+> „Vor-Analyse für den n8n-Umbau" am Ende) und `demo/bibliothek.html`
+> als Chip-Vokabular-Basis. Wir starten den n8n-Umbau auf
+> Whitelabel-Ausgabe — Domain-Name ist noch offen, wir arbeiten vor.
+> Erste Bau-Entscheidungen: (a) Chip-Vokabular in `bibliothek.html`
+> auf `produktdatenbank`-Tiefe (ca. 15 Felder) erweitern, (b)
+> Fork-Nodes mit `_wl`-Suffix aufsetzen, (c) Bibliotheks-Datenmodell
+> in Supabase designen, (d) Regel-Engine gegen das neue Datenmodell
+> laufen lassen, ohne die 0/36-Drift-Baseline der MONAT-Test-Suite
+> zu brechen. Sinas Bibliothek (37 MONAT-Produkte) als
+> Test-Fixture.
