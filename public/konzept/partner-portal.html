@@ -158,9 +158,12 @@
     .cover-option.selected{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
     .cover-thumb{width:100%;aspect-ratio:16/10;background-size:cover;background-position:center;background-color:var(--blush)}
     .cover-thumb.thumb-rose{background:linear-gradient(135deg,#f6e6e1 0%,#e0b1a8 55%,#c98f84 100%)}
-    .cover-thumb.thumb-minimal{background:linear-gradient(180deg,#fbf6f0 0%,#efe5dc 100%)}
-    .cover-thumb.thumb-elegant{background:linear-gradient(135deg,#322e2d 0%,#5c5651 55%,#8c857f 100%)}
-    .cover-thumb.thumb-natur{background:linear-gradient(135deg,#eef2ea 0%,#c8d6c0 55%,#a0b598 100%)}
+    .cover-thumb.thumb-peach{background:linear-gradient(135deg,#fbe4d4 0%,#f2c1a3 55%,#d69166 100%)}
+    .cover-thumb.thumb-mint{background:linear-gradient(135deg,#e2f0e8 0%,#b6d8c5 55%,#8ab89b 100%)}
+    .cover-thumb.thumb-powder{background:linear-gradient(135deg,#e0eaf3 0%,#b9cde0 55%,#8faec9 100%)}
+    .cover-thumb.thumb-vanille{background:linear-gradient(135deg,#f8ecc9 0%,#ecd9a8 55%,#d4b96a 100%)}
+    .cover-thumb.thumb-terracotta{background:linear-gradient(135deg,#ecd0c2 0%,#c48972 55%,#8a5236 100%)}
+    .cover-thumb.thumb-lavendel{background:linear-gradient(135deg,#ece1f0 0%,#c6b3d6 55%,#9d84b5 100%)}
     .cover-thumb.thumb-custom{background:repeating-linear-gradient(45deg,var(--card-tint),var(--card-tint) 8px,#fff 8px,#fff 16px);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.1em}
     .cover-caption{padding:8px 12px;font-size:12px;color:var(--ink);text-align:center;letter-spacing:.02em;background:#fff;border-top:1px solid var(--line)}
     .cover-option.selected .cover-caption{background:var(--blush);color:var(--chip-text);font-weight:600}
@@ -173,9 +176,12 @@
       color:var(--ink);border:1px solid var(--line);
     }
     .cover-preview.style-rose{background:linear-gradient(160deg,#f6e6e1 0%,#e0b1a8 60%,#c98f84 100%);color:#322e2d}
-    .cover-preview.style-minimal{background:linear-gradient(180deg,#fbf6f0 0%,#efe5dc 100%);color:#322e2d}
-    .cover-preview.style-elegant{background:linear-gradient(160deg,#322e2d 0%,#5c5651 60%,#8c857f 100%);color:#fbf6f0}
-    .cover-preview.style-natur{background:linear-gradient(160deg,#eef2ea 0%,#c8d6c0 60%,#a0b598 100%);color:#2f3a2b}
+    .cover-preview.style-peach{background:linear-gradient(160deg,#fbe4d4 0%,#f2c1a3 60%,#d69166 100%);color:#322e2d}
+    .cover-preview.style-mint{background:linear-gradient(160deg,#e2f0e8 0%,#b6d8c5 60%,#8ab89b 100%);color:#2b3a2f}
+    .cover-preview.style-powder{background:linear-gradient(160deg,#e0eaf3 0%,#b9cde0 60%,#8faec9 100%);color:#2b303a}
+    .cover-preview.style-vanille{background:linear-gradient(160deg,#f8ecc9 0%,#ecd9a8 60%,#d4b96a 100%);color:#3a3225}
+    .cover-preview.style-terracotta{background:linear-gradient(160deg,#ecd0c2 0%,#c48972 60%,#8a5236 100%);color:#fbf6f0}
+    .cover-preview.style-lavendel{background:linear-gradient(160deg,#ece1f0 0%,#c6b3d6 60%,#9d84b5 100%);color:#302a3a}
     .cover-preview .cp-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
     .cover-preview .cp-brand{font-family:Georgia,serif;font-size:16px;letter-spacing:.06em}
     .cover-preview .cp-portrait{width:56px;height:56px;border-radius:50%;background:#fff;color:var(--accent-deep);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:20px;font-weight:500;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.15);flex-shrink:0}
@@ -188,8 +194,7 @@
     .cover-preview .cp-partner{font-size:12px;opacity:.85}
     .cover-preview .cp-partner b{font-family:Georgia,serif;font-weight:500;font-size:14px;display:block;margin-bottom:2px}
     .cover-preview .cp-start{background:var(--accent);color:var(--ink);font-size:12px;font-weight:600;padding:8px 16px;border-radius:50px;letter-spacing:.02em}
-    .cover-preview.style-elegant .cp-start{background:#fbf6f0}
-    .cover-preview.style-natur .cp-start{background:#fff}
+    .cover-preview.style-terracotta .cp-start{background:#fbf6f0}
 
     /* Pro-Bereich Badge + Sperre */
     .pro-badge{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent-deep));color:#fff;font-size:10px;letter-spacing:.14em;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;margin-left:10px;vertical-align:middle}
@@ -884,24 +889,36 @@
               <h4>Deckblatt-Design</h4>
               <span class="pro-badge">Pro</span>
             </div>
-            <div class="section-sub">Wähl den Look für die Startseite deines Fragebogens.</div>
+            <div class="section-sub">Wähl den Farbverlauf für die Startseite deines Fragebogens — dieselben sieben Töne wie in der Farbwelt oben, plus optional dein eigenes Bild.</div>
 
             <div class="cover-grid" id="cover-picker">
               <div class="cover-option selected" data-cover="rose">
                 <div class="cover-thumb thumb-rose"></div>
-                <div class="cover-caption">Rosé-Verlauf</div>
+                <div class="cover-caption">Rosé</div>
               </div>
-              <div class="cover-option" data-cover="minimal">
-                <div class="cover-thumb thumb-minimal"></div>
-                <div class="cover-caption">Minimal-Champagne</div>
+              <div class="cover-option" data-cover="peach">
+                <div class="cover-thumb thumb-peach"></div>
+                <div class="cover-caption">Peach</div>
               </div>
-              <div class="cover-option" data-cover="elegant">
-                <div class="cover-thumb thumb-elegant"></div>
-                <div class="cover-caption">Elegant-Dunkel</div>
+              <div class="cover-option" data-cover="mint">
+                <div class="cover-thumb thumb-mint"></div>
+                <div class="cover-caption">Mint</div>
               </div>
-              <div class="cover-option" data-cover="natur">
-                <div class="cover-thumb thumb-natur"></div>
-                <div class="cover-caption">Natur-Sage</div>
+              <div class="cover-option" data-cover="powder">
+                <div class="cover-thumb thumb-powder"></div>
+                <div class="cover-caption">Powder</div>
+              </div>
+              <div class="cover-option" data-cover="vanille">
+                <div class="cover-thumb thumb-vanille"></div>
+                <div class="cover-caption">Vanille</div>
+              </div>
+              <div class="cover-option" data-cover="terracotta">
+                <div class="cover-thumb thumb-terracotta"></div>
+                <div class="cover-caption">Terracotta</div>
+              </div>
+              <div class="cover-option" data-cover="lavendel">
+                <div class="cover-thumb thumb-lavendel"></div>
+                <div class="cover-caption">Lavendel</div>
               </div>
               <div class="cover-option" data-cover="custom" style="grid-column:1 / -1">
                 <div class="cover-thumb thumb-custom">⬆ EIGENES BILD HOCHLADEN</div>
@@ -912,7 +929,7 @@
             <div class="lock-overlay">
               <div class="lock-icon">🔒</div>
               <div class="lock-title">Deckblatt-Austausch ist ein Pro-Feature</div>
-              <div class="lock-sub">Vier abgestimmte Presets plus eigenes Bild. Verfügbar ab Pro.</div>
+              <div class="lock-sub">Sieben Farbverläufe plus eigenes Bild. Verfügbar ab Pro.</div>
               <button class="lock-cta">Auf Pro upgraden</button>
             </div>
           </div>
@@ -1203,7 +1220,7 @@
   }
 
   /* ===== Branding: Cover-Picker ===== */
-  const COVER_STYLES = ['rose','minimal','elegant','natur'];
+  const COVER_STYLES = ['rose','peach','mint','powder','vanille','terracotta','lavendel'];
   function setCover(cover){
     document.querySelectorAll('#cover-picker .cover-option').forEach(o=>{
       o.classList.toggle('selected', o.dataset.cover === cover);
