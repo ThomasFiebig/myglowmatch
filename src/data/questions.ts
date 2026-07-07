@@ -283,6 +283,9 @@ export const formSteps: Step[] = [
     phoneDescription:
       "Optional – damit dich deine Beraterin auch per WhatsApp kontaktieren kann.",
     phonePlaceholder: "z. B. 0151 12345678",
+    emailOptInLabel:
+      "Ich möchte meine Analyse zusätzlich als E-Mail erhalten.",
+    emailPlaceholder: "deine@e-mail.de",
     consentText:
       "Ich willige ein, dass meine Angaben zur Erstellung einer personalisierten Haarpflege-Empfehlung verarbeitet werden. Die Datenschutzhinweise habe ich gelesen.",
     submitLabel: "Zu meiner individuellen Haaranalyse →",

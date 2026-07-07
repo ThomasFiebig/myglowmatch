@@ -95,6 +95,9 @@ export type ContactStep = StepBase & {
   phoneLabel: string;
   phoneDescription: string;
   phonePlaceholder: string;
+  // Optionales E-Mail-Opt-in — Kundin kann Analyse zusätzlich als Mail erhalten.
+  emailOptInLabel: string;
+  emailPlaceholder: string;
   // Pflicht-Einwilligung — jetzt auf derselben Seite wie Kontakt.
   consentText: string;
   // CTA-Label des Absende-Buttons („Zu deiner Haaranalyse →").

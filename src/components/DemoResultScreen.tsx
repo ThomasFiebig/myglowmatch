@@ -266,14 +266,29 @@ function buildBedarf(slotTyp: string, n: NormalizedAnswers): string | null {
   if (parts.length === 0) return null;
 
   if (["shampoo", "spuelung", "maske"].includes(slotTyp)) {
-    const suffix: string[] = [];
-    if (structure) suffix.push(`${label(structure)}es Haar`);
+    // "für <adjektiv> Haar" grammatikalisch korrekt zusammenbauen.
+    // Struktur + Stärke werden zu einem einzigen Adjektiv-Compound:
+    //   glatt + fein  → "feines, glattes Haar"
+    //   wellig + dick → "dickes, welliges Haar"
+    const adjektive: string[] = [];
     if (thickness && thickness !== "mittel") {
-      const t =
-        thickness === "fein" ? "feinem" : thickness === "dick" ? "dickem" : label(thickness);
-      suffix.push(`${t}${suffix.length ? "" : " Haar"}`);
+      const t = thickness === "fein" ? "feines" : thickness === "dick" ? "dickes" : label(thickness);
+      adjektive.push(t);
     }
-    if (suffix.length) return `${parts.join(", ")} · für ${suffix.join(", ")}`;
+    if (structure) {
+      const s =
+        structure === "glatt"
+          ? "glattes"
+          : structure === "wellig"
+            ? "welliges"
+            : structure === "lockig"
+              ? "lockiges"
+              : structure === "kraus"
+                ? "krauses"
+                : label(structure);
+      adjektive.push(s);
+    }
+    if (adjektive.length) return `${parts.join(", ")} · für ${adjektive.join(", ")} Haar`;
   }
   return parts.join(", ");
 }
@@ -427,19 +442,37 @@ export default function DemoResultScreen({
 
   return (
     <main className="relative flex flex-1 flex-col items-center px-3 py-6 md:px-8 md:py-10">
-      {/* Diagonales DEMO-Wasserzeichen */}
+      {/* Diagonales DEMO-Wasserzeichen — als Rautenmuster ohne Überlappung */}
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-0 flex items-center justify-center overflow-hidden"
+        className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(-24deg, transparent 0 220px, transparent 220px 240px)",
+        }}
       >
-        <div className="grid h-[220vh] w-[220vw] grid-cols-3 gap-x-40 -rotate-[24deg] opacity-[0.07]">
-          {Array.from({ length: 30 }).map((_, i) => (
-            <span
-              key={i}
-              className="whitespace-nowrap font-serif text-5xl font-bold uppercase tracking-widest text-rosegold-dark md:text-8xl"
-            >
-              Demo · nicht echt
-            </span>
+        <div
+          className="absolute inset-0"
+          style={{
+            transform: "rotate(-24deg) scale(1.4)",
+            transformOrigin: "center",
+            display: "grid",
+            gridTemplateColumns: "repeat(6, 1fr)",
+            gap: "80px 100px",
+            padding: "40px",
+            opacity: 0.09,
+            fontFamily: "Georgia, serif",
+            fontSize: "56px",
+            fontWeight: 700,
+            letterSpacing: "0.3em",
+            color: "#c98f84",
+            textTransform: "uppercase",
+            whiteSpace: "nowrap",
+            userSelect: "none",
+          }}
+        >
+          {Array.from({ length: 48 }).map((_, i) => (
+            <span key={i}>DEMO</span>
           ))}
         </div>
       </div>
@@ -797,10 +830,25 @@ export default function DemoResultScreen({
             >
               Nächste Schritte
             </p>
-            <ol style={{ paddingLeft: "18px", fontSize: "13px", color: "#3D3935", lineHeight: 1.7, margin: 0 }}>
-              <li>{displayName} hat die Empfehlung gerade im Browser bekommen.</li>
-              <li>In der Ergebnisseite ist ein WhatsApp-Button zu dir — sie kann sich direkt melden.</li>
-              <li>
+            <ol
+              style={{
+                paddingLeft: "22px",
+                fontSize: "13px",
+                color: "#3D3935",
+                lineHeight: 1.7,
+                margin: 0,
+                listStyleType: "decimal",
+                listStylePosition: "outside",
+              }}
+            >
+              <li style={{ paddingLeft: "4px" }}>
+                {displayName} hat die Empfehlung gerade im Browser bekommen.
+              </li>
+              <li style={{ paddingLeft: "4px" }}>
+                In der Ergebnisseite ist ein WhatsApp-Button zu dir — sie kann sich
+                direkt melden.
+              </li>
+              <li style={{ paddingLeft: "4px" }}>
                 {hasPhone
                   ? `Tipp: ${displayName} hat ihre Nummer hinterlegt — du kannst sie direkt per WhatsApp kontaktieren.`
                   : `Falls sie sich nicht in 24h meldet: schreib ihr aktiv an. Das ist deine Conversion-Chance.`}

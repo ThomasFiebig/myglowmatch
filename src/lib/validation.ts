@@ -6,6 +6,13 @@
 import type { Answers, QuestionStep } from "@/lib/types";
 
 // -------------------------------------------------------------------
+// Einfache E-Mail-Prüfung: etwas@etwas.endung
+// -------------------------------------------------------------------
+export function isValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+// -------------------------------------------------------------------
 // Lockere Telefon-Prüfung: erlaubt Ziffern, +, Leerzeichen, Bindestriche.
 // Leere Eingabe gilt als gültig (Pflichtfeld = NEIN).
 // -------------------------------------------------------------------
@@ -17,29 +24,30 @@ export function isValidPhone(value: string): boolean {
 
 // -------------------------------------------------------------------
 // Prüft, ob ein Frage-Schritt gültig beantwortet ist.
-// Gibt true zurück, wenn man "Weiter" klicken darf.
 // -------------------------------------------------------------------
 export function isStepValid(step: QuestionStep, answers: Answers): boolean {
-  // --- Einfachauswahl: ein nicht-leerer Wert muss gewählt sein ------
   if (step.type === "single") {
     const answer = answers[step.field];
     return typeof answer === "string" && answer !== "";
   }
 
-  // --- Mehrfachauswahl: Anzahl muss zwischen min und max liegen -----
   if (step.type === "multi") {
     const answer = answers[step.field];
     const list = Array.isArray(answer) ? answer : [];
     return list.length >= step.minSelect && list.length <= step.maxSelect;
   }
 
-  // --- Kontakt + Einwilligung (letzter Schritt) ---------------------
-  //  Vorname nicht leer, Telefon optional (leer = ok; ungültige Zeichen
-  //  sperren Absenden), Pflicht-Checkbox angehakt.
+  // Kontakt + Einwilligung (letzter Schritt):
+  //  Vorname Pflicht, Telefon optional (leer = ok; falsche Zeichen sperren),
+  //  E-Mail Pflicht wenn Opt-in aktiv, Consent-Checkbox angehakt.
   const firstName = answers.first_name;
   const phone = answers.phone;
+  const email = answers.email;
   const firstNameOk = typeof firstName === "string" && firstName.trim() !== "";
   const phoneOk = typeof phone !== "string" || isValidPhone(phone);
   const consentOk = answers.consent_recommendation === true;
-  return firstNameOk && phoneOk && consentOk;
+  const wantsEmail = answers.wants_email_copy === true;
+  const emailOk =
+    !wantsEmail || (typeof email === "string" && isValidEmail(email));
+  return firstNameOk && phoneOk && emailOk && consentOk;
 }

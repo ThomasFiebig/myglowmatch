@@ -45,18 +45,23 @@ export default function QuestionScreen({
       />
     );
   } else {
-    // step.type === "contact" (letzter Schritt: Vorname, Telefon, Consent)
+    // step.type === "contact" (letzter Schritt: Vorname, Telefon,
+    // optional E-Mail-Kopie, Consent)
     input = (
       <ContactFields
         firstNameLabel={step.firstNameLabel}
         phoneLabel={step.phoneLabel}
         phoneDescription={step.phoneDescription}
         phonePlaceholder={step.phonePlaceholder}
+        emailOptInLabel={step.emailOptInLabel}
+        emailPlaceholder={step.emailPlaceholder}
         consentText={step.consentText}
         firstName={
           typeof answers.first_name === "string" ? answers.first_name : ""
         }
         phone={typeof answers.phone === "string" ? answers.phone : ""}
+        email={typeof answers.email === "string" ? answers.email : ""}
+        wantsEmailCopy={answers.wants_email_copy === true}
         consent={answers.consent_recommendation === true}
         onChange={updateAnswer}
       />

@@ -44,10 +44,10 @@ export function buildSubmission(
   return {
     partner_id: partnerId,
     first_name: getText(answers, "first_name"),
-    // E-Mail wird nicht mehr im Fragebogen erhoben — Empfehlung erscheint
-    // direkt im Browser. Feld bleibt im Payload leer, damit n8n
-    // schema-kompatibel bleibt (Send-Node ist parallel dazu deaktiviert).
-    email: "",
+    // E-Mail nur mitschicken, wenn die Kundin aktiv „Analyse per Mail"
+    // angeklickt hat. Sonst leer (n8n-Send-Node an die Kundin ist
+    // ohnehin deaktiviert, siehe n8n-UI).
+    email: getBool(answers, "wants_email_copy") ? getText(answers, "email") : "",
     phone: getText(answers, "phone"),
     consent_recommendation: getBool(answers, "consent_recommendation"),
     // Marketing-Checkbox entfällt — konstant false, damit das n8n-Schema
