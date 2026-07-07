@@ -23,7 +23,7 @@ export default function Logo({ width = 200, className = "" }: LogoProps) {
       width={width}
       height={height}
       role="img"
-      aria-label="myglowmatch"
+      aria-label="MyBeautyKey"
       className={className}
     >
       <text
@@ -33,10 +33,10 @@ export default function Logo({ width = 200, className = "" }: LogoProps) {
         dominantBaseline="middle"
         className="font-serif"
         fontWeight={400}
-        fontSize={80}
+        fontSize={76}
         fill="#5A4A3F"
       >
-        myglowmatch
+        MyBeautyKey
       </text>
     </svg>
   );

@@ -8,7 +8,7 @@ import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 
 export const metadata: Metadata = {
-  title: "Impressum – myglowmatch",
+  title: "Impressum – MyBeautyKey",
 };
 
 export default function ImpressumPage() {

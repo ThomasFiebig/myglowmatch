@@ -20,7 +20,7 @@ const fraunces = Fraunces({
 // auf Instagram, WhatsApp, Facebook, X, LinkedIn etc. geteilt wird.
 export const metadata: Metadata = {
   metadataBase: new URL("https://myglowmatch.de"),
-  title: "myglowmatch – Deine persönliche Haaranalyse",
+  title: "MyBeautyKey – Deine persönliche Haaranalyse",
   description:
     "Beantworte ein paar kurze Fragen und erhalte deine persönliche Haarpflege-Empfehlung – abgestimmt auf dein Haar und deine Kopfhaut.",
   icons: {
@@ -30,8 +30,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "de_DE",
     url: "https://myglowmatch.de",
-    siteName: "myglowmatch",
-    title: "myglowmatch – Deine persönliche Haaranalyse",
+    siteName: "MyBeautyKey",
+    title: "MyBeautyKey – Deine persönliche Haaranalyse",
     description:
       "Beantworte ein paar kurze Fragen und erhalte deine persönliche Haarpflege-Empfehlung.",
     images: [
@@ -39,13 +39,13 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "myglowmatch – Deine persönliche Haaranalyse",
+        alt: "MyBeautyKey – Deine persönliche Haaranalyse",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "myglowmatch – Deine persönliche Haaranalyse",
+    title: "MyBeautyKey – Deine persönliche Haaranalyse",
     description:
       "Beantworte ein paar kurze Fragen und erhalte deine persönliche Haarpflege-Empfehlung.",
     images: ["/og-image.jpg"],

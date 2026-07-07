@@ -10,7 +10,7 @@ import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 
 export const metadata: Metadata = {
-  title: "Datenschutz – myglowmatch",
+  title: "Datenschutz – MyBeautyKey",
 };
 
 export default function DatenschutzPage() {
