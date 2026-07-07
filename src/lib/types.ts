@@ -83,47 +83,35 @@ export type MultiStep = StepBase & {
 };
 
 // -------------------------------------------------------------------
-// Schritt-Typ 4: Kontaktdaten (Vorname + E-Mail)
+// Schritt-Typ 4: Kontaktdaten + DSGVO-Einwilligung + Absenden
+// (letzter Schritt vor der Analyse — E-Mail entfällt, weil das
+// Ergebnis direkt im Browser erscheint und kein Versand mehr nötig ist.)
 // -------------------------------------------------------------------
 export type ContactStep = StepBase & {
   type: "contact";
   title: string;
   firstNameLabel: string;
-  emailLabel: string;
-  // Telefonnummer: optionales Drittfeld auf derselben Seite.
+  // Telefonnummer: optionales Feld für WhatsApp-Kontakt zur Beraterin.
   phoneLabel: string;
   phoneDescription: string;
   phonePlaceholder: string;
-};
-
-// -------------------------------------------------------------------
-// Schritt-Typ 5: Einwilligung (zwei DSGVO-Checkboxen + Absende-Button)
-// -------------------------------------------------------------------
-export type ConsentStep = StepBase & {
-  type: "consent";
-  title: string;
-  recommendationText: string; // Pflicht-Checkbox
-  marketingText: string; // optionale Checkbox
+  // Pflicht-Einwilligung — jetzt auf derselben Seite wie Kontakt.
+  consentText: string;
+  // CTA-Label des Absende-Buttons („Zu deiner Haaranalyse →").
   submitLabel: string;
 };
 
 // -------------------------------------------------------------------
-// "Step" fasst alle 5 Typen zusammen. Eine Liste vom Typ Step[]
-// darf also jeden dieser Schritte enthalten.
+// "Step" fasst alle Schritttypen zusammen.
 // -------------------------------------------------------------------
-export type Step =
-  | IntroStep
-  | SingleStep
-  | MultiStep
-  | ContactStep
-  | ConsentStep;
+export type Step = IntroStep | SingleStep | MultiStep | ContactStep;
 
 // -------------------------------------------------------------------
 // "QuestionStep" = alle Schritte AUSSER dem Intro, also die echten
 // Fragen. Sie haben alle ein "title"-Feld. Praktisch für Komponenten,
 // die nur Fragen anzeigen (nie das Intro).
 // -------------------------------------------------------------------
-export type QuestionStep = SingleStep | MultiStep | ContactStep | ConsentStep;
+export type QuestionStep = SingleStep | MultiStep | ContactStep;
 
 // -------------------------------------------------------------------
 // Das finale JSON, das beim Absenden an den n8n-Webhook geht.

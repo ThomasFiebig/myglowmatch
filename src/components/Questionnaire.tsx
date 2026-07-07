@@ -138,6 +138,8 @@ export default function Questionnaire({ partnerId }: QuestionnaireProps) {
   if (isLastStep) {
     if (submitState === "sending") primaryLabel = "Wird gesendet …";
     else if (submitState === "error") primaryLabel = "Erneut senden";
+    else if (currentStep.type === "contact")
+      primaryLabel = currentStep.submitLabel;
     else primaryLabel = "Abschließen";
   }
 

@@ -8,7 +8,6 @@ import type { Answers, AnswerValue, QuestionStep } from "@/lib/types";
 import SingleChoice from "@/components/SingleChoice";
 import MultiChoice from "@/components/MultiChoice";
 import ContactFields from "@/components/ContactFields";
-import ConsentFields from "@/components/ConsentFields";
 
 type QuestionScreenProps = {
   step: QuestionStep;
@@ -45,30 +44,20 @@ export default function QuestionScreen({
         onChange={(newValues) => updateAnswer(step.field, newValues)}
       />
     );
-  } else if (step.type === "contact") {
+  } else {
+    // step.type === "contact" (letzter Schritt: Vorname, Telefon, Consent)
     input = (
       <ContactFields
         firstNameLabel={step.firstNameLabel}
-        emailLabel={step.emailLabel}
         phoneLabel={step.phoneLabel}
         phoneDescription={step.phoneDescription}
         phonePlaceholder={step.phonePlaceholder}
+        consentText={step.consentText}
         firstName={
           typeof answers.first_name === "string" ? answers.first_name : ""
         }
-        email={typeof answers.email === "string" ? answers.email : ""}
         phone={typeof answers.phone === "string" ? answers.phone : ""}
-        onChange={updateAnswer}
-      />
-    );
-  } else {
-    // step.type === "consent"
-    input = (
-      <ConsentFields
-        recommendationText={step.recommendationText}
-        marketingText={step.marketingText}
-        recommendation={answers.consent_recommendation === true}
-        marketing={answers.consent_marketing === true}
+        consent={answers.consent_recommendation === true}
         onChange={updateAnswer}
       />
     );

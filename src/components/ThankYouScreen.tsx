@@ -43,8 +43,8 @@ export default function ThankYouScreen({ firstName }: ThankYouScreenProps) {
         </h1>
 
         <p className="mt-4 leading-relaxed text-ink-soft">
-          Deine persönliche Haaranalyse ist unterwegs. Du erhältst deine
-          individuelle Produktempfehlung in Kürze per E-Mail.
+          Deine Angaben sind bei deiner Beraterin. Sie meldet sich in Kürze
+          persönlich bei dir — mit deiner individuellen Produktempfehlung.
         </p>
 
         <SiteFooter className="mt-10" />

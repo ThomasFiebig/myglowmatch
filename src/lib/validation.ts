@@ -1,18 +1,9 @@
 // ===================================================================
-// myglowmatch – Validierung (Etappe 7)
+// myglowmatch – Validierung
 // Beantwortet: "Ist die aktuelle Frage gültig beantwortet?"
-// Die Regeln stammen aus docs/fragenkatalog.md.
 // ===================================================================
 
 import type { Answers, QuestionStep } from "@/lib/types";
-
-// -------------------------------------------------------------------
-// Einfache E-Mail-Prüfung: etwas@etwas.endung
-//  [^\s@]+  = ein oder mehr Zeichen, die kein Leerzeichen / kein @ sind
-// -------------------------------------------------------------------
-export function isValidEmail(value: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
 
 // -------------------------------------------------------------------
 // Lockere Telefon-Prüfung: erlaubt Ziffern, +, Leerzeichen, Bindestriche.
@@ -42,20 +33,13 @@ export function isStepValid(step: QuestionStep, answers: Answers): boolean {
     return list.length >= step.minSelect && list.length <= step.maxSelect;
   }
 
-  // --- Kontaktdaten: Vorname nicht leer, E-Mail gültig,
-  //     Telefon optional (leer = ok; ungültige Zeichen sperren Weiter)
-  if (step.type === "contact") {
-    const firstName = answers.first_name;
-    const email = answers.email;
-    const phone = answers.phone;
-    const firstNameOk =
-      typeof firstName === "string" && firstName.trim() !== "";
-    const emailOk = typeof email === "string" && isValidEmail(email);
-    const phoneOk = typeof phone !== "string" || isValidPhone(phone);
-    return firstNameOk && emailOk && phoneOk;
-  }
-
-  // --- Einwilligung: die Pflicht-Checkbox muss angehakt sein --------
-  // (consent_marketing ist optional und wird nicht geprüft)
-  return answers.consent_recommendation === true;
+  // --- Kontakt + Einwilligung (letzter Schritt) ---------------------
+  //  Vorname nicht leer, Telefon optional (leer = ok; ungültige Zeichen
+  //  sperren Absenden), Pflicht-Checkbox angehakt.
+  const firstName = answers.first_name;
+  const phone = answers.phone;
+  const firstNameOk = typeof firstName === "string" && firstName.trim() !== "";
+  const phoneOk = typeof phone !== "string" || isValidPhone(phone);
+  const consentOk = answers.consent_recommendation === true;
+  return firstNameOk && phoneOk && consentOk;
 }

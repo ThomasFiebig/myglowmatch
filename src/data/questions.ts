@@ -269,32 +269,22 @@ export const formSteps: Step[] = [
   },
 
   // -----------------------------------------------------------------
-  // Frage 12 – Kontaktdaten (Vorname + E-Mail)
+  // Frage 12 – Kontaktdaten + DSGVO-Einwilligung + Absenden
+  // Einzige Kontaktseite: Vorname (Pflicht), Telefon (optional),
+  // Einwilligung (Pflicht). Kein E-Mail-Feld mehr — das Ergebnis
+  // erscheint direkt im Browser, kein Versand nötig.
   // -----------------------------------------------------------------
   {
     id: "contact",
     type: "contact",
     title: "Fast geschafft!",
     firstNameLabel: "Wie ist dein Vorname?",
-    emailLabel:
-      "An welche E-Mail-Adresse darf ich deine persönliche Produktempfehlung senden?",
     phoneLabel: "Telefonnummer",
     phoneDescription:
       "Optional – damit dich deine Beraterin auch per WhatsApp kontaktieren kann.",
     phonePlaceholder: "z. B. 0151 12345678",
-  },
-
-  // -----------------------------------------------------------------
-  // Frage 13 – Einwilligung (DSGVO-Checkboxen + Absenden)
-  // -----------------------------------------------------------------
-  {
-    id: "consent",
-    type: "consent",
-    title: "Einverständnis & Absenden",
-    recommendationText:
-      "Ich willige ein, dass meine Angaben zur Erstellung einer personalisierten Haarpflege-Empfehlung verarbeitet und mir per E-Mail zugesendet werden. Die Datenschutzhinweise habe ich gelesen.",
-    marketingText:
-      "Ich möchte zusätzlich Tipps, Angebote und Neuigkeiten per E-Mail erhalten.",
-    submitLabel: "Jetzt persönliche Empfehlung erhalten →",
+    consentText:
+      "Ich willige ein, dass meine Angaben zur Erstellung einer personalisierten Haarpflege-Empfehlung verarbeitet werden. Die Datenschutzhinweise habe ich gelesen.",
+    submitLabel: "Zu meiner individuellen Haaranalyse →",
   },
 ];

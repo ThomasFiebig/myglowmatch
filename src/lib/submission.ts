@@ -44,10 +44,15 @@ export function buildSubmission(
   return {
     partner_id: partnerId,
     first_name: getText(answers, "first_name"),
-    email: getText(answers, "email"),
+    // E-Mail wird nicht mehr im Fragebogen erhoben — Empfehlung erscheint
+    // direkt im Browser. Feld bleibt im Payload leer, damit n8n
+    // schema-kompatibel bleibt (Send-Node ist parallel dazu deaktiviert).
+    email: "",
     phone: getText(answers, "phone"),
     consent_recommendation: getBool(answers, "consent_recommendation"),
-    consent_marketing: getBool(answers, "consent_marketing"),
+    // Marketing-Checkbox entfällt — konstant false, damit das n8n-Schema
+    // unverändert bleibt.
+    consent_marketing: false,
     scalp_status: getList(answers, "scalp_status"),
     hair_structure: getText(answers, "hair_structure"),
     hair_thickness: getText(answers, "hair_thickness"),
