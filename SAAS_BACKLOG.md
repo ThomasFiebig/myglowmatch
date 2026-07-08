@@ -4,8 +4,9 @@
 Getrennt von `HANDOVER.md` (n8n / Regel-Engine) und `demo/BUILD_SPEC.md` (End-Zustand
 für Partner).
 
-**Stand:** 2026-07-08 (Infrastruktur & Tooling als Kapitel 3.5 eingefügt,
-Anthropic-Klarstellung: nur Bau-Werkzeug, keine Laufzeit-Komponente).
+**Stand:** 2026-07-08 spät (Cloud-Toolchain bestätigt, Google Sheets aus
+Laufzeit-Kette, Zielgruppen-Erweiterung als Compliance-Firewall dokumentiert,
+Datenmodell-Skizze Multi-Tenant als Kapitel 3.6 ergänzt).
 
 **Rollen:**
 - **Desirée Fiebig** (MONAT-Markenpartnerin Nr. 14038921) — fachliche und technische
@@ -59,6 +60,38 @@ Beraterin-eigener Produkt-Bibliothek).**
 - Keine Wartezeit auf MONAT-Freigabe → sofort startfähig nach Namens-Fix
 - Bei späterem MONAT-Deal (Weg B): ihr verhandelt aus Position der Stärke
   (zahlende Kunden vorweisbar)
+
+### Zielgruppen-Erweiterung und doppelte Motivation (Update 2026-07-08)
+
+Offiziell beworben als **markenneutrales Haaranalyse-Tool** für Beauty-Profis
+im DACH-Raum. Kern-Zielgruppen:
+
+- Salons (Inhaberin + Team-Mitarbeiter, ab V2 Seat-basiert)
+- Solo-Hair-Artists und Make-up-Artists
+- Beauty-Studios
+- MLM-Vertriebspartnerinnen (als **eine von vielen** Anwendungsgruppen,
+  nicht als beworbene Kern-Zielgruppe)
+
+**Doppelte Motivation für die breite Aufstellung:**
+
+1. **Marktgröße** — TAM steigt um Faktor 50–100 gegenüber „nur
+   MONAT-Beraterinnen". Instagram-Ads-Kampagnen sind für „Beauty-Profis"
+   ansprechbarer als für ein enges MLM-Segment.
+2. **Compliance-Firewall gegen MONAT-§3.2.1-Argument** — wenn wir öffentlich
+   und in allen Marketing-Kanälen als generisches Haaranalyse-Tool
+   auftreten, kann MONAT nicht plausibel behaupten, VERADEX habe „ein Tool
+   speziell für unsere Vertriebsstruktur gebaut, um am Umsatz mitzuverdienen".
+   Das ist die Kehrseite von Kapitel 2.6: nicht nur der Code muss neutral
+   sein, auch die **Außendarstellung** entzieht der Marken-Attacke die
+   Angriffsfläche.
+
+Konsequenz für Marketing und Landingpage: Sina/Marcel-Kontext ist interne
+Positionsklärung, aber die öffentliche Positionierung nutzt keine
+MLM-Sprache und keinen MONAT-Bezug. Die MLM-Fähigkeit wird als eine
+Anwendung neben Salon, Solo-Artist, Studio erwähnt — nicht in der Headline.
+
+Skin-Analyse als V2-Erweiterung mitdenken (Datenmodell so bauen, dass eine
+zweite Analyse-Domäne andockbar ist), aber nicht V1 bauen. Siehe Kapitel 3.6.
 
 **Aufwand für Umstellung des gebauten Systems:**
 - Regel-Engine (Node 04–15): bleibt zu 90 % identisch, arbeitet mit Bedarfsprofil
@@ -254,6 +287,29 @@ argumentieren, VERADEX-Infrastruktur verbreitet Marken systematisch.
   Sortiment als meine eigene Empfehlung")
 - Content-Verantwortung wandert bei jedem Klick
 
+**Falle 4 — Einrichtungsservice (Update 2026-07-08)**
+Wenn VERADEX als bezahltes Setup-Feature MONAT-Datenblätter der Beraterin
+ins System einpflegt, könnten wir als aktiver Content-Distributor gelten
+— trotz „im Auftrag der Kundin".
+
+*Absicherung:*
+- Der Einrichtungsservice verarbeitet **ausschließlich vom Kunden
+  hochgeladenes Material** (PDFs, CSVs, Fotos) — nie vorgefertigte
+  Marken-Kataloge aus VERADEX-Vorrat
+- Buchungsstrecke fordert Upload explizit: „Lade deine Produktdaten oder
+  Datenblätter hoch, wir übernehmen die Eingabe"
+- Ergebnis landet zunächst im **Draft-Status** (nicht live sichtbar)
+- Die Kundin sieht Preview des eingepflegten Katalogs
+- **Aktiver Freigabe-Klick** durch die Kundin schaltet den Katalog live
+  — dieser Klick ist gleichzeitig **Content-Verantwortungs-Übernahme**
+- Content-Freigabe wird mit Zeitstempel, User-ID und AGB-Version
+  protokolliert (siehe Kapitel 3.6, `consent_log`-Tabelle)
+- Rechteversicherung beim Upload: Häkchen „Ich habe die Rechte, dieses
+  Material zu verwenden und stelle VERADEX von Ansprüchen frei"
+
+Ohne diesen Freigabe-Schritt wäre VERADEX Distributor. Mit dem Schritt
+wandert die Content-Verantwortung dokumentiert auf die Kundin.
+
 ### Absicherungs-Checkliste vor Launch
 
 **Technisch (im System):**
@@ -291,6 +347,29 @@ Wenn MONAT (oder eine andere Marke) sich beschwert, argumentieren wir:
 > Inhalte im Rahmen unseres Takedown-Prozesses."
 
 Diese Position vertreten Salesforce, Notion, Airtable, HubSpot mit Erfolg.
+
+### Takedown-Prozess (§ 10 TMG-Standardpraxis)
+
+Damit die neutrale-Plattform-Position tragfähig bleibt, muss ein
+funktionierender Takedown-Prozess vor Launch stehen:
+
+- **Takedown-Adresse** `takedown@[domain]` (oder `notice@`) prominent im
+  Impressum
+- **Bearbeitungs-SLA:** 48 Stunden ab Eingang einer begründeten
+  Markenbeschwerde bis zur Sperrung des betroffenen Inhalts
+- **Interne SOP**: dokumentierter Ablauf — Eingang → Prüfung
+  Beschwerde-Substanz → Sperr-Aktion in Supabase (Feld `product.aktiv =
+  FALSE` oder `catalog.blocked_at`) → Benachrichtigung an Kundin mit
+  Widerspruchsmöglichkeit → Log-Eintrag
+- **Sperr-Endpoint im Backend:** Admin-Funktion (nicht öffentlich), die
+  eine einzelne `product`-Zeile oder einen ganzen `product_catalog`
+  binnen Sekunden aus allen Kundinnenseiten entfernt
+- **Notice-and-Counter-Notice:** die Beraterin kann der Sperrung
+  widersprechen, dann prüfen wir erneut oder verweisen an eine
+  Streit-Beilegungs-Stelle
+
+Ohne diesen Prozess ist die § 10 TMG-Position nicht verteidigbar, weil
+wir dann kein „unverzüglich" mehr im Sinne des Gesetzes zeigen können.
 
 ### Grauzone — Anwaltscheck vor Launch nötig
 
@@ -459,7 +538,7 @@ Freigabe — Nachzieh-Liste in `chat-archive/2026-07-06_etappe-2-branding.md`.
 
 ---
 
-## 3.5 — Infrastruktur & Tooling (Stand 2026-07-08)
+## 3.5 — Infrastruktur & Tooling (Stand 2026-07-08 spät)
 
 **Prinzip — hart, nicht verhandelbar:** vor Markteintritt (erster zahlender
 Kunde außerhalb Desirée) muss die gesamte Datenverarbeitung DSGVO-konform
@@ -467,6 +546,59 @@ und auf EU-Regionen konfiguriert sein. VERADEX darf bei einer Beschwerde
 nicht angreifbar sein. Wir bauen sauber von Anfang an, nachträgliche
 Region-Migrationen sind teuer bis unmöglich (Supabase-Region z. B. ist
 irreversibel).
+
+### Cloud vs. Self-Hosted — Entscheidung 2026-07-08 spät
+
+**Cloud-Vendors mit EU-Region + SCC/DPA bleibt der Weg.** Self-hosted auf
+Hetzner wurde erwogen, aber gegen den Ops-Aufwand entschieden — Server-
+Administration, tägliche Backup-Restore-Tests, SSL-Renewal, PostgreSQL-
+Upgrades, Security-Patches sind für ein Solo-Betreiber-Startup nicht
+tragbar ohne DevOps-Kapazität.
+
+**Ehrliche Schrems-II-Einordnung:**
+Vercel + Supabase-Managed (beide US-Firmen mit EU-Region + Data
+Processing Addendum + Standard Contractual Clauses) ist der aktuelle
+Marktstandard für DSGVO-konforme SaaS-Bauten nach Schrems II. Es bleibt
+ein Restrisiko durch den US-CLOUD-Act (US-Behörden könnten theoretisch
+Zugriff auf Daten der US-Muttergesellschaften verlangen — auch wenn die
+Daten physisch in EU liegen). Dieses Restrisiko wird mit **technischen
+Zusatzmaßnahmen** minimiert:
+
+- **Encryption at rest** in Supabase aktiv (Standard)
+- **Verschlüsselte Client-Serverkommunikation** (TLS 1.3 Pflicht)
+- **Access-Logs** aller Datenbank-Zugriffe (via Supabase Audit)
+- **Minimalprinzip Endkundinnen-Daten:** Fragebogen-Antworten werden
+  NICHT persistiert (nur durchgeleitet), n8n-Execution-Logs so
+  konfiguriert dass Payloads nicht gespeichert werden. In Supabase
+  liegen nur Kunden-Logins + deren Produktkataloge (Geschäftsdaten),
+  KEINE Endkundinnen-PII
+
+Das ist die Position, die auch von HubSpot, Notion, Salesforce, Airtable
+in DACH mit Erfolg vertreten wird. Ein Umstieg auf 100%-EU-Firmen
+(Cleura, Scaleway, IONOS Cloud) bleibt optional für später, falls
+politischer Wind sich dreht.
+
+### Google Sheets aus Laufzeit-Toolchain entfernt
+
+Die aktuelle Nutzung von Google Sheets (Regeln + Log + Produktdatenbank
+im MONAT-Test) wird für den WL-Bau **komplett eliminiert**:
+
+- **Produktdaten:** wandern nach Supabase (Multi-Tenant, siehe
+  Kapitel 3.6)
+- **Regeln (map_priorities, map_pool_filter etc.):** bleiben V1
+  **embedded im n8n-Workflow-JSON** (aktueller Stand nach Migration #27
+  bereits so). Sync erfolgt aus CSV/YAML-Dateien im Git-Repo statt aus
+  Sheets. Vorteil: versionierbar, kein Google-Vendor mehr in der Kette.
+  Migration nach Supabase erst V2, wenn eine Admin-UI für Regel-
+  Bearbeitung nötig wird oder pro-Kunden-Regel-Overrides eingeführt
+  werden
+- **Beratungs-Log (`beratungs_log`-Tab):** ersetzt durch anonymisiertes
+  Supabase-Log ohne Endkundinnen-PII (nur Zeitstempel, Beraterin-ID,
+  Empfehlungs-IDs — keine Kundinnen-Antworten, keine Namen)
+
+Google Workspace bleibt für Business-Mail-Konten (`@veradex.de`,
+`@mybeautykey.de`) mit EU-DPA — das ist reine Firmen-Kommunikation, kein
+Kundinnen-Datenspeicher.
 
 ### Klarstellung Anthropic — nur Bau-Werkzeug, keine Laufzeit-Komponente
 
@@ -624,6 +756,227 @@ mehr. Punkt 4 hat die längste Wartezeit — deshalb früh anwerfen.
 - Auskunftsanfrage-Prozess getestet (Test-Account, Datenexport binnen 30 Tagen)
 
 Wenn alle acht Haken gesetzt: Markteintritt möglich.
+
+---
+
+## 3.6 — Datenmodell Multi-Tenant + Provenienz (Stand 2026-07-08 spät)
+
+**Zweck:** Bau-Vorbereitung für den Supabase-Migration und die
+Compliance-Guardrails, die in den Code müssen (nicht optional).
+
+### Kern-Prinzipien
+
+1. **Multi-Tenant über Organisation als Vertragseinheit.** Jede zahlende
+   Einheit (Salon, Solo-Artist, Studio, MLM-Beraterin) ist eine
+   `organization`. Nutzer gehören zu einer Organization, Kataloge und
+   Produkte hängen an der Organization — nicht am einzelnen User. Das ist
+   die Grundlage für V2-Team-Seats: Owner + Mitarbeiter unter einem Dach.
+2. **RLS ist die Isolationsgrenze.** Postgres Row-Level-Security-Policies
+   verhindern, dass Organization A jemals Daten von Organization B sieht.
+   Jeder Query läuft durch RLS, ohne Ausnahme. Vor Launch: automatisierte
+   RLS-Regressionstests mit zwei Test-Nutzern.
+3. **Provenienz ist Pflicht auf DB-Ebene.** Alle Content-Tabellen führen
+   `created_by`, `created_at`, `updated_by`, `updated_at`, optional
+   `source_document`. Postgres-Triggers setzen `created_by`/`updated_by`
+   automatisch aus `auth.uid()` — der Client kann diese Felder nicht
+   fälschen. Das ist der harte Beleg im Streitfall: „Diese Zeile wurde
+   am X von User Y eingetragen."
+4. **Endkundinnen-Daten werden NICHT persistiert.** Fragebogen-Antworten
+   laufen durch n8n und Regel-Engine, das Ergebnis geht an die Beraterin
+   und die Endkundin — es wird nirgendwo dauerhaft gespeichert. Das
+   `beratungs_log` (falls überhaupt) enthält nur Zeitstempel + IDs, keine
+   Antworten. Vorteil: DSGVO-Löschpflichten für Endkundinnen entfallen
+   praktisch komplett.
+5. **Consent-Log als Beweismittel.** Alle rechtserheblichen Zustimmungen
+   (AGB, AVV, Team-Übernahme, Upload-Rechte) werden mit Zeitstempel, IP,
+   User-Agent und Dokument-Version geloggt. Bei DSGVO-Auskunftsanfrage
+   auskunftsfähig.
+
+### Schema-Skizze (Supabase Postgres)
+
+```
+organization
+  id                     uuid PK
+  name                   text
+  slug                   text unique
+  plan                   enum (free, basic, pro)
+  contract_started_at    timestamptz
+  billing_customer_id    text            -- Paddle-Kundennummer
+  seat_limit             int             -- V2
+  created_at, updated_at
+
+user
+  id                     uuid PK, = auth.uid()
+  organization_id        uuid FK → organization
+  email                  text unique
+  display_name           text
+  role                   enum (owner, member)   -- V1: nur owner
+  status                 enum (active, suspended)
+  created_at, updated_at
+
+product_catalog
+  id                     uuid PK
+  organization_id        uuid FK → organization
+  name                   text                    -- z.B. "Sommer-Sortiment"
+  is_default             bool
+  analysis_type          enum (hair, skin)       -- V2: skin
+  created_by             uuid FK → user
+  created_at             timestamptz
+  updated_by             uuid FK → user
+  updated_at             timestamptz
+
+product
+  id                     uuid PK
+  catalog_id             uuid FK → product_catalog
+  -- 25 Spalten aus wl_adapter.py als typisierte Felder:
+  produkt_key            text
+  produktname_de         text
+  slot_typ               enum
+  hauptfunktion          text[]                  -- Postgres array
+  nebenfunktionen        text[]
+  haarstruktur           text[]
+  haarstaerke            text[]
+  haarzustand            text[]
+  kopfhaut               text[]
+  pflegelevel            text[]
+  ausschluss_bei         text[]
+  intensitaet            enum
+  ist_bonding            bool
+  ist_hitzeschutz        bool
+  ist_scalp_focus        bool
+  locken_geeignet        bool
+  produkt_url            text
+  anwendung              text                    -- warum_sinnvoll-Freitext
+  aktiv                  bool default true       -- für Takedown
+  -- Provenienz (Trigger-gesetzt):
+  created_by             uuid FK → user
+  created_at             timestamptz
+  updated_by             uuid FK → user
+  updated_at             timestamptz
+  source_document        text nullable           -- Upload-Belegname
+
+share_code
+  id                     uuid PK
+  code                   text unique, 8 char     -- z.B. SINA-2M8K
+  source_catalog_id      uuid FK → product_catalog
+  created_by             uuid FK → user
+  created_at             timestamptz
+  expires_at             timestamptz nullable
+  usage_count            int
+
+share_usage
+  id                     uuid PK
+  share_code_id          uuid FK → share_code
+  target_organization_id uuid FK → organization
+  accepted_at            timestamptz             -- aktive Content-Bestätigung
+  accepted_by            uuid FK → user
+
+consent_log
+  id                     uuid PK
+  user_id                uuid FK → user
+  consent_type           enum (agb, avv, share_takeover,
+                               upload_rights, catalog_release)
+  document_version       text                    -- z.B. "AGB v1.3 2026-08"
+  accepted_at            timestamptz
+  ip_address             inet
+  user_agent             text
+  reference_id           uuid nullable           -- FK auf betroffene Entity
+
+setup_service_upload
+  id                     uuid PK
+  organization_id        uuid FK → organization
+  uploaded_at            timestamptz
+  uploaded_by            uuid FK → user
+  file_url               text                    -- Storage-Referenz
+  file_hash              text                    -- SHA-256
+  rights_confirmed       bool                    -- Häkchen-Bestätigung
+  draft_catalog_id       uuid FK → product_catalog nullable
+  released_at            timestamptz nullable    -- aktive Freigabe
+  released_by            uuid FK → user nullable
+```
+
+### RLS-Policies (Muster)
+
+```sql
+-- Organization: nur eigene sichtbar
+CREATE POLICY org_own_read ON organization
+  FOR SELECT USING (
+    id = (auth.jwt() ->> 'organization_id')::uuid
+  );
+
+-- Katalog: nur eigener Organisation
+CREATE POLICY catalog_own_all ON product_catalog
+  FOR ALL USING (
+    organization_id = (auth.jwt() ->> 'organization_id')::uuid
+  );
+
+-- Produkt: transitiv über Katalog
+CREATE POLICY product_own_all ON product
+  FOR ALL USING (
+    catalog_id IN (
+      SELECT id FROM product_catalog
+      WHERE organization_id = (auth.jwt() ->> 'organization_id')::uuid
+    )
+  );
+```
+
+Der JWT-Claim `organization_id` wird beim Login von einer Supabase-Auth-
+Function gesetzt (via User-Metadata-Lookup).
+
+### Provenienz-Trigger (Muster)
+
+```sql
+CREATE FUNCTION set_provenance() RETURNS TRIGGER AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    NEW.created_by := auth.uid();
+    NEW.created_at := now();
+  END IF;
+  NEW.updated_by := auth.uid();
+  NEW.updated_at := now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER product_provenance
+  BEFORE INSERT OR UPDATE ON product
+  FOR EACH ROW EXECUTE FUNCTION set_provenance();
+```
+
+Damit kann der Client die Provenienz-Felder nicht setzen — sie kommen
+zwingend aus der authentifizierten Session.
+
+### V2-Andockstellen
+
+- **Team-Seats:** `user.role` existiert bereits (V1 nur owner).
+  Erweiterung um `role IN ('owner','admin','member','viewer')` und
+  `organization.seat_limit`-Enforcement. Kein Schema-Umbau, nur
+  Feld-Nutzung.
+- **Skin-Analyse:** `product_catalog.analysis_type` existiert bereits
+  (V1 nur hair). Zweiter Wert `skin` schaltet einen zweiten Regel-Satz
+  im n8n-Workflow frei. Datenmodell trägt beide Domänen ohne Umbau.
+- **Regel-Overrides pro Organisation:** neue Tabelle `custom_rule` mit
+  `organization_id` und Regel-JSON, RLS analog. Aktiviert
+  Regel-Feintuning pro Kunde (nur in V2 nötig).
+
+### Was NICHT in der DB liegt (bewusst)
+
+- Fragebogen-Antworten der Endkundinnen
+- Empfehlungs-Ergebnisse einzelner Beratungen
+- Endkundinnen-Namen, -Mails, -Telefonnummern
+- LLM-Prompt-Historie (weil kein LLM zur Laufzeit läuft, siehe Kapitel 3.5)
+
+### Automatisierte Regressionstests vor Launch
+
+- **RLS-Test:** zwei Test-Organisationen mit je einem User, jeder darf nur
+  eigene Daten sehen. Alle CRUD-Operationen auf allen Content-Tabellen
+  einmal cross-Org versuchen — alle müssen mit RLS-Denial fehlschlagen.
+- **Provenienz-Test:** Insert einer Zeile → `created_by` muss = `auth.uid()`
+  sein, egal was der Client sendet.
+- **Consent-Log-Test:** AGB-Akzeptanz löst Log-Eintrag mit korrekter
+  Version und IP aus.
+- **Löschtest:** User-Löschung kaskadiert nicht auf `consent_log` (Belege
+  bleiben mit anonymisierter `user_id` erhalten für DSGVO-Nachweispflicht).
 
 ---
 
