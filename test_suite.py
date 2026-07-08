@@ -839,6 +839,7 @@ def run_bulk(base_url: str, api_key: str, to_test: list, gap: float,
 
 # ─── Main ──────────────────────────────────────────────────────
 def main():
+    global WEBHOOK_URL, WORKFLOW_ID
     parser = argparse.ArgumentParser(description="MONAT System Test-Suite v3 (T-03)")
     parser.add_argument("--profile", "-p",
         choices=list(PROFILES.keys()) + ["all"], default="all",
@@ -851,7 +852,16 @@ def main():
         help=f"Max. Wartezeit (Sek.). Single-Profile-Default {SINGLE_PROFILE_WAIT}s, Bulk-Default {BULK_TOTAL_WAIT}s.")
     parser.add_argument("--gap", type=float, default=BULK_TRIGGER_GAP,
         help=f"Gap (Sek.) zwischen Bulk-Triggern (default: {BULK_TRIGGER_GAP}s). Schützt vor Google-Sheets-Rate-Limit.")
+    parser.add_argument("--webhook-url", type=str, default=None,
+        help=f"Webhook-URL überschreiben (default: {WEBHOOK_URL}). Für WL-Klon: /webhook/mybeautykey-wl-haaranalyse.")
+    parser.add_argument("--workflow-id", type=str, default=None,
+        help=f"Workflow-ID für Execution-Retrieval überschreiben (default: {WORKFLOW_ID}). WL-Klon: 5lPLG0y235XiIpN1.")
     args = parser.parse_args()
+
+    if args.webhook_url:
+        WEBHOOK_URL = args.webhook_url
+    if args.workflow_id:
+        WORKFLOW_ID = args.workflow_id
 
     env = load_env(Path(__file__).parent / ".env")
     api_key = env.get("N8N_API_KEY") or os.environ.get("N8N_API_KEY")
