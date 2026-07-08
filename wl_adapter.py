@@ -18,13 +18,15 @@ Format-Konventionen:
     - pflegelevel: SET aus {LOW, MID, HIGH}, in aufsteigender Reihenfolge
 
 Bekannte Limits gegenüber MONAT-produktdatenbank (Isomorphie-Δ):
-    - Mockup-UI kennt 11 Funktions-Tokens; real sind ~25 im Umlauf
-    - Mockup-UI kennt 7 Slots; real gibt es 11 (kopfhaut_taeglich, nacht_serum,
-      styling_3 nicht abbildbar)
-    - produktlinie hardcodiert auf "eigen" (real 12 MONAT-Linien)
-    - kombinationen / kombi_optional werden nicht gepflegt (V1)
+    - produktlinie hardcodiert auf "eigen" (real 12 MONAT-Linien) — Sync-
+      Skripte reichen `produktlinie` per PASSTHROUGH aus der Original-Zeile
+      durch, weil workflow-relevant in Nodes 08/12/14.
+    - kombinationen / kombi_optional werden nicht gepflegt (V1, workflow-tot)
     - hauptfunktion im Mockup ein primary + Sekundär-Liste; real kann
       hauptfunktion selbst mehrwertig sein (z.B. "reparatur,bonding")
+    Historisch (behoben 2026-07-08): 4 Sub-Slots (kopfhaut_taeglich,
+    nacht_serum, styling_2, styling_3) waren im UI-Vokabular verschmolzen —
+    jetzt eigenständige Slot-Chips.
 """
 
 from __future__ import annotations
@@ -39,14 +41,24 @@ import unicodedata
 # ---------------------------------------------------------------------------
 
 # Slot-Wahl im Mockup → (slot_typ, produkttyp_default, routine_schritt)
+# Nach Sub-Slot-Ausroll-Entscheidung 2026-07-08: 11 UI-Slot-Chips (statt 7).
+# Die 4 zuvor verschmolzenen Sub-Slots (kopfhaut_taeglich, nacht_serum,
+# styling_2, styling_3) sind jetzt eigenständige UI-Slots, damit Beraterinnen
+# ein Produkt gezielt in den richtigen Routine-Schritt legen können.
+# routine_schritt und produkttyp-Defaults aus Live-produktdatenbank-Verteilung
+# abgeleitet (siehe Skript-Notiz Iso-Session, produkt-Zeilen-Sample).
 SLOT_MAP: dict[str, tuple[str, str, int]] = {
-    "shampoo":         ("shampoo",   "shampoo",   1),
-    "spuelung":        ("spuelung",  "spuelung",  2),
-    "maske":           ("maske",     "maske",     3),
-    "kopfhaut":        ("kopfhaut",  "kopfhaut_treatment", 4),
-    "leave_in":        ("leave_in",  "leave_in",  5),
-    "styling":         ("styling_1", "styling",   6),
-    "serum":           ("finish",    "serum",     8),
+    "shampoo":           ("shampoo",           "shampoo",            1),
+    "kopfhaut":          ("kopfhaut",          "kopfhaut_treatment", 1),  # Kur / Behandlung
+    "maske":             ("maske",             "maske",              2),
+    "spuelung":          ("spuelung",          "spuelung",           3),
+    "kopfhaut_taeglich": ("kopfhaut_taeglich", "serum",              4),  # täglich anwendbar
+    "leave_in":          ("leave_in",          "leave_in",           5),
+    "nacht_serum":       ("nacht_serum",       "serum",              6),
+    "styling":           ("styling_1",         "styling",            7),
+    "styling_2":         ("styling_2",         "styling",            8),
+    "styling_3":         ("styling_3",         "styling",            8),
+    "serum":             ("finish",            "finish_oel",         9),
 }
 
 # Chip: Haupt-Nutzen — UI-Slug = DB-Token (1:1), damit Reverse eindeutig ist.
@@ -133,6 +145,7 @@ class LibraryEntry:
     produkt_key: str = ""       # leer → aus produktname slugifiziert
     routine_schritt: int = 0    # 0 → Default aus SLOT_MAP
     produkttyp: str = ""        # leer → Default aus SLOT_MAP
+    produktlinie: str = ""      # leer → Default aus to_produktdatenbank_row-Parameter
     # 12. UI-Feld (nach Isomorphie-Test 2026-07-07 als Chip-Multi ergänzt):
     pflegelevel: list[str] = field(default_factory=list)  # ["LOW","MID","HIGH"]-Untermenge
 
@@ -159,7 +172,7 @@ def to_produktdatenbank_row(
     return {
         "produkt_key":       e.produkt_key or _slugify(e.produktname),
         "produktname_de":    e.produktname,
-        "produktlinie":      produktlinie,
+        "produktlinie":      e.produktlinie or produktlinie,
         "produkttyp":        e.produkttyp or produkttyp_default,
         "slot_typ":          slot_db,
         "routine_schritt":   e.routine_schritt or routine_schritt_default,
@@ -292,7 +305,6 @@ def _slugify(s: str) -> str:
 #   - kombinationen / kombi_optional (Produkt-zu-Produkt-Referenzen)
 #   - produkttyp-Feinheiten (finish_oel vs finish_treatment vs serum werden
 #     alle im UI zu "Serum"→"finish")
-#   - Slots kopfhaut_taeglich, nacht_serum, styling_2, styling_3 (nicht im UI)
 #   - Funktions-Tokens jenseits der 11 Mockup-Chips (auffrischung, definition,
 #     elastizitaet, entgiftung, farbschutz, frische, haarwuchs, kaemmbarkeit,
 #     kraeftigend, reinigung, staerkend, textur, verdichtend, versiegelung,
@@ -307,19 +319,20 @@ REVERSE_HAARZUSTAND = {v: k for k, v in UI_HAARZUSTAND.items()}
 REVERSE_KOPFHAUT = {v: k for k, v in UI_KOPFHAUT.items()}
 REVERSE_AUSSCHLUSS = {v: k for k, v in UI_AUSSCHLUSS.items()}
 
-# slot_typ → UI-Slot (mit Fallback-Zuordnung für Slots ohne UI-Repräsentation)
+# slot_typ → UI-Slot. 1:1-Mapping seit Sub-Slot-Ausroll 2026-07-08 — die 4
+# zuvor verschmolzenen Sub-Slots sind jetzt eigenständige UI-Slots.
 REVERSE_SLOT = {
     "shampoo":           "shampoo",
     "spuelung":          "spuelung",
     "maske":             "maske",
     "kopfhaut":          "kopfhaut",
-    "kopfhaut_taeglich": "kopfhaut",   # Δ: kein Sub-Slot im UI
+    "kopfhaut_taeglich": "kopfhaut_taeglich",
     "leave_in":          "leave_in",
     "styling_1":         "styling",
-    "styling_2":         "styling",    # Δ: kein Sub-Slot im UI
-    "styling_3":         "styling",    # Δ: kein Sub-Slot im UI
+    "styling_2":         "styling_2",
+    "styling_3":         "styling_3",
     "finish":            "serum",
-    "nacht_serum":       "serum",      # Δ: kein Sub-Slot im UI
+    "nacht_serum":       "nacht_serum",
 }
 
 
@@ -335,8 +348,6 @@ def from_produktdatenbank_row(row: dict) -> tuple["LibraryEntry", list[str]]:
     if slot is None:
         warnings.append(f"unbekannter slot_typ '{row['slot_typ']}' → 'shampoo'")
         slot = "shampoo"
-    elif row["slot_typ"] in {"kopfhaut_taeglich", "styling_2", "styling_3", "nacht_serum"}:
-        warnings.append(f"slot_typ '{row['slot_typ']}' auf UI-Slot '{slot}' verschmolzen")
 
     haupt_tokens = _split(row.get("hauptfunktion", ""))
     neben_tokens = _split(row.get("nebenfunktionen", ""))
@@ -371,8 +382,6 @@ def from_produktdatenbank_row(row: dict) -> tuple["LibraryEntry", list[str]]:
 
     ausschluss = _reverse_ausschluss(row.get("ausschluss_bei", ""), warnings)
 
-    if row.get("produktlinie", "") not in ("", "eigen"):
-        warnings.append(f"produktlinie='{row['produktlinie']}' geht beim Reverse verloren")
     if row.get("kombinationen", "") or row.get("kombi_optional", ""):
         warnings.append("kombinationen/kombi_optional gehen beim Reverse verloren")
 
@@ -393,6 +402,7 @@ def from_produktdatenbank_row(row: dict) -> tuple["LibraryEntry", list[str]]:
         produkt_key=row.get("produkt_key", ""),
         routine_schritt=int(row.get("routine_schritt", 0) or 0),
         produkttyp=row.get("produkttyp", ""),
+        produktlinie=row.get("produktlinie", ""),
         pflegelevel=_split(row.get("pflegelevel", "")),
     )
     return entry, warnings

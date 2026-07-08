@@ -1,0 +1,1545 @@
+{
+  "meta": {
+    "source": "WL-Klon 5lPLG0y235XiIpN1, Node '08 Ausschluss-Filter'",
+    "count": 37,
+    "adapter_version": "12-Feld/11-Slot (2026-07-08)"
+  },
+  "entries": [
+    {
+      "produktname": "MONAT Bond IQ™ Peptid-Therapie Leave-in-Creme",
+      "slot": "leave_in",
+      "hauptnutzen_primary": [
+        "reparatur",
+        "bonding"
+      ],
+      "hauptnutzen_secondary": [
+        "feuchtigkeit",
+        "hitzeschutz",
+        "frizz_reduktion",
+        "kaemmbarkeit",
+        "glanz",
+        "staerkend"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "stark_geschaedigt",
+        "haarbruch",
+        "trocken",
+        "frizz"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "alle",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Auf sauberes, handtuchtrockenes Haar auftragen. Nicht ausspülen.",
+      "produkt_key": "bond_iq_leave_in",
+      "routine_schritt": 5,
+      "produkttyp": "leave_in",
+      "produktlinie": "bond_iq",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "MONAT Bond IQ™ Regenerationsserum für Tag & Nacht",
+      "slot": "nacht_serum",
+      "hauptnutzen_primary": [
+        "reparatur"
+      ],
+      "hauptnutzen_secondary": [
+        "feuchtigkeit",
+        "glanz",
+        "frizz_reduktion",
+        "kaemmbarkeit",
+        "elastizitaet",
+        "staerkend",
+        "kraeftigend"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "stark_geschaedigt",
+        "spliss",
+        "haarbruch",
+        "trocken",
+        "frizz"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "intensiv",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Vor dem Schlafengehen auf trockenes oder handtuchtrockenes Haar auftragen. Einen Pumpstoß in den Händen verteilen und gleichmäßig auf Längen und Spitzen auftragen. Nicht ausspülen.",
+      "produkt_key": "bond_iq_night_day_serum",
+      "routine_schritt": 6,
+      "produkttyp": "serum",
+      "produktlinie": "bond_iq",
+      "pflegelevel": [
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "MONAT Bond IQ™ Stärkendes Shampoo",
+      "slot": "shampoo",
+      "hauptnutzen_primary": [
+        "reparatur"
+      ],
+      "hauptnutzen_secondary": [
+        "feuchtigkeit",
+        "frizz_reduktion",
+        "glanz",
+        "kaemmbarkeit",
+        "staerkend"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "stark_geschaedigt",
+        "haarbruch",
+        "trocken",
+        "frizz"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "alle",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "In den Händen aufschäumen lassen und auf das nasse Haar auftragen. 1–2 Minuten aufschäumen. Ausspülen und wiederholen.",
+      "produkt_key": "bond_iq_shampoo",
+      "routine_schritt": 1,
+      "produkttyp": "shampoo",
+      "produktlinie": "bond_iq",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "MONAT Bond IQ™ Stärkende Spülung",
+      "slot": "spuelung",
+      "hauptnutzen_primary": [
+        "reparatur"
+      ],
+      "hauptnutzen_secondary": [
+        "feuchtigkeit",
+        "kaemmbarkeit",
+        "glanz",
+        "elastizitaet",
+        "staerkend"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "stark_geschaedigt",
+        "haarbruch",
+        "trocken",
+        "frizz"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "intensiv",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Nach der Haarwäsche überschüssiges Wasser entfernen. Conditioner vom Ansatz bis in die Spitzen auftragen, 3–5 Minuten einwirken lassen, ausspülen.",
+      "produkt_key": "bond_iq_spuelung",
+      "routine_schritt": 3,
+      "produkttyp": "spuelung",
+      "produktlinie": "bond_iq",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "MONAT Curl Perfection™ Auffrischungsspray",
+      "slot": "styling_3",
+      "hauptnutzen_primary": [
+        "locken",
+        "auffrischung"
+      ],
+      "hauptnutzen_secondary": [
+        "feuchtigkeit",
+        "glanz",
+        "frizz_reduktion",
+        "definition",
+        "elastizitaet",
+        "staerkend"
+      ],
+      "haarstruktur": [
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "trocken",
+        "frizz"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [
+        "glatt"
+      ],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Gleichmäßig auf feuchtes oder trockenes Haar aufsprühen, beginnend an den Spitzen und in Richtung Ansatz arbeiten. Locken sanft mit den Händen kneten, um sie zu reaktivieren. Lufttrocknen, mit Diffusor föhnen oder nach Wunsch stylen.",
+      "produkt_key": "curl_auffrischer",
+      "routine_schritt": 8,
+      "produkttyp": "styling",
+      "produktlinie": "curl_perfection",
+      "pflegelevel": [
+        "LOW",
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "MONAT Curl Perfection™ Lockendefinierende Creme",
+      "slot": "styling",
+      "hauptnutzen_primary": [
+        "locken",
+        "feuchtigkeit"
+      ],
+      "hauptnutzen_secondary": [
+        "frizz_reduktion",
+        "definition",
+        "kaemmbarkeit"
+      ],
+      "haarstruktur": [
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "trocken",
+        "frizz"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [
+        "glatt"
+      ],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Gleichmäßig auf nasses, feuchtes oder handtuchtrockenes Haar auftragen, besonders in Längen und Spitzen, wo Locken tendenziell trockener sind. Nicht ausspülen. Nach Belieben lufttrocknen, mit Diffusor föhnen oder stylen.",
+      "produkt_key": "curl_creme",
+      "routine_schritt": 7,
+      "produkttyp": "styling",
+      "produktlinie": "curl_perfection",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "MONAT Curl Perfection™ Gelée für Feuchtigkeit & Halt",
+      "slot": "styling_2",
+      "hauptnutzen_primary": [
+        "locken",
+        "definition",
+        "halt"
+      ],
+      "hauptnutzen_secondary": [
+        "feuchtigkeit",
+        "frizz_reduktion",
+        "glanz",
+        "elastizitaet",
+        "staerkend",
+        "reparatur"
+      ],
+      "haarstruktur": [
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "frizz",
+        "trocken"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "intensiv",
+      "ausschluss_bei": [
+        "glatt"
+      ],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Auf nasses, handtuchtrockenes oder feuchtes Haar auftragen. Mit den Fingern oder einem breiten Kamm durchkämmen. Nicht ausspülen. Nach Belieben lufttrocknen, mit Diffusor föhnen oder stylen. Kann auf trockenes Haar aufgetragen werden, um Locken aufzufrischen.",
+      "produkt_key": "curl_gelee",
+      "routine_schritt": 8,
+      "produkttyp": "styling",
+      "produktlinie": "curl_perfection",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "Entwirrungs-Spray",
+      "slot": "leave_in",
+      "hauptnutzen_primary": [
+        "entwirren"
+      ],
+      "hauptnutzen_secondary": [
+        "feuchtigkeit",
+        "frizz_reduktion",
+        "glanz",
+        "staerkend",
+        "kaemmbarkeit"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "haarbruch",
+        "spliss"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Auf das handtuchtrockene Haar sprühen, vor allem auf verknotete Stellen. Durchkämmen und wie gewohnt stylen. Nicht ausspülen.",
+      "produkt_key": "entwirrungsspray",
+      "routine_schritt": 5,
+      "produkttyp": "leave_in",
+      "produktlinie": "basis",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "Erweiterte Feuchtigkeitsspülung",
+      "slot": "spuelung",
+      "hauptnutzen_primary": [
+        "feuchtigkeit"
+      ],
+      "hauptnutzen_secondary": [
+        "glanz",
+        "kaemmbarkeit"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel"
+      ],
+      "haarzustand": [
+        "trocken",
+        "glanzlos"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Nach der Reinigung überschüssiges Wasser aus dem Haar entfernen. In das nasse Haar einarbeiten. Ausspülen. Für zusätzliche Pflege 1–2 Minuten einwirken lassen, dann ausspülen.",
+      "produkt_key": "erweiterte_feuchtigkeit_spuelung",
+      "routine_schritt": 3,
+      "produkttyp": "spuelung",
+      "produktlinie": "erw_feuchtigkeit",
+      "pflegelevel": [
+        "LOW",
+        "MID"
+      ]
+    },
+    {
+      "produktname": "Reinigendes Essig-Shampoo",
+      "slot": "shampoo",
+      "hauptnutzen_primary": [
+        "reinigung",
+        "entgiftung"
+      ],
+      "hauptnutzen_secondary": [
+        "glanz",
+        "kopfhautpflege",
+        "frische"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "glanzlos"
+      ],
+      "kopfhaut": [
+        "fettig"
+      ],
+      "intensitaet": "alle",
+      "ausschluss_bei": [
+        "normal",
+        "trocken",
+        "juckend_empfindlich"
+      ],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "In den Händen aufschäumen und auf das nasse Haar auftragen. 1-2 Minuten einwirken lassen. Ausspülen und wiederholen.",
+      "produkt_key": "essig_shampoo",
+      "routine_schritt": 1,
+      "produkttyp": "shampoo",
+      "produktlinie": "reinigende",
+      "pflegelevel": [
+        "LOW",
+        "MID"
+      ]
+    },
+    {
+      "produktname": "Reinigende Essigspülung",
+      "slot": "spuelung",
+      "hauptnutzen_primary": [
+        "reinigung",
+        "wash_alternative"
+      ],
+      "hauptnutzen_secondary": [
+        "glanz",
+        "feuchtigkeit",
+        "entgiftung",
+        "farbschutz",
+        "kopfhautpflege"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "glanzlos",
+        "trocken"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "alle",
+      "ausschluss_bei": [
+        "normal",
+        "trocken",
+        "juckend_empfindlich"
+      ],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Den Sprühkopf aufdrehen und auf das nasse Haar und die Kopfhaut in horizontalen Abschnitten vom vorderen Haaransatz nach hinten auftragen. 1–3 Minuten einmassieren und aufschäumen lassen. Ausspülen.",
+      "produkt_key": "essig_spuelung",
+      "routine_schritt": 3,
+      "produkttyp": "spuelung",
+      "produktlinie": "reinigende",
+      "pflegelevel": [
+        "LOW",
+        "MID"
+      ]
+    },
+    {
+      "produktname": "Erweitertes Feuchtigkeitsshampoo",
+      "slot": "shampoo",
+      "hauptnutzen_primary": [
+        "feuchtigkeit"
+      ],
+      "hauptnutzen_secondary": [
+        "glanz",
+        "kaemmbarkeit",
+        "reinigung"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel"
+      ],
+      "haarzustand": [
+        "trocken",
+        "glanzlos"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "In den Händen aufschäumen und auf das nasse Haar auftragen. 1–2 Minuten einwirken lassen. Ausspülen und wiederholen.",
+      "produkt_key": "feuchtigkeits_shampoo",
+      "routine_schritt": 1,
+      "produkttyp": "shampoo",
+      "produktlinie": "erw_feuchtigkeit",
+      "pflegelevel": [
+        "LOW",
+        "MID"
+      ]
+    },
+    {
+      "produktname": "MONAT STUDIO ONE™ Föhncreme",
+      "slot": "styling",
+      "hauptnutzen_primary": [
+        "frizz_reduktion",
+        "hitzeschutz"
+      ],
+      "hauptnutzen_secondary": [
+        "glanz"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "frizz"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "alle",
+      "ausschluss_bei": [
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Auf sauberes, handtuchtrockenes Haar von den Wurzeln bis zu den Spitzen auftragen. Föhnen und stylen wie gewohnt.",
+      "produkt_key": "fohncreme",
+      "routine_schritt": 7,
+      "produkttyp": "styling",
+      "produktlinie": "studio_one",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "MONAT STUDIO ONE™ Hitzeschutzspray",
+      "slot": "styling",
+      "hauptnutzen_primary": [
+        "hitzeschutz"
+      ],
+      "hauptnutzen_secondary": [
+        "glanz",
+        "staerkend",
+        "elastizitaet"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "haarbruch"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Auf das saubere, handtuchtrockene Haar auftragen. Föhnen und wie gewohnt stylen. Kann auch auf trockenes Haar vor der Verwendung von Stylinggeräten angewendet werden.",
+      "produkt_key": "hitzeschutzspray",
+      "routine_schritt": 7,
+      "produkttyp": "styling",
+      "produktlinie": "studio_one",
+      "pflegelevel": [
+        "LOW",
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "IR Clinical™ Kopfhautserum gegen dünner werdendes Haar",
+      "slot": "kopfhaut_taeglich",
+      "hauptnutzen_primary": [
+        "verdichtend",
+        "haarwuchs",
+        "kopfhautpflege"
+      ],
+      "hauptnutzen_secondary": [
+        "kopfhautpflege"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel"
+      ],
+      "haarzustand": [
+        "duenn",
+        "kraftlos",
+        "haarbruch"
+      ],
+      "kopfhaut": [
+        "trocken"
+      ],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Mit der Pipette direkt auf die feuchte oder trockene Kopfhaut auftragen, dabei das Haar in Sektionen teilen. 1 bis 3 Pipetten auf die gesamte Kopfhaut. Mit den Fingerspitzen einmassieren. Nicht ausspülen. Einmal täglich anwenden.",
+      "produkt_key": "ir_clinical_kopfhautserum",
+      "routine_schritt": 4,
+      "produkttyp": "kopfhaut_treatment",
+      "produktlinie": "ir_clinical",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "IR Clinical™ Verdickendes Shampoo",
+      "slot": "shampoo",
+      "hauptnutzen_primary": [
+        "verdichtend"
+      ],
+      "hauptnutzen_secondary": [
+        "reinigung",
+        "farbschutz",
+        "haarwuchs",
+        "staerkend",
+        "frische"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel"
+      ],
+      "haarzustand": [
+        "duenn",
+        "kraftlos",
+        "haarbruch"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "alle",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Auf das nasse Haar auftragen. 1–2 Minuten aufschäumen. Ausspülen und wiederholen.",
+      "produkt_key": "ir_clinical_shampoo",
+      "routine_schritt": 1,
+      "produkttyp": "shampoo",
+      "produktlinie": "ir_clinical",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "IR Clinical™ Verdickende Spülung",
+      "slot": "spuelung",
+      "hauptnutzen_primary": [
+        "verdichtend"
+      ],
+      "hauptnutzen_secondary": [
+        "feuchtigkeit",
+        "farbschutz",
+        "haarwuchs",
+        "staerkend",
+        "kaemmbarkeit",
+        "frische"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel"
+      ],
+      "haarzustand": [
+        "duenn",
+        "kraftlos",
+        "haarbruch"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Nach dem Shampoo überschüssiges Wasser aus dem Haar entfernen. Von der Kopfhaut bis in die Spitzen auftragen. 3–5 Minuten einwirken lassen. Gut ausspülen.",
+      "produkt_key": "ir_clinical_spuelung",
+      "routine_schritt": 3,
+      "produkttyp": "spuelung",
+      "produktlinie": "ir_clinical",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "Reinigungspeeling für die Kopfhaut",
+      "slot": "kopfhaut",
+      "hauptnutzen_primary": [
+        "kopfhautpflege",
+        "reinigung"
+      ],
+      "hauptnutzen_secondary": [
+        "entgiftung",
+        "frische",
+        "feuchtigkeit"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "glanzlos"
+      ],
+      "kopfhaut": [
+        "fettig"
+      ],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [
+        "juckend_empfindlich"
+      ],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Auf nasses Haar und Kopfhaut auftragen. In die Kopfhaut einmassieren, um sanft zu peelen und aufschäumen zu lassen. Gründlich ausspülen. Einmal pro Woche oder nach Bedarf anwenden.",
+      "produkt_key": "kopfhaut_peeling",
+      "routine_schritt": 1,
+      "produkttyp": "kopfhaut_treatment",
+      "produktlinie": "reinigende",
+      "pflegelevel": [
+        "LOW",
+        "MID"
+      ]
+    },
+    {
+      "produktname": "MONAT BLACK™ Shampoo + Spülung",
+      "slot": "shampoo",
+      "hauptnutzen_primary": [
+        "reinigung",
+        "verdichtend"
+      ],
+      "hauptnutzen_secondary": [
+        "staerkend"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel"
+      ],
+      "haarzustand": [
+        "kraftlos",
+        "duenn"
+      ],
+      "kopfhaut": [
+        "fettig"
+      ],
+      "intensitaet": "alle",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "In den Händen aufemulgieren und auf das nasse Haar auftragen. 2-3 Minuten einwirken lassen. Ausspülen und wiederholen.",
+      "produkt_key": "monat_black",
+      "routine_schritt": 1,
+      "produkttyp": "shampoo_2in1",
+      "produktlinie": "monat_black",
+      "pflegelevel": [
+        "LOW",
+        "MID"
+      ]
+    },
+    {
+      "produktname": "MONAT STUDIO ONE™ The Moxie™ Volumen-Mousse",
+      "slot": "styling",
+      "hauptnutzen_primary": [
+        "volumen",
+        "halt"
+      ],
+      "hauptnutzen_secondary": [
+        "frizz_reduktion",
+        "definition"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "kraftlos",
+        "frizz",
+        "duenn"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Vor Gebrauch gut schütteln. Auf sauberes, nasses oder handtuchtrockenes Haar auftragen. Föhnen und wie gewohnt stylen.",
+      "produkt_key": "moxie_mousse",
+      "routine_schritt": 7,
+      "produkttyp": "styling",
+      "produktlinie": "studio_one",
+      "pflegelevel": [
+        "LOW",
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "REJUVABEADS® Spliss-Versiegler",
+      "slot": "leave_in",
+      "hauptnutzen_primary": [
+        "reparatur",
+        "versiegelung"
+      ],
+      "hauptnutzen_secondary": [
+        "glanz",
+        "kaemmbarkeit",
+        "staerkend",
+        "frizz_reduktion"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "spliss",
+        "haarbruch",
+        "frizz"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "intensiv",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Auf die mittleren Längen und Spitzen des sauberen, handtuchtrockenen Haars auftragen. Eine Minute warten. Stylen wie gewohnt.",
+      "produkt_key": "rejuvabeads",
+      "routine_schritt": 5,
+      "produkttyp": "finish_treatment",
+      "produktlinie": "basis",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "REJUVENIQE® Pflegeöl",
+      "slot": "serum",
+      "hauptnutzen_primary": [
+        "glanz",
+        "feuchtigkeit"
+      ],
+      "hauptnutzen_secondary": [
+        "frizz_reduktion",
+        "kraeftigend",
+        "kaemmbarkeit"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "trocken",
+        "glanzlos",
+        "frizz"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "intensiv",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Vor-Shampoo-Behandlung: Großzügig auf trockenes oder feuchtes Haar und Kopfhaut auftragen, 15 Minuten einwirken lassen, gründlich ausspülen und shampoonieren. Intensive Feuchtigkeitsbehandlung: Großzügig auf feuchtes Haar und Kopfhaut auftragen, warmes feuchtes Handtuch um den Kopf legen, 30 Minuten einwirken lassen, ausspülen und shampoonieren. Leave-in Finish: Wenige Tropfen in den Handflächen verreiben und auf die Spitzen trockenen Haars auftragen.",
+      "produkt_key": "rejuveniqe_oel",
+      "routine_schritt": 9,
+      "produkttyp": "finish_oel",
+      "produktlinie": "basis",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "Renew™ Hydrating Shampoo",
+      "slot": "shampoo",
+      "hauptnutzen_primary": [
+        "feuchtigkeit"
+      ],
+      "hauptnutzen_secondary": [
+        "glanz",
+        "reinigung",
+        "kaemmbarkeit"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "trocken",
+        "glanzlos"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "intensiv",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "In den Händen aufemulgieren und auf das nasse Haar und die Kopfhaut auftragen. 2–3 Minuten einwirken lassen. Ausspülen und wiederholen.",
+      "produkt_key": "renew_shampoo",
+      "routine_schritt": 1,
+      "produkttyp": "shampoo",
+      "produktlinie": "renew",
+      "pflegelevel": [
+        "LOW",
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "Renew™ Hydrating Spülung",
+      "slot": "spuelung",
+      "hauptnutzen_primary": [
+        "feuchtigkeit"
+      ],
+      "hauptnutzen_secondary": [
+        "kaemmbarkeit"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "trocken"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "intensiv",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Nach Renew™ Shampoo verwenden. Überschüssiges Wasser aus dem Haar entfernen. Von der Kopfhaut bis zu den Spitzen auftragen. 3–5 Minuten einwirken lassen. Gut ausspülen.",
+      "produkt_key": "renew_spuelung",
+      "routine_schritt": 3,
+      "produkttyp": "spuelung",
+      "produktlinie": "renew",
+      "pflegelevel": [
+        "LOW",
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "Replenish™ Feuchtigkeitsmaske",
+      "slot": "maske",
+      "hauptnutzen_primary": [
+        "feuchtigkeit"
+      ],
+      "hauptnutzen_secondary": [
+        "glanz",
+        "kraeftigend",
+        "kaemmbarkeit"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "trocken",
+        "glanzlos"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "intensiv",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Nach der Haarwäsche auf das Haar auftragen und 5–10 Minuten einwirken lassen. Gut ausspülen. 1–2 Mal pro Woche anwenden.",
+      "produkt_key": "replenish_maske",
+      "routine_schritt": 2,
+      "produkttyp": "maske",
+      "produktlinie": "renew",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "Restore™ Leave-In Conditioner",
+      "slot": "leave_in",
+      "hauptnutzen_primary": [
+        "feuchtigkeit"
+      ],
+      "hauptnutzen_secondary": [
+        "staerkend",
+        "kaemmbarkeit"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "trocken"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "intensiv",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Gleichmäßig auf nasses, handtuchtrockenes oder trockenes Haar auftragen. Durchkämmen und wie gewohnt stylen. Nicht ausspülen.",
+      "produkt_key": "restore_leave_in",
+      "routine_schritt": 5,
+      "produkttyp": "leave_in",
+      "produktlinie": "basis",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "Volumenverstärkende Revitalize™ Spülung",
+      "slot": "spuelung",
+      "hauptnutzen_primary": [
+        "volumen"
+      ],
+      "hauptnutzen_secondary": [
+        "feuchtigkeit",
+        "staerkend",
+        "kaemmbarkeit",
+        "reparatur"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel"
+      ],
+      "haarzustand": [
+        "kraftlos"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Nach der Haarwäsche überschüssiges Wasser entfernen. Conditioner auftragen. Gut ausspülen.",
+      "produkt_key": "revitalize_spuelung",
+      "routine_schritt": 3,
+      "produkttyp": "spuelung",
+      "produktlinie": "volumen",
+      "pflegelevel": [
+        "LOW",
+        "MID"
+      ]
+    },
+    {
+      "produktname": "Volumenverstärkendes Revive™ Shampoo",
+      "slot": "shampoo",
+      "hauptnutzen_primary": [
+        "volumen"
+      ],
+      "hauptnutzen_secondary": [
+        "reinigung",
+        "staerkend",
+        "feuchtigkeit",
+        "kaemmbarkeit",
+        "reparatur"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel"
+      ],
+      "haarzustand": [
+        "kraftlos"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "In den Händen aufschäumen und auf das nasse Haar auftragen. 2–3 Minuten einwirken lassen. Ausspülen und wiederholen.",
+      "produkt_key": "revive_shampoo",
+      "routine_schritt": 1,
+      "produkttyp": "shampoo",
+      "produktlinie": "volumen",
+      "pflegelevel": [
+        "LOW",
+        "MID"
+      ]
+    },
+    {
+      "produktname": "MONAT Scalp Comfort™ Ausgleichende Kopfhautbehandlung",
+      "slot": "kopfhaut",
+      "hauptnutzen_primary": [
+        "kopfhautpflege",
+        "ausgleichend"
+      ],
+      "hauptnutzen_secondary": [
+        "feuchtigkeit",
+        "reinigung",
+        "entgiftung",
+        "frische"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [],
+      "kopfhaut": [
+        "juckend_empfindlich",
+        "schuppig",
+        "trocken"
+      ],
+      "intensitaet": "intensiv",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Anstelle des normalen Shampoos verwenden. Direkt auf die nasse, feuchte oder trockene Kopfhaut auftragen und das Haar mit der Spitze des Applikators von vorne nach hinten abteilen. 3 bis 5 Produktstränge zur Abdeckung der gesamten Kopfhaut. Mit den Fingerspitzen einmassieren. Gründlich ausspülen. 1–2 Mal pro Woche oder nach Bedarf anwenden.",
+      "produkt_key": "scalp_comfort_behandlung",
+      "routine_schritt": 1,
+      "produkttyp": "kopfhaut_treatment",
+      "produktlinie": "scalp_comfort",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "MONAT Scalp Comfort™ Ausgleichendes Serum",
+      "slot": "kopfhaut_taeglich",
+      "hauptnutzen_primary": [
+        "kopfhautpflege",
+        "ausgleichend"
+      ],
+      "hauptnutzen_secondary": [
+        "feuchtigkeit"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [],
+      "kopfhaut": [
+        "juckend_empfindlich",
+        "schuppig",
+        "trocken"
+      ],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Direkt auf die feuchte oder trockene Kopfhaut auftragen, mit der Pipette von vorne nach hinten abteilen. 1-3 Pipettenfüllungen. Einmassieren. Nicht ausspülen. Einmal täglich.",
+      "produkt_key": "scalp_comfort_serum",
+      "routine_schritt": 4,
+      "produkttyp": "serum",
+      "produktlinie": "scalp_comfort",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "Smoothing Anti-Frizz™ Deep Conditioner",
+      "slot": "spuelung",
+      "hauptnutzen_primary": [
+        "frizz_reduktion"
+      ],
+      "hauptnutzen_secondary": [
+        "feuchtigkeit",
+        "kaemmbarkeit",
+        "reparatur"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel"
+      ],
+      "haarzustand": [
+        "frizz",
+        "trocken",
+        "haarbruch"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "intensiv",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Nach dem Waschen mit Smoothing Anti-Frizz™ Shampoo im Haar verteilen. 3–5 Minuten einwirken lassen, gründlich ausspülen.",
+      "produkt_key": "smoothing_deep_conditioner",
+      "routine_schritt": 3,
+      "produkttyp": "spuelung",
+      "produktlinie": "smoothing",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "Smoothing Anti-Frizz™ Föhn-Spray",
+      "slot": "styling",
+      "hauptnutzen_primary": [
+        "frizz_reduktion",
+        "hitzeschutz"
+      ],
+      "hauptnutzen_secondary": [
+        "glanz",
+        "staerkend"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "frizz"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Gut schütteln. Gleichmäßig auf das feuchte Haar aufsprühen. Föhnen und nach Belieben stylen.",
+      "produkt_key": "smoothing_fohn_spray",
+      "routine_schritt": 7,
+      "produkttyp": "styling",
+      "produktlinie": "smoothing",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "Smoothing Anti-Frizz™ Shampoo",
+      "slot": "shampoo",
+      "hauptnutzen_primary": [
+        "frizz_reduktion"
+      ],
+      "hauptnutzen_secondary": [
+        "feuchtigkeit",
+        "kaemmbarkeit",
+        "reparatur"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "frizz",
+        "haarbruch"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "alle",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Auf nasses Haar auftragen, 1–2 Minuten aufschäumen lassen. Ausspülen und bei Bedarf wiederholen.",
+      "produkt_key": "smoothing_shampoo",
+      "routine_schritt": 1,
+      "produkttyp": "shampoo",
+      "produktlinie": "smoothing",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "Smoothing Anti-Frizz™ Intensive Tiefenbehandlung",
+      "slot": "maske",
+      "hauptnutzen_primary": [
+        "frizz_reduktion"
+      ],
+      "hauptnutzen_secondary": [
+        "kaemmbarkeit",
+        "reparatur"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "frizz",
+        "haarbruch"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "intensiv",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Nach dem Waschen mit Smoothing Anti-Frizz™ Shampoo in den Händen aufschäumen und ins Haar einarbeiten. 3–5 Minuten einwirken lassen, gründlich ausspülen.",
+      "produkt_key": "smoothing_tiefenbehandlung",
+      "routine_schritt": 2,
+      "produkttyp": "maske",
+      "produktlinie": "smoothing",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "Super-Feuchtigkeitsmaske",
+      "slot": "maske",
+      "hauptnutzen_primary": [
+        "feuchtigkeit"
+      ],
+      "hauptnutzen_secondary": [
+        "glanz",
+        "elastizitaet",
+        "kaemmbarkeit"
+      ],
+      "haarstruktur": [
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "trocken",
+        "glanzlos"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "intensiv",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Nach der Haarwäsche auf das Haar auftragen und 5-10 Minuten einwirken lassen. Gut ausspülen. Ein- bis zweimal pro Woche anwenden.",
+      "produkt_key": "super_feuchtigkeitsmaske",
+      "routine_schritt": 2,
+      "produkttyp": "maske",
+      "produktlinie": "erw_feuchtigkeit",
+      "pflegelevel": [
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "The Champ™ Pflegendes Trockenshampoo",
+      "slot": "serum",
+      "hauptnutzen_primary": [
+        "reinigung",
+        "frische"
+      ],
+      "hauptnutzen_secondary": [
+        "volumen",
+        "textur"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel",
+        "dick"
+      ],
+      "haarzustand": [
+        "kraftlos"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "alle",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Vor Gebrauch gut schütteln. Gleichmäßig aus einem Abstand von 10–12 cm auf das Haar sprühen, dabei auf den Haaransatz konzentrieren. 1–2 Minuten trocknen lassen. Gründlich kämmen oder bürsten.",
+      "produkt_key": "the_champ",
+      "routine_schritt": 9,
+      "produkttyp": "trockenshampoo",
+      "produktlinie": "studio_one",
+      "pflegelevel": [
+        "LOW",
+        "MID",
+        "HIGH"
+      ]
+    },
+    {
+      "produktname": "MONAT STUDIO ONE™ Volumen-Spray",
+      "slot": "styling",
+      "hauptnutzen_primary": [
+        "volumen"
+      ],
+      "hauptnutzen_secondary": [
+        "halt",
+        "verdichtend",
+        "staerkend"
+      ],
+      "haarstruktur": [
+        "glatt",
+        "wellig",
+        "lockig",
+        "kraus"
+      ],
+      "haarstaerke": [
+        "fein",
+        "mittel"
+      ],
+      "haarzustand": [
+        "kraftlos",
+        "duenn"
+      ],
+      "kopfhaut": [],
+      "intensitaet": "leicht",
+      "ausschluss_bei": [],
+      "bezugsquelle": "",
+      "warum_sinnvoll": "Auf das feuchte Haar sprühen, vom Ansatz bis in die Spitzen. Durchbürsten, um das Produkt gleichmäßig zu verteilen. Anschließend föhnen und wie gewünscht stylen.",
+      "produkt_key": "volumen_spray",
+      "routine_schritt": 7,
+      "produkttyp": "styling",
+      "produktlinie": "studio_one",
+      "pflegelevel": [
+        "LOW",
+        "MID",
+        "HIGH"
+      ]
+    }
+  ]
+}
