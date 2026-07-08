@@ -181,6 +181,18 @@ schnell profitabel.
 | Push-Benachrichtigung aufs Handy | — | — | ✓ |
 | Dashboard als App auf den Homebildschirm installieren (PWA) | — | — | ✓ |
 | Zustellungs-Toggle (Mail / Push / nur Dashboard) | — | — | ✓ |
+| **Follow-up-Kennzahlen** (Selbstauskunft der Beraterin, keine Kundinnen-PII) | — | — | ✓ |
+
+**Follow-up-Kennzahlen — Design-Entscheidung 2026-07-08 spät**
+Die Kennzahlen „Follow-ups offen" und „Follow-up-Quote" (Warenkorb →
+Bestellung) im Dashboard beruhen ausschließlich auf **Beraterin-
+Selbstauskunft**: pro Lead klickt die Beraterin manuell „Warenkorb
+versendet" und/oder „Bestellt". Das System aggregiert nur diese Ticks.
+Kein automatisches Tracking, keine Speicherung von Kundinnen-Verhalten,
+kein Marketing-Attribution-Kram. Damit bleibt das „Endkundinnen-Daten
+werden nicht persistiert"-Prinzip aus Kapitel 3.6 unverletzt, während
+die Beraterin trotzdem ihre Conversion-Rate sieht. Datenmodell-Detail
+siehe Kapitel 3.6, Tabelle `lead_status`.
 
 **Kernunterschied Basic ↔ Pro (neu):**
 - **Basic:** Kundinnen sehen Bedarfe („feuchtigkeitsspendendes Shampoo für
@@ -525,10 +537,24 @@ Detail-Konfiguration und DPA-Übersicht: siehe Kapitel 3.5.
 3. **n8n-Workflow-Klon** `myglowmatch_wl` via API aufsetzen — separater
    Webhook, separater Datenbestand, Regel-Engine (Nodes 04–15) unverändert
    übernommen. Details in `chat-archive/2026-07-07_wl-adapter-isomorphie.md`.
+   **✓ Erledigt 2026-07-08:** Klon live als `MyBeautyKey Whitelabel
+   Beratungssystem v1.0` (ID `5lPLG0y235XiIpN1`, Webhook
+   `mybeautykey-wl-haaranalyse`), `clone_workflow_wl.py` idempotent, MONAT-
+   Workflow physisch unangetastet. Verifikation via 4× Regressions-Bulk
+   0/76 Slot-Drift gegen frische MONAT-Baseline; siehe
+   `chat-archive/2026-07-08_wl-klon-adapter.md`.
 4. **Produktbibliothek + Auswertung gegen eigene Produkt-DB** —
    Beraterin-UI mit Chip-Formular (12 Felder), Adapter übersetzt in
    25-Spalten-Format (siehe `wl_adapter.py`), Matching gegen die
    organisationseigene Produktbibliothek in Supabase.
+   **Teilstand 2026-07-08:** Adapter auf 11 Slot-Chips + `produktlinie`-
+   Feld ausgerollt (Sub-Slot-Design final, Iso-Priorität 1 geschlossen).
+   Persistenz als JSON-Fixture `wl_libraries/sina_monat.json` (37 Einträge)
+   via `dump_wl_library.py`. Sync-Pipeline `sync_wl_produktdatenbank.py
+   --source` speist den Klon-Node 08, verlustfrei belegt. Offen für V1:
+   Beraterin-UI (Frontend) und Supabase-Persistenz-Schicht statt JSON-
+   Datei. Mockup `demo/bibliothek.html` muss auf 27 Nutzen-Chips + 11
+   Slot-Chips + Pflegelevel-Feld aktualisiert werden.
 5. **CSV/Excel-Import** per Drag-and-drop mit fertiger Spaltenvorlage,
    ODER manuelle Produkt-Anlage im UI (Alternative-Weg).
 6. **Multi-Tenant-Datenmodell** in Supabase mit RLS und Provenienz-Triggern
@@ -927,7 +953,27 @@ setup_service_upload
   draft_catalog_id       uuid FK → product_catalog nullable
   released_at            timestamptz nullable    -- aktive Freigabe
   released_by            uuid FK → user nullable
+
+lead_status                                       -- Beraterin-Selbstauskunft
+  id                     uuid PK                  -- KEINE Kundinnen-PII
+  organization_id        uuid FK → organization
+  beraterin_id           uuid FK → user
+  consultation_ref       text                     -- opaker Verweis (Hash
+                                                  -- der Beratungs-Session,
+                                                  -- kein Klarname)
+  cart_sent_at           timestamptz nullable     -- Beraterin klickt "Warenkorb versendet"
+  order_placed_at        timestamptz nullable     -- Beraterin klickt "Bestellt"
+  created_at, updated_at
 ```
+
+**Wichtig zu `lead_status`:** die Tabelle enthält KEINE Kundinnen-PII —
+weder Name noch E-Mail noch Kontaktdaten. Nur die Beraterin sieht in
+ihrem eigenen Portal, welche ihrer Beratungen sie noch nicht als
+„Warenkorb versendet" markiert hat. Der `consultation_ref` ist ein
+Hash, der die Beraterin an ihre eigene Notiz erinnert, aber keinen
+Rückschluss auf die Kundin zulässt. Follow-up-KPIs im Dashboard
+aggregieren nur diese Timestamps (`cart_sent_at IS NULL AND
+created_at < now() - 5 days` = Follow-up fällig).
 
 ### RLS-Policies (Muster)
 
