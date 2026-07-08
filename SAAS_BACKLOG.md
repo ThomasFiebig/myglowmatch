@@ -479,62 +479,113 @@ Nach Launch beobachten:
 
 ---
 
-## 3 — Bau-Reihenfolge (angepasst nach Strategie-Umkehr)
+## 3 — Bau-Reihenfolge V0 / V1 / V2 (Master-Reihenfolge, Stand 2026-07-08 spät)
 
-Realistischer Weg vom heutigen Stand (n8n-Workflow mit MONAT-Produkten, Landing
-für Konzept-Präsentation) zum Whitelabel-Launch:
+**Prinzip:** eine einzige Reihenfolge, an der du „was ist als nächstes"
+ablesen kannst. Kapitel 3.5 (Tooling-Details) und 3.6 (Datenmodell) sind
+Nachschlagewerke, keine parallelen Aufgabenlisten.
 
-1. **Namensfreigabe** durch Sina / Marcel (aktueller Vorschlag: **MyBeautyKey**
-   passt zur markenneutralen Strategie)
-2. **Domain sichern** + neues Logo finalisieren
-3. **Whitelabel-Grundgerüst** als Route-Group `src/app/(whitelabel)/` im
-   bestehenden Repo aufsetzen
-4. **Fragebogen** aus bestehendem System kopieren, MONAT-spezifische
-   Vokabular-Referenzen entfernen (bleibt in `src/data/questions.ts` erhalten,
-   neue Version im whitelabel-Ordner)
-5. **Ergebnisseite markenneutral** — Analyse-Engine liefert Bedarfsprofil
-   (Slot-basierte Empfehlungen wie „shampoo=feuchtigkeit+dickes_haar"),
-   Kundinnenseite zeigt Text ohne Produktnamen
-6. **Regel-Engine (Node 04–15)** wiederverwenden: liefert das Bedarfsprofil,
-   nicht mehr konkrete Produkte. **Update 2026-07-07 (Bau-Session):** seit
-   Migration #27 arbeitet die Regel-Engine bereits abstrakt gegen strukturierte
-   Produktattribute — kein Umbau nötig. Der WL-Umbau reduziert sich auf einen
-   Daten-Adapter zwischen Beraterin-UI und dem 25-Spalten-Format der
-   `produktdatenbank`. Adapter existiert (`wl_adapter.py`), Isomorphie-Test
-   gegen die 37 MONAT-Produkte belegt: 12-Felder-UI (11 Mockup-Chips + Chip-
-   Multi „Pflegelevel") trägt Desirées Sortiment mit 5/162 harten Δ, alle
-   strukturell durch die UI-Konsolidierung der 4 Sub-Slots erklärt
-   (`isomorphie_report.md`, `chat-archive/2026-07-07_wl-adapter-isomorphie.md`).
-7. **Free-Modus** implementieren — Beraterin bucht kostenlos, bekommt Link,
-   Limit 2 Beratungen/Monat, Upgrade-Prompt bei Erreichen
-8. **Basic-Modus** — Portal mit Login, Beratermail, Kundinnen-Übersicht,
-   ausgegraute Pro-Cards
-9. **Pro-Modus** — Produkt-Bibliothek-UI (Beraterin trägt Sortiment pro Slot
-   ein, strukturierte Attribute per Chip-Auswahl aus n8n-Vokabular),
-   `warum_sinnvoll`-Freitext, Matching Bedarfsprofil → Beraterin-Produkte,
-   Dashboard, Branding-Bereich, PWA, Push
-9.a **Team-Sharing** — Team-Code-Generator im Upline-Portal, Import-Flow
-   für Downlines beim Setup, Pull-Notification bei Vorlage-Updates
-   (siehe Kapitel 2.5)
-9.b **Compliance-Absicherung** — AGB-Klauseln, Takedown-Endpoint, prominente
-   Beraterin-Attribution auf Kundinnen-Ergebnisseite, Content-Akzeptanz-Klick
-   bei Team-Sharing (siehe Kapitel 2.6). Anwaltscheck vor erstem zahlenden
-   Kunden.
-10. **Stripe-Anbindung** für Free-Upgrade auf Basic und Pro-Buchung + Setup-Fee
-11. **Öffentliche Demo** unter dem neuen Namen (`[name].de/demo`) mit
-    Analyse-only-Beispiel
-12. **Übergabe der finalen Demo** an Sina und die ca. 10 Top-Leaderinnen
+Realistischer Zeitrahmen zum Basic-Launch: **~14–18 Bau-Tage** ab V1-Start,
+V0 läuft parallel als Vorarbeit.
 
-**Realistischer Zeitrahmen:** ~14–18 Bau-Tage für Basic-Launch inkl.
-ausgegrautem Dashboard. Pro-Features als V1.1 unmittelbar danach.
+### V0 — Infrastruktur & Recht (parallel zum Bau, muss vor Launch stehen)
 
-**Etappe 2 als Demo-Mockup erledigt (2026-07-06):** Branding-Bereich mit
-Portrait-Slot, Farbwahl (6 Pastell-Töne, kein Lila), Grußformel +
-Vorstellungstext, Deckblatt-Wahl (4 Presets + Custom-Slot), zweigeteilte
-Live-Vorschau (Fragebogen-Deckblatt + Empfehlungs-Mail) sowie Basic↔Pro-
-Toggle mit Sperr-Overlay + Upgrade-CTA. Live-Bau der Features (Uploads,
-Persistenz in `partner`-Tabelle, Node-17-Anbindung) folgt nach MONAT-
-Freigabe — Nachzieh-Liste in `chat-archive/2026-07-06_etappe-2-branding.md`.
+Diese Punkte blockieren V1 nicht (außer 1 und 2), können also nebenher
+laufen. Nummerierung nach Blocker-Wirkung und Wartezeit:
+
+1. **Domain sichern** — `mybeautykey.de` oder Alternative bei Strato,
+   sobald Sina/Marcel den Namen bestätigt haben. Blockiert V1.
+2. **Namensfreigabe** durch Sina/Marcel (aktueller Vorschlag MyBeautyKey).
+   Blockiert Punkt 1. Rückmeldung ausstehend.
+3. **Supabase-Projekt in `eu-central-1`** anlegen (Region ist irreversibel,
+   deshalb früh und richtig).
+4. **Vercel-Deployment** WL-Route-Group auf Region `fra1` fixieren.
+5. **Paddle-Account** anlegen + Business-Verifikation starten (~1 Woche
+   Wartezeit, deshalb früh).
+6. **DKIM/SPF/DMARC** für neue Domain bei Strato einrichten (aktueller
+   HANDOVER-🔴-Blocker).
+7. **Brevo-Account** anlegen, Domain verifizieren, API-Key in n8n binden.
+8. **AVV-Muster** aus Bitkom-Vorlage vorbereiten (~60 Min).
+9. **Datenschutzerklärung + Impressum + AGB** entwerfen (~3–4 h
+   eigenständig).
+10. **DPAs unterschreiben** — Vercel, Supabase, Paddle, Sentry, Brevo,
+    Google Workspace.
+11. **Anwaltscheck** der AGB/AVV/Compliance-Klauseln — ~300–600 €, muss
+    vor erstem zahlenden Kunden abgeschlossen sein.
+
+Detail-Konfiguration und DPA-Übersicht: siehe Kapitel 3.5.
+
+### V1 — Feature-Fundament (verkaufsfähig, ~14–18 Bau-Tage)
+
+1. **Whitelabel-Grundgerüst** als Route-Group `src/app/(whitelabel)/` im
+   bestehenden Repo.
+2. **Fragebogen** markenneutral aus bestehendem System übernehmen,
+   MONAT-spezifische Vokabular-Referenzen entfernen (neue Version im
+   whitelabel-Ordner, `src/data/questions.ts` bleibt).
+3. **n8n-Workflow-Klon** `myglowmatch_wl` via API aufsetzen — separater
+   Webhook, separater Datenbestand, Regel-Engine (Nodes 04–15) unverändert
+   übernommen. Details in `chat-archive/2026-07-07_wl-adapter-isomorphie.md`.
+4. **Produktbibliothek + Auswertung gegen eigene Produkt-DB** —
+   Beraterin-UI mit Chip-Formular (12 Felder), Adapter übersetzt in
+   25-Spalten-Format (siehe `wl_adapter.py`), Matching gegen die
+   organisationseigene Produktbibliothek in Supabase.
+5. **CSV/Excel-Import** per Drag-and-drop mit fertiger Spaltenvorlage,
+   ODER manuelle Produkt-Anlage im UI (Alternative-Weg).
+6. **Multi-Tenant-Datenmodell** in Supabase mit RLS und Provenienz-Triggern
+   umsetzen (siehe Kapitel 3.6).
+7. **Ergebnisseite markenneutral** — Analyse-Engine liefert Bedarfsprofil
+   plus (im Pro-Modus) Produktvorschläge aus der Beraterin-Bibliothek mit
+   prominenter Beraterin-Attribution.
+8. **Free-Modus** — Beraterin bucht kostenlos, bekommt Link, Limit
+   2 Beratungen/Monat, Upgrade-Prompt bei Erreichen.
+9. **Basic-Modus** — Portal mit Login, Beratermail, Kundinnen-Übersicht,
+   ausgegraute Pro-Cards.
+10. **Pro-Modus** — Produktbibliothek-UI voll aktiv, `warum_sinnvoll`-
+    Freitext, Dashboard, Branding-Bereich, PWA, Push.
+11. **Einrichtungsservice-Buchung** — Kunde lädt Material hoch, wir pflegen
+    ein, Draft-Katalog → aktive Kunden-Freigabe (siehe Kapitel 2.6
+    Falle 4).
+12. **Teilen/Kopieren per Team-Code** — 8-stelliger Code, Downline
+    übernimmt als Kopie (kein Live-Sync), aktive Content-Bestätigung beim
+    Übernehmen (siehe Kapitel 2.5).
+13. **Compliance-Guardrails im Code** — Beraterin-Attribution auf
+    Kundinnenseite, Takedown-Endpoint (siehe Kapitel 2.6), Consent-Log für
+    alle rechtserheblichen Zustimmungen.
+14. **Paddle-Anbindung** — Free-Upgrade auf Basic, Pro-Buchung + Setup-Fee,
+    Webhook-Automation zur Onboarding-Mail und Supabase-Insert.
+15. **Öffentliche Demo** unter dem neuen Namen (`[name].de/demo`) mit
+    Analyse-only-Beispiel und Fantasie-Bibliothek (siehe Session-Archiv
+    2026-07-07 zum Zwei-Bibliotheken-Konzept).
+16. **Übergabe der finalen Demo** an Sina und die ca. 10 Top-Leaderinnen.
+
+### V2 — Nachrüsten (nach ersten zahlenden Kunden)
+
+- **Team-/Multi-Seat-Modell** — Organisation → Mitglieder → Rollen
+  (Owner/Admin/Member/Viewer), Lead-Zuordnung pro Login. Schema-Andockstelle
+  in `user.role` und `organization.seat_limit` bereits vorbereitet (siehe
+  Kapitel 3.6).
+- **Pro-Seat- oder Staffel-Preise** — Salon abonniert, Mitarbeiter-Seats.
+- **Skin-Analyse** als zweite Analyse-Domäne — Datenmodell trägt es bereits
+  über `product_catalog.analysis_type`, es fehlt nur das zweite Regel-Set
+  im n8n-Workflow und ein zweiter Fragebogen.
+- **Regel-Admin-UI in Supabase** — wenn Regeln pro Kunde overridebar
+  werden sollen oder häufigere Regel-Anpassungen nötig werden. V1 bleiben
+  Regeln embedded im Workflow (via CSV im Repo).
+- **Analytics und Auswertungen** für zahlende Kunden — welche
+  Produkte am häufigsten empfohlen, welche Bedarfsprofile am häufigsten
+  auftreten.
+- **Meta-API-WhatsApp** — falls Beraterinnen doch geführten Nachrichten-
+  Flow wollen (heute bewusst verworfen, siehe Kapitel 5).
+
+### Historisch — Etappe 2 als Demo-Mockup erledigt (2026-07-06)
+
+Branding-Bereich mit Portrait-Slot, Farbwahl (6 Pastell-Töne, kein Lila),
+Grußformel + Vorstellungstext, Deckblatt-Wahl (4 Presets + Custom-Slot),
+zweigeteilte Live-Vorschau (Fragebogen-Deckblatt + Empfehlungs-Mail) sowie
+Basic↔Pro-Toggle mit Sperr-Overlay + Upgrade-CTA. Live-Bau der Features
+(Uploads, Persistenz in `partner`-Tabelle, Node-17-Anbindung) läuft in V1
+Punkt 10 mit — Nachzieh-Liste in
+`chat-archive/2026-07-06_etappe-2-branding.md`.
 
 ---
 
@@ -721,29 +772,12 @@ Stripe prüfen (dann rechnet sich der Buchhaltungs-Overhead).
   da kein LLM zur Laufzeit. Dokumentiert für den Fall künftiger
   LLM-Ergänzungen (dann PII-Prompt-Redaction einbauen).
 
-### Prioritäten für die Umsetzung
+### Prioritäten-Reihenfolge
 
-Sortiert nach Blocker-Wirkung und Zeit bis Effekt:
-
-1. **Domain sichern** (`mybeautykey.de` oder Alternative bei Strato) —
-   30 Min, blockiert alles andere
-2. **Supabase-Projekt in `eu-central-1`** anlegen — 15 Min, Region ist
-   IRREVERSIBEL, deshalb früh und richtig
-3. **Vercel-Projekt** WL-Deployment auf `fra1` konfigurieren — 5 Min
-4. **Paddle-Account** anlegen und Business-Verifikation starten — 30 Min
-   Antrag + ~1 Woche Wartezeit auf Freigabe
-5. **DKIM/SPF/DMARC** für WL-Domain bei Strato einrichten (Zwischen-Blocker
-   aus HANDOVER 🔴) — 30 Min
-6. **Brevo-Account** anlegen, Domain verifizieren, API-Key in n8n binden
-   — 30 Min
-7. **AVV-Muster** aus Bitkom-Vorlage vorbereiten — 60 Min
-8. **Datenschutzerklärung + Impressum + AGB** entwerfen — 3–4 h
-   eigenständig, danach Anwaltscheck ~300 € vor Launch
-9. **DPAs unterschreiben** (Vercel, Supabase, Paddle, Sentry, Brevo) —
-   Paket-Abend, ~1 h insgesamt
-
-Punkte 1–3 lassen sich diese Woche machen und blockieren nichts anderes
-mehr. Punkt 4 hat die längste Wartezeit — deshalb früh anwerfen.
+**Umsetzungs-Reihenfolge ist nach Kapitel 3 V0 gewandert** (Master-
+Reihenfolge, ein Ort für „was ist als nächstes"). Kapitel 3.5 bleibt reine
+Nachschlage-Referenz: Tool-Details, Kosten, DPAs. Regionsan­forderungen,
+Zeit-Schätzungen und Blocker-Reihenfolge stehen in Kapitel 3 V0.
 
 ### Metriken für DSGVO-Bereitschaft (interner Check vor Launch)
 
