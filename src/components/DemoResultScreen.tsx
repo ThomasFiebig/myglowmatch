@@ -298,7 +298,7 @@ function buildBedarf(slotTyp: string, n: NormalizedAnswers): string | null {
 function buildVerkaufstipp(primary: string | undefined): string {
   switch (primary) {
     case "stark_geschaedigt":
-      return 'Sprich konkret das geschädigte Haar an. Beispiel: „Ich habe gesehen, dass dein Haar gerade etwas Unterstützung braucht – mit dem IR Clinical werden wir das Schritt für Schritt aufbauen."';
+      return 'Sprich konkret das geschädigte Haar an. Beispiel: „Ich habe gesehen, dass dein Haar gerade etwas Unterstützung braucht – wir bauen das mit der Routine Schritt für Schritt auf."';
     case "trocken":
       return 'Beziehe dich auf das trockene Haar. Beispiel: „Trockenes Haar ist so frustrierend – die gute Nachricht ist: Mit der richtigen Feuchtigkeitspflege siehst du schon nach wenigen Wochen einen Unterschied."';
     case "haarbruch":
@@ -306,7 +306,7 @@ function buildVerkaufstipp(primary: string | undefined): string {
     case "frizz":
       return 'Sprich Frizz als Thema an. Beispiel: „Frizz nervt unglaublich – die empfohlene Routine glättet und definiert gleichzeitig."';
     case "kraftlos":
-      return 'Beziehe dich auf Volumen. Beispiel: „Volumen ist eine Frage der richtigen Produkte – mit dem verdickenden Shampoo wirst du den Unterschied sofort fühlen."';
+      return 'Beziehe dich auf Volumen. Beispiel: „Volumen ist eine Frage der richtigen Produkte – mit der empfohlenen Routine wirst du den Unterschied sofort fühlen."';
     case "duenn":
       return 'Sprich behutsam über Haardichte. Beispiel: „Das Gefühl von dünner werdendem Haar ist sehr persönlich – die empfohlenen Produkte unterstützen die Kopfhaut und sorgen für volleres Haar."';
     default:
@@ -516,7 +516,7 @@ export default function DemoResultScreen({
               Deine persönliche Haaranalyse
             </div>
           </div>
-          <div className="px-5 pb-7 md:px-10 md:pb-9">
+          <div className="px-5 pb-7 text-center md:px-10 md:pb-9">
             <h1
               className="mb-4 font-serif text-2xl font-semibold md:text-3xl"
               style={{ color: "#2D2A26", lineHeight: 1.25 }}
@@ -524,7 +524,7 @@ export default function DemoResultScreen({
               Deine persönliche Haaranalyse ist da, {displayName} ✨
             </h1>
             <div
-              className="space-y-3 text-[15px] leading-relaxed"
+              className="mx-auto max-w-xl space-y-3 text-[15px] leading-relaxed"
               style={{ color: "#5C5651" }}
             >
               <p>Hallo {displayName},</p>
@@ -539,17 +539,60 @@ export default function DemoResultScreen({
           </div>
         </section>
 
+        {/* Deine Angaben — kurze Rekapitulation für die Kundin */}
+        <section className="mb-6 rounded-2xl border border-blush bg-white/95 px-5 py-5 shadow-sm md:px-7 md:py-6">
+          <div className="mb-4 text-center">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-rosegold-dark">
+              Deine Angaben
+            </div>
+            <p className="mt-1 text-xs italic text-ink-soft">
+              zur Erinnerung, was du im Fragebogen angegeben hast
+            </p>
+          </div>
+          <dl className="mx-auto max-w-xl space-y-2.5 text-[13.5px]">
+            {[
+              {
+                label: "Haar",
+                value: (() => {
+                  const s = label(normalized.hair_structure);
+                  const t = label(normalized.hair_thickness);
+                  if (s === "–" && t === "–") return "–";
+                  if (s === "–") return t;
+                  if (t === "–") return s;
+                  return `${s}, ${t}`;
+                })(),
+              },
+              { label: "Kopfhaut", value: labelList(normalized.scalp_status) },
+              { label: "Zustand", value: labelList(normalized.hair_condition) },
+              { label: "Behandelt", value: label(normalized.hair_treatments) },
+              { label: "Ziele", value: labelList(normalized.care_goals) },
+            ]
+              .filter((row) => row.value && row.value !== "–")
+              .map((row) => (
+                <div
+                  key={row.label}
+                  className="flex flex-col items-start gap-0.5 border-b border-blush/40 pb-2 last:border-b-0 last:pb-0 sm:flex-row sm:items-baseline sm:gap-4"
+                >
+                  <dt className="w-[110px] shrink-0 text-[10px] font-bold uppercase tracking-widest text-rosegold-dark">
+                    {row.label}
+                  </dt>
+                  <dd className="text-ink">{row.value}</dd>
+                </div>
+              ))}
+          </dl>
+        </section>
+
         {/* Basic + Pro Split */}
         <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
           {/* Basic */}
           <div className="rounded-2xl border border-blush bg-white/95 p-5 shadow-sm">
-            <div className="mb-4 flex items-baseline justify-between">
+            <div className="mb-3 flex flex-col items-center gap-2 text-center">
               <h2 className="font-serif text-lg font-semibold text-ink">Basic-Ansicht</h2>
               <span className="rounded-full bg-blush/60 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-rosegold-dark">
                 Bedarfsprofil
               </span>
             </div>
-            <p className="mb-3 text-xs text-ink-soft">
+            <p className="mb-4 text-center text-xs text-ink-soft">
               Die Beraterin bekommt dieses Profil und empfiehlt dir persönlich
               die passenden Produkte aus ihrer Markenwelt.
             </p>
@@ -557,7 +600,7 @@ export default function DemoResultScreen({
               {basicRows.map((row) => (
                 <div
                   key={row.slot}
-                  className="rounded-xl border border-blush/60 bg-white p-3"
+                  className="rounded-xl border border-blush/60 bg-white p-3 text-center"
                 >
                   <div className="text-[10px] font-bold uppercase tracking-widest text-rosegold-dark">
                     {row.slot}
@@ -608,8 +651,8 @@ export default function DemoResultScreen({
         </div>
 
         {/* Beraterinnen-Karte */}
-        <section className="mb-6 rounded-2xl border border-blush bg-white px-5 py-5 shadow-sm md:px-8 md:py-6">
-          <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-center md:text-left">
+        <section className="mb-6 rounded-2xl border border-blush bg-white px-5 py-6 shadow-sm md:px-8 md:py-7">
+          <div className="flex flex-col items-center gap-4 text-center">
             {partner.photo_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -633,7 +676,7 @@ export default function DemoResultScreen({
                 {partner.initials}
               </div>
             )}
-            <div className="flex-1">
+            <div>
               <p className="text-[10px] font-bold uppercase tracking-widest text-rosegold-dark">
                 {partner.title}
               </p>
@@ -647,13 +690,11 @@ export default function DemoResultScreen({
                 <p className="mt-0.5 text-sm text-ink-soft">{partner.phone}</p>
               )}
             </div>
-          </div>
-          <div className="mt-5 text-center">
             <a
               href={waHref}
               target={partner.whatsapp ? "_blank" : undefined}
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#22b459]"
+              className="mt-1 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#22b459]"
             >
               💬 &nbsp; Per WhatsApp anschreiben
             </a>
@@ -690,33 +731,65 @@ export default function DemoResultScreen({
               </span>
             </div>
           </div>
+          {/* Farbverlauf-Hero — analog zur Kundinnen-Mail */}
           <div
-            className="px-4 py-5 md:px-6"
-            style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
+            className="px-4 pb-6 pt-7 text-center md:px-8 md:pb-8 md:pt-9"
+            style={{
+              background:
+                "linear-gradient(180deg, #F6E6E1 0%, #FBF5EE 60%, #FFFFFF 100%)",
+            }}
           >
+            <div
+              style={{
+                fontFamily: "Georgia, serif",
+                fontSize: "22px",
+                letterSpacing: "0.03em",
+                color: "#5A4A3F",
+                fontWeight: 400,
+              }}
+            >
+              MyBeautyKey
+            </div>
+            <div
+              style={{
+                marginTop: "6px",
+                fontSize: "10px",
+                fontWeight: 700,
+                letterSpacing: "0.22em",
+                color: "#A07560",
+                textTransform: "uppercase",
+              }}
+            >
+              Neue Kundinnen-Anfrage
+            </div>
             <h3
-              className="text-center"
               style={{
                 fontFamily: "Georgia, serif",
                 fontSize: "20px",
                 color: "#2D2A26",
                 fontWeight: 600,
-                margin: "0 0 6px",
+                margin: "16px 0 6px",
+                lineHeight: 1.25,
               }}
             >
-              Neuer Lead via MyBeautyKey
+              {displayName} wartet auf deine Empfehlung
             </h3>
             <p
-              className="text-center"
               style={{
                 fontSize: "13px",
                 color: "#5C5651",
-                margin: "0 0 20px",
+                margin: 0,
                 lineHeight: 1.6,
               }}
             >
-              {displayName} hat soeben deinen Fragebogen ausgefüllt.
+              Sie hat soeben deinen Fragebogen ausgefüllt.
             </p>
+          </div>
+
+          <div
+            className="px-4 py-5 md:px-6"
+            style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
+          >
 
             <div
               style={{

@@ -49,9 +49,9 @@ const heroIcons = [
   >
     <path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z" />
   </svg>,
-  // Briefumschlag – "Per E-Mail direkt zu dir"
+  // Auge – "Ergebnis sofort sichtbar"
   <svg
-    key="mail"
+    key="eye"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -60,8 +60,8 @@ const heroIcons = [
     strokeLinejoin="round"
     className="h-4 w-4"
   >
-    <rect x="3" y="5" width="18" height="14" rx="2" />
-    <path d="M3.5 7l8.5 6 8.5-6" />
+    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+    <circle cx="12" cy="12" r="3" />
   </svg>,
 ];
 

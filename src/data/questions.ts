@@ -26,7 +26,7 @@ export const formSteps: Step[] = [
     points: [
       "Schnell beantwortet",
       "Persönliche Empfehlung",
-      "Per E-Mail direkt zu dir",
+      "Ergebnis sofort sichtbar",
     ],
     ctaLabel: "Jetzt starten",
     privacyNote: "Deine Daten werden DSGVO-konform verarbeitet.",
