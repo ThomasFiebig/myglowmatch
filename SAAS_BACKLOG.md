@@ -1090,6 +1090,51 @@ eingebaut. Nur relevant, sobald Adressen mit `consent_marketing=true` in eine
 Newsletter-/Werbe-Liste übernommen werden. Aktuell keine Marketing-Nutzung
 der Adressen geplant → nicht dringend.
 
+### REQ-Regel-Produkt-Key-Abstraktion — Whitelabel-Blocker (Stand 2026-07-09)
+
+**Kern:** 26 von 31 Regeln in `map_slot_rules` haben harte MONAT-Produkt-Keys
+im `filter`-Feld (curl_gelee, curl_creme, bond_iq_leave_in, rejuveniqe_oel,
+moxie_mousse, monat_black, entwirrungsspray, scalp_comfort_serum u.a.). Zwei
+weitere nutzen Produktlinien-Namen (`bond_iq`, `scalp_comfort`). Solange
+ein Klon den byte-identischen MONAT-Katalog fährt (aktueller Sina-Klon via
+`wl_libraries/sina_monat.json`), unproblematisch. Sobald ein Klon einen
+Fremdkatalog reinbringt (Nicht-MONAT-Produkte), fallen 26 Regeln tot.
+
+**Betroffen (Cluster):**
+- Kernprodukte pro Slot: REQ-02/03/05/06/07/08/24
+- Curl-Choreographie: REQ-11/11b/11c/12/13
+- Volumen-Choreographie: REQ-16/16b/19/19b
+- Optionale Empfehlungen: REQ-14/17/17b/18/20/21/22/23
+- Minimal-Routine: REQ-30 (monat_black als 2-in-1)
+- Smoothing-Sonderregel: REQ-04b
+
+**Design-Choice bewusst so, kein Bug:** Node 12 (Ranking) ist
+wirkungs-abstrahiert (`hauptfunktion`/`nebenfunktion` via `map_profil_funktion`),
+Node 11 (REQ-Choreographie) ist produkt-spezifisch, weil manche Empfehlungen
+NUR mit einem bestimmten Produkt fachlich Sinn ergeben (z.B. „bei Curl-Wunsch
+MUSS die Curl-Creme in styling_1", nicht „irgendein Creme-Produkt").
+Wirkungs-abstraktes REQ würde die Beraterinnen-Choreographie zerstören.
+
+**Lösungs-Skizze (spätestens vor erstem Fremdkatalog-Kunden):**
+- Neue Spalte `filter_typ ∈ {produkt_key, produktlinie, wirkung}` in `map_slot_rules`
+- Node 11 verzweigt Filter-Auswertung nach `filter_typ`:
+  - `produkt_key` → aktuelles Verhalten (Literalvergleich auf produkt_key-Spalte)
+  - `produktlinie` → Vergleich auf produktlinie-Spalte (REQ-02/03/05 informell so)
+  - `wirkung` → Vergleich gegen hauptfunktion ∪ nebenfunktionen des Kandidaten-Pools
+- Kunden-Katalog-Anleitung: pro Slot mindestens ein Produkt mit passenden
+  Wirkungen anlegen (Curl-Trio → 3 Produkte mit hauptfunktion `locken,definition,halt`
+  und den drei Slot-Typen styling_1/2/3).
+
+**Wann angehen?**
+- Nicht vor V1-Launch mit Sina (MONAT-Katalog identisch, kein Blocker)
+- **Spätestens vor erstem Kunden mit eigenem Fremdkatalog** — Fixture-Test
+  mit fiktivem Nicht-MONAT-Katalog vorher fahren, um tote Regeln zu erkennen
+- Alternativ als V2-Punkt formuliert, falls V1-Kunden alle MONAT-Ausroll bleiben
+
+**Sichtbar geworden:** 2026-07-09 während PDF-strikt-Audit curl_gelee —
+Tomi hat den Produkt-Key in REQ-12 als Whitelabel-untypisch erkannt und
+den Umfang hinterfragt.
+
 ---
 
 ## 5 — Verworfene Ideen (mit Begründung)
