@@ -170,15 +170,32 @@ Ranking in Node 12 wählt weiterhin das best-passende.
 
 ## Folgepunkte für nächste Session
 
-### Priorität 1: PDF-Audit der 12 unangetasteten Sheet-Zeilen
+### Priorität 1: 2 Bauchgefühl-Fehler aus 15-PDF-Audit korrigieren
 
-Wir haben von 37 Produkten nur 17 überhaupt gegen PDF geprüft (6 Grenzfälle
-+ 17 Agent-analysiert, davon 12 als PDF-strikt bestätigt). 20 Produkte sind
-komplett unauditiert. Nicht kritisch — der Score-Split hat das Match-Problem
-gelöst — aber saubere Basis für weitere Beraterinnen wichtig.
+Agent-Audit der 15 unauditierten Zeilen (nachts noch gefahren): 12 ✓,
+2 ⚠, 1 ? Ambivalent. Konkrete Fixture-Korrekturen für nächste Session:
 
-Agent-Delegation für die 20, dann Sheet-Update für Bauchgefühl-Fehler, dann
-Regressions-Bulk.
+| produkt_key | Fixture | PDF-strikt | PDF-Zitat |
+|---|---|---|---|
+| rejuveniqe_oel | intensiv | **leicht** | „Mehrzweck-Öl... täglicher Gebrauch / Behandlung vor Shampoo" |
+| restore_leave_in | intensiv | **leicht** | „intensive Feuchtigkeit, ohne zu beschweren... tägl. Anwendung möglich" |
+
+Ambivalent (nicht korrigieren, Agent hatte PDF-Zugriffsproblem):
+- **curl_gelee** — PDF hat 15 Seiten, Agent konnte nur Deckblatt lesen.
+  Manuelle Prüfung nötig.
+
+Impact: nur `intensitaet` betroffen, das ist Tiebreaker in Node 12 Stufe 11
+(kein Kern-Filter). Erwartung: 0-2 Empfehlungs-Änderungen im Regressions-Bulk,
+niemand verliert einen Slot. Umsetzung: Sheet-Update + Workflow-Sync +
+Fixture-Patch + WL-Klon-Sync + Bulk (~15 Min).
+
+### Priorität 2: PDF-Audit der letzten unauditierten Zeilen
+
+Nach Prio 1 sind 34 von 37 Produkten PDF-strikt auditiert. Übrig: die 3
+Original-Mockup-Referenz-Produkte (bond_iq_shampoo etc.) — die waren im
+Agent-Bericht der ersten Runde bereits enthalten, aber noch nicht als
+Sheet-Änderung durchgezogen. Prüfen ob vollständig oder ob curl_gelee
+manuell nachgezogen werden muss.
 
 ### Priorität 2: MONAT-Workflow ist jetzt nicht mehr "physisch unangetastet"
 
