@@ -184,6 +184,156 @@
     flex-wrap:wrap;
     gap:6px;
   }
+  .grid-table{
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--card);
+    overflow:hidden;
+  }
+  .grid-header-row{
+    display:grid;
+    background:#f7ede0;
+  }
+  .grid-header-row > div{
+    padding:10px 6px 8px;
+    text-align:center;
+    font-size:10px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:700;
+  }
+  .grid-header-row > div.left{
+    text-align:left;
+    padding-left:14px;
+    color:var(--kupfer);
+  }
+  .grid-group{
+    border-top:1px solid var(--line);
+  }
+  .grid-group > summary{
+    padding:9px 14px;
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--kupfer);
+    font-weight:700;
+    background:var(--input-bg);
+    cursor:pointer;
+    list-style:none;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    user-select:none;
+  }
+  .grid-group > summary::-webkit-details-marker{display:none}
+  .grid-group > summary::after{
+    content:"▾";
+    color:var(--muted);
+    font-size:11px;
+  }
+  .grid-group:not([open]) > summary::after{content:"▸"}
+  .grid-group > summary .count{
+    font-size:10px;
+    color:var(--muted);
+    font-weight:500;
+    letter-spacing:.02em;
+    text-transform:none;
+    margin-right:8px;
+  }
+  .grid-group-body{
+    display:grid;
+  }
+  .grid-name{
+    padding:7px 14px;
+    font-size:13px;
+    color:var(--ink-soft);
+    border-top:1px solid #f4ece2;
+  }
+  .grid-name.haupt-row{
+    font-weight:600;
+    color:var(--ink);
+  }
+  .grid-cell{
+    padding:7px 6px;
+    text-align:center;
+    border-top:1px solid #f4ece2;
+  }
+  .nutzen-cols{grid-template-columns: 1fr 62px 62px 52px}
+  .passung-cols{grid-template-columns: 1fr 72px 72px}
+  .nutzen-radio{
+    display:inline-block;
+    width:15px;
+    height:15px;
+    border-radius:50%;
+    border:1.5px solid var(--line);
+    background:var(--card);
+    vertical-align:middle;
+  }
+  .nutzen-radio.on{
+    background:var(--accent-dark);
+    border-color:var(--accent-dark);
+    box-shadow:inset 0 0 0 3px var(--card);
+  }
+  .nutzen-radio.on.haupt{
+    background:var(--kupfer);
+    border-color:var(--kupfer);
+  }
+  .grid-hint{
+    font-size:11.5px;
+    color:var(--muted);
+    margin-top:8px;
+    padding:0 4px;
+    line-height:1.5;
+  }
+  .req{
+    color:var(--accent-dark);
+    margin-left:2px;
+    font-weight:700;
+  }
+  .req-legend{
+    font-size:11.5px;
+    color:var(--muted);
+    padding:12px 0 4px;
+    margin-top:6px;
+    border-top:1px dashed var(--line);
+  }
+  .req-legend .req{margin-left:0;margin-right:4px}
+
+  .auto-field{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 14px;
+    background:var(--input-bg);
+    border:1px dashed var(--line);
+    border-radius:8px;
+    color:var(--muted);
+    font-size:13px;
+  }
+  .auto-field .auto-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:3px 8px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    font-size:11px;
+    color:var(--kupfer);
+    font-weight:600;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+  .auto-field .auto-tag::before{
+    content:"⚙";
+    font-size:12px;
+  }
+  .auto-field .auto-value{
+    color:var(--ink);
+    font-weight:600;
+    font-size:14px;
+  }
   .chip{
     display:inline-flex;
     align-items:center;
@@ -429,7 +579,7 @@
 
       <!-- 1: Produktname (Freitext) -->
       <div class="form-row">
-        <div class="form-label">Produktname <span class="hint">Freitext — selbst eintippen, keine Vorschlagsliste</span></div>
+        <div class="form-label">Produktname<span class="req">*</span> <span class="hint">Freitext — selbst eintippen, keine Vorschlagsliste</span></div>
         <input class="form-input" type="text" value="Renew Shampoo" readonly>
       </div>
 
@@ -441,112 +591,324 @@
 
       <!-- 3: Slot-Typ (Radio, genau eine Auswahl) -->
       <div class="form-row">
-        <div class="form-label">Produkt-Kategorie <span class="hint">genau eine Auswahl</span></div>
+        <div class="form-label">Produkt-Kategorie<span class="req">*</span> <span class="hint">genau eine Auswahl, bestimmt den Routine-Platz</span></div>
         <div class="radio-group">
           <span class="radio-chip selected">Shampoo</span>
+          <span class="radio-chip">Kopfhaut-Kur</span>
+          <span class="radio-chip">Kopfhaut-Serum</span>
+          <span class="radio-chip">Haarkur / Maske</span>
           <span class="radio-chip">Spülung</span>
-          <span class="radio-chip">Kur / Maske</span>
           <span class="radio-chip">Leave-in</span>
           <span class="radio-chip">Styling</span>
-          <span class="radio-chip">Serum</span>
-          <span class="radio-chip">Kopfhaut-Pflege</span>
+          <span class="radio-chip">Serum / Öl</span>
         </div>
       </div>
 
-      <!-- 4: Haupt-Nutzen (Chips, ein primär, weitere sekundär) -->
+      <!-- 4: Haupt-Nutzen (Tabelle: 27 Zeilen, 3-Radio-Wahl pro Zeile) -->
       <div class="form-row">
-        <div class="form-label">Haupt-Nutzen <span class="hint">einen als Haupt-Grund markieren, weitere als „auch geeignet für"</span></div>
-        <div class="chip-group">
-          <span class="chip primary">Feuchtigkeit <span class="badge">Haupt</span></span>
-          <span class="chip selected">Reparatur</span>
-          <span class="chip selected">Glanz</span>
-          <span class="chip">Volumen</span>
-          <span class="chip">Bonding</span>
-          <span class="chip">Anti-Frizz</span>
-          <span class="chip">Locken-Pflege</span>
-          <span class="chip">Hitzeschutz</span>
-          <span class="chip">Kopfhaut-Fokus</span>
-          <span class="chip">Entwirren</span>
-          <span class="chip">Halt / Styling-Fixierung</span>
+        <div class="form-label">Haupt-Nutzen<span class="req">*</span> <span class="hint">pro Nutzen entweder Haupt-Grund, „auch geeignet für" oder nicht relevant</span></div>
+        <div class="grid-table">
+          <div class="grid-header-row nutzen-cols">
+            <div class="left">Nutzen</div>
+            <div>Haupt</div>
+            <div>Auch</div>
+            <div>—</div>
+          </div>
+
+          <details class="grid-group" open>
+            <summary>Pflege &amp; Reparatur <span class="count">1 Haupt · 1 Auch</span></summary>
+            <div class="grid-group-body nutzen-cols">
+              <div class="grid-name haupt-row">Feuchtigkeit</div>
+              <div class="grid-cell"><span class="nutzen-radio on haupt"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-name">Reparatur</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-name">Bonding</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Stärkend</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Elastizität</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Kräftigend</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Versiegelung</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Farbschutz</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+            </div>
+          </details>
+
+          <details class="grid-group" open>
+            <summary>Optik &amp; Struktur <span class="count">1 Auch</span></summary>
+            <div class="grid-group-body nutzen-cols">
+              <div class="grid-name">Glanz</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-name">Volumen</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Verdichtend</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Halt / Styling-Fixierung</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Definition (Curl)</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Textur</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Frische</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Auffrischung</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+            </div>
+          </details>
+
+          <details class="grid-group">
+            <summary>Styling &amp; Handling <span class="count">nichts gewählt</span></summary>
+            <div class="grid-group-body nutzen-cols">
+              <div class="grid-name">Anti-Frizz</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Entwirren</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Kämmbarkeit</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Locken-Pflege</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Hitzeschutz</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+            </div>
+          </details>
+
+          <details class="grid-group">
+            <summary>Kopfhaut &amp; Reinigung <span class="count">nichts gewählt</span></summary>
+            <div class="grid-group-body nutzen-cols">
+              <div class="grid-name">Kopfhaut-Fokus</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Tiefen-Reinigung</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Detox / Entgiftung</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Ausgleichend</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Haarwuchs</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Wasch-Alternative</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+            </div>
+          </details>
+        </div>
+        <div class="grid-hint">
+          <b>Haupt</b> = Verkaufs-Kernargument (mindestens einer, wird in der
+          Empfehlung an die Kundin fett hervorgehoben). &nbsp;
+          <b>Auch</b> = zusätzliche Eignung, sorgt für Bonus-Matches. &nbsp;
+          <b>—</b> = trifft nicht zu. Gruppen können zugeklappt werden.
         </div>
       </div>
 
-      <!-- 5: Haarstruktur (Chips, mehrere) -->
+      <!-- 5: Haar & Kopfhaut-Passung (Tabelle: 4 Kategorien aufklappbar, je Ja/Nein) -->
       <div class="form-row">
-        <div class="form-label">Passt zu Haarstruktur <span class="hint">mehrere möglich</span></div>
+        <div class="form-label">Haar &amp; Kopfhaut-Passung<span class="req">*</span> <span class="hint">für welche Kundinnen ist das Produkt geeignet</span></div>
+        <div class="grid-table">
+          <div class="grid-header-row passung-cols">
+            <div class="left">Merkmal</div>
+            <div>Passt</div>
+            <div>Nicht relevant</div>
+          </div>
+
+          <details class="grid-group" open>
+            <summary>Haarstruktur <span class="count">3 von 4</span></summary>
+            <div class="grid-group-body passung-cols">
+              <div class="grid-name">Glatt</div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-name">Wellig</div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-name">Lockig</div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-name">Kraus</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+            </div>
+          </details>
+
+          <details class="grid-group" open>
+            <summary>Haarstärke <span class="count">2 von 3</span></summary>
+            <div class="grid-group-body passung-cols">
+              <div class="grid-name">Fein</div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-name">Mittel</div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-name">Dick</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+            </div>
+          </details>
+
+          <details class="grid-group">
+            <summary>Haarzustand <span class="count">3 von 11</span></summary>
+            <div class="grid-group-body passung-cols">
+              <div class="grid-name">Normal</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Trocken</div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-name">Glanzlos</div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-name">Gefärbt</div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-name">Blondiert</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Kraftlos</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Dünn</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Frizz</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Spliss</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Haarbruch</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Stark geschädigt</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+            </div>
+          </details>
+
+          <details class="grid-group">
+            <summary>Kopfhaut <span class="count">1 von 5</span></summary>
+            <div class="grid-group-body passung-cols">
+              <div class="grid-name">Normal</div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-name">Fettig</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Schuppig</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Juckend / empfindlich</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+              <div class="grid-name">Schnell nachfettender Ansatz</div>
+              <div class="grid-cell"><span class="nutzen-radio"></span></div>
+              <div class="grid-cell"><span class="nutzen-radio on"></span></div>
+            </div>
+          </details>
+        </div>
+        <div class="grid-hint">
+          Gruppen können zugeklappt werden. „Passt" = das Produkt eignet sich
+          für Kundinnen mit diesem Merkmal, „Nicht relevant" = das Produkt
+          wirkt darauf nicht speziell.
+        </div>
+      </div>
+
+      <!-- 6: Zielgruppe laut PDF (Chip-Multi, 1:1 abgeleitet aus Datenblatt-Text) -->
+      <div class="form-row">
+        <div class="form-label">Zielgruppe laut PDF<span class="req">*</span> <span class="hint">wörtlich aus dem Datenblatt übernehmen — nichts selbst einschätzen</span></div>
         <div class="chip-group">
-          <span class="chip selected">Glatt</span>
-          <span class="chip selected">Wellig</span>
-          <span class="chip selected">Lockig</span>
+          <span class="chip selected">Alle Haartypen / gesundes Haar / auch für normales Haar</span>
+          <span class="chip selected">Beanspruchtes Haar (trocken, gefärbt, coloriert, kraftlos, feines)</span>
+          <span class="chip">Stark geschädigtes Haar (blondiert, Spliss, Haarbruch, Reparatur)</span>
+        </div>
+        <div class="form-help">
+          Im Produktdatenblatt (PDF) steht meist im Kopf-Bereich oder unter
+          <b>„Ideal für diejenigen, die…"</b>, für welche Kundinnen das
+          Produkt gemacht ist. Diese Info hier abhaken — mehrere gleichzeitig
+          möglich, wenn im PDF mehrere Zielgruppen genannt werden. Auf
+          dieser Grundlage baut das System die Empfehlung für die richtige
+          Kundin.
+        </div>
+      </div>
+
+      <!-- 7: Ausschluss (Chips, Multi-Auswahl) -->
+      <div class="form-row">
+        <div class="form-label">Nicht empfehlen bei <span class="hint">optional · nur setzen, wenn das PDF ausdrücklich davor warnt</span></div>
+        <div class="chip-group">
           <span class="chip">Kraus</span>
-        </div>
-      </div>
-
-      <!-- 6: Haarstärke (Chips) -->
-      <div class="form-row">
-        <div class="form-label">Passt zu Haarstärke <span class="hint">mehrere möglich</span></div>
-        <div class="chip-group">
-          <span class="chip selected">Fein</span>
-          <span class="chip selected">Mittel</span>
-          <span class="chip">Dick</span>
-        </div>
-      </div>
-
-      <!-- 7: Haarzustand (Chips, mehrere) -->
-      <div class="form-row">
-        <div class="form-label">Passt zu Haarzustand <span class="hint">mehrere möglich</span></div>
-        <div class="chip-group">
-          <span class="chip">Normal</span>
-          <span class="chip selected">Trocken</span>
-          <span class="chip selected">Glanzlos</span>
-          <span class="chip selected">Gefärbt</span>
           <span class="chip">Blondiert</span>
-          <span class="chip">Kraftlos</span>
-          <span class="chip">Dünn</span>
-          <span class="chip">Frizz</span>
-          <span class="chip">Spliss</span>
-          <span class="chip">Haarbruch</span>
-          <span class="chip">Stark geschädigt</span>
+          <span class="chip">Gefärbt</span>
+          <span class="chip">Empfindliche Kopfhaut</span>
+          <span class="chip">Fettige Kopfhaut</span>
+          <span class="chip">Schuppige Kopfhaut</span>
+          <span class="chip">Fein</span>
+          <span class="chip">Dick</span>
+          <span class="chip">Trocken</span>
         </div>
       </div>
 
-      <!-- 8: Kopfhaut (Chips, mehrere) -->
-      <div class="form-row">
-        <div class="form-label">Passt zu Kopfhaut <span class="hint">mehrere möglich</span></div>
-        <div class="chip-group">
-          <span class="chip selected">Normal</span>
-          <span class="chip">Fettig</span>
-          <span class="chip">Schuppig</span>
-          <span class="chip">Juckend / empfindlich</span>
-          <span class="chip">Schnell nachfettender Ansatz</span>
-        </div>
-      </div>
-
-      <!-- 9: Pflege-Intensität (Radio) -->
-      <div class="form-row">
-        <div class="form-label">Pflege-Intensität <span class="hint">genau eine Auswahl</span></div>
-        <div class="radio-group">
-          <span class="radio-chip">Leicht</span>
-          <span class="radio-chip selected">Mittel</span>
-          <span class="radio-chip">Intensiv</span>
-        </div>
-      </div>
-
-      <!-- 10: Ausschluss (Chips) -->
-      <div class="form-row">
-        <div class="form-label">Nicht empfehlen bei <span class="hint">optional, verhindert falsches Matching</span></div>
-        <div class="chip-group">
-          <span class="chip disabled">Kraus</span>
-          <span class="chip disabled">Blondiertem Haar</span>
-          <span class="chip disabled">Empfindlicher Kopfhaut</span>
-          <span class="chip disabled">Feinem Haar</span>
-        </div>
-      </div>
-
-      <!-- 11: Verkaufsbegründung (Freitext) -->
+      <!-- 8: Verkaufsbegründung (Freitext) -->
       <div class="form-row">
         <div class="form-label">Warum genau dieses Produkt <span class="hint">Freitext — erscheint in der Empfehlung an die Kundin</span></div>
         <div class="form-textarea">Weil dieses Shampoo speziell für coloriertes Haar entwickelt wurde und die Farbe schützt, während es tief mit Feuchtigkeit versorgt. In meiner Beratung erzielt es die besten Ergebnisse bei trockenem, glanzlosem Haar nach häufigen Colorationen.</div>
+      </div>
+
+      <div class="req-legend">
+        <span class="req">*</span> Pflichtfeld — 5 Felder reichen für einen
+        sauberen Match. Alle weiteren Angaben machen die Empfehlung genauer,
+        sind aber nicht zwingend.
       </div>
 
       <div class="form-actions">
@@ -565,13 +927,17 @@
       <p><b>Chips / Radio-Buttons</b> für alles, was die Beratungs-Engine
       auswerten muss:</p>
       <ul>
-        <li><b>Produkt-Kategorie</b> — welcher Routine-Slot</li>
-        <li><b>Haupt-Nutzen</b> — was das Produkt vor allem kann</li>
-        <li><b>Haar-Passung</b> — Struktur, Stärke, Zustand</li>
-        <li><b>Kopfhaut-Passung</b> — für welche Kopfhaut-Typen</li>
-        <li><b>Pflege-Intensität</b> — leicht, mittel, intensiv</li>
+        <li><b>Produkt-Kategorie</b> — welcher Routine-Slot (8 Optionen)</li>
+        <li><b>Haupt-Nutzen</b> — als Tabelle, 27 Nutzen in 4 Gruppen, pro Zeile Haupt / Auch / —</li>
+        <li><b>Haar &amp; Kopfhaut-Passung</b> — als Tabelle, 4 Kategorien aufklappbar</li>
+        <li><b>Zielgruppe laut PDF</b> — die im Datenblatt genannten Kundinnen-Gruppen abhaken</li>
         <li><b>Ausschlüsse</b> — wo das Produkt nicht empfohlen wird</li>
       </ul>
+      <p style="margin-top:10px">Kein Feld verlangt von der Beraterin eine
+      System-Einschätzung. Jedes Feld ist entweder eine <b>direkte Übernahme
+      aus dem Datenblatt</b> oder eine offensichtliche Kategorisierung.
+      Damit kann das System korrekt matchen, ohne dass die Beraterin die
+      interne Empfehlungslogik verstehen muss.</p>
       <p style="margin-top:10px"><b>Freitext</b> nur bei: Produktname,
       Bezugsquelle-Link, „Warum genau dieses Produkt".</p>
     </div>

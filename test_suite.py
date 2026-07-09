@@ -360,6 +360,31 @@ PROFILES = {
         "consent_recommendation": True,
         "consent_marketing": False,
     },
+    # Session 2026-07-09: Desirees eigenes Beratungsprofil als 14. Testprofil
+    # (echter Trigger für den Split-Score-Refactor). Kein tatsächlicher Schaden,
+    # aber hoher Investment-Wunsch → im alten Score fälschlich HIGH-Bedarf.
+    "desi": {
+        "partner_id": "desiree",
+        "first_name": "Desi-TEST",
+        "email": "info@myglowmatch.de",
+        "phone": "01500000099",
+        "scalp_status": ["normal"],
+        "hair_structure": "kraus",
+        "hair_thickness": "dick",
+        "hair_condition": ["trocken", "frizz", "kraftlos"],
+        "hair_treatments": "nein",
+        "heat_frequency": "nie_selten",
+        "heat_tools": [],
+        "wash_frequency": "nicht_taeglich",
+        "styling_effort": "aufwendiges_styling",
+        "curl_priority": "beides",
+        "ends_condition": "leicht_trocken",
+        "care_goals": ["feuchtigkeit", "frizz_reduktion"],
+        "routine_preference": "bestmoeglich",
+        "time_commitment": "bewusst_regelmaessig",
+        "consent_recommendation": True,
+        "consent_marketing": False,
+    },
 }
 
 

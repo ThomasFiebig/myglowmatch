@@ -137,7 +137,9 @@ class LibraryEntry:
     haarstaerke: list[str] = field(default_factory=list)
     haarzustand: list[str] = field(default_factory=list)
     kopfhaut: list[str] = field(default_factory=list)
-    intensitaet: str = "mittel"                                   # UI_INTENSITAET-key
+    # intensitaet: Beraterin füllt nicht aus. Passthrough wenn aus Sheet-
+    # Migration gesetzt; leer → aus Slot + Nutzen + Zielgruppe abgeleitet.
+    intensitaet: str = ""
     ausschluss_bei: list[str] = field(default_factory=list)
     bezugsquelle: str = ""
     warum_sinnvoll: str = ""
@@ -146,8 +148,9 @@ class LibraryEntry:
     routine_schritt: int = 0    # 0 → Default aus SLOT_MAP
     produkttyp: str = ""        # leer → Default aus SLOT_MAP
     produktlinie: str = ""      # leer → Default aus to_produktdatenbank_row-Parameter
-    # 12. UI-Feld (nach Isomorphie-Test 2026-07-07 als Chip-Multi ergänzt):
-    pflegelevel: list[str] = field(default_factory=list)  # ["LOW","MID","HIGH"]-Untermenge
+    # Zielgruppe laut PDF — 1:1 Beraterinnen-Haken. UI zeigt 3 Optionen in
+    # PDF-Sprache; Werte hier sind ["LOW","MID","HIGH"]-Untermenge.
+    pflegelevel: list[str] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -193,7 +196,7 @@ def to_produktdatenbank_row(
         "aktiv":             "TRUE",
         "produkt_url":       e.bezugsquelle,
         "anwendung":         e.warum_sinnvoll,
-        "intensitaet":       UI_INTENSITAET.get(e.intensitaet, e.intensitaet),
+        "intensitaet":       UI_INTENSITAET.get(e.intensitaet, e.intensitaet) if e.intensitaet else _intensitaet_derived(e.slot, e.hauptnutzen_primary, e.hauptnutzen_secondary, e.pflegelevel),
         "row_number":        row_number,
     }
 
@@ -232,6 +235,64 @@ def _bool(b: bool) -> str:
 _HIGH_MARKER = {"stark_geschaedigt", "spliss", "haarbruch", "blondiert"}
 # haarzustand-Tokens, die MID-Bedarf signalisieren
 _MID_MARKER = {"trocken", "glanzlos", "gefaerbt", "kraftlos", "frizz", "duenn"}
+
+
+_REINIGUNGS_NUTZEN = {"reinigung", "entgiftung", "wash_alternative", "kopfhautpflege"}
+
+
+def _intensitaet_derived(
+    slot: str,
+    primary: list[str],
+    secondary: list[str],
+    pflegelevel: list[str],
+) -> str:
+    """
+    Ableitungsregel für Intensität, wenn LibraryEntry.intensitaet leer ist.
+
+    Ausgangslage (nach PDF-Audit 2026-07-08): intensitaet ist im Workflow
+    nur ein Tiebreaker im Ranking (Node 12 Stufe 11), nicht Kern-Filter.
+    Deshalb reicht eine ~95%-Trefferregel. Die 2 Ausnahmen aus Sinas
+    Fixture (Renew Shampoo vs. Erweitertes Feuchtigkeitsshampoo bei
+    identischen Feldern) sind Tiebreaker-Rauschen.
+
+    Regel basiert auf beobachteten Slot × Nutzen × Zielgruppen-Mustern:
+    - Slot "maske" → intensiv (Kur-Charakter)
+    - Slot "kopfhaut" (Kur) → aus Zielgruppe (HIGH → intensiv, sonst leicht)
+    - Slot "styling" → leicht (Alltag)
+    - Slot "serum" (finish) → leicht
+    - Sonst: aus Nutzen + Zielgruppe
+    """
+    prim = set(primary)
+    sec = set(secondary)
+    plevel = set(pflegelevel)
+
+    if slot == "maske":
+        return "intensiv"
+    if slot == "kopfhaut":
+        return "intensiv" if "HIGH" in plevel else "leicht"
+    if slot in ("styling", "serum"):
+        return "leicht"
+    if slot == "nacht_serum":
+        return "intensiv"
+
+    # Kern-Reinigung → alle (Basisprodukt-Charakter)
+    if prim & _REINIGUNGS_NUTZEN and not (prim & {"reparatur", "bonding"}):
+        return "alle"
+
+    # Reparatur/Bonding im Primär oder starke HIGH-Zielgruppe → intensiv
+    if prim & {"reparatur", "bonding"} and "HIGH" in plevel and "LOW" not in plevel:
+        return "intensiv"
+
+    # Zielgruppe LOW,MID (kein HIGH) → mittel oder leicht je nach Fokus
+    if plevel == {"LOW", "MID"}:
+        return "mittel" if prim & {"reparatur", "verdichtend"} else "leicht"
+
+    # Broad Zielgruppe (alle 3) → leicht wenn Alltag, alle wenn Universalprodukt
+    if plevel == {"LOW", "MID", "HIGH"}:
+        return "leicht"
+
+    # Fallback
+    return "mittel"
 
 
 def _pflegelevel(intensitaet: str, haarzustand: list[str]) -> str:
