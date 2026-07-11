@@ -593,9 +593,11 @@ def check_anomalies(profile: dict, output: dict) -> list:
     if profile["hair_structure"] in ("wellig", "lockig", "kraus"):
         if "fohncreme" in product_keys:
             warnings.append("Föhncreme empfohlen trotz Locken/Wellen (glättet aktiv)")
-        # Migration #15 — Locken-Profile sollten mind. 1 Curl-Produkt erhalten,
-        # AUSSER curl_priority='glatt' (User trägt Locken bewusst geglättet).
-        if profile.get("curl_priority") != "glatt":
+        # Migration #15 — Locken-Profile sollten mind. 1 Curl-Produkt erhalten.
+        # Ausnahmen: curl_priority='glatt' (User trägt Locken bewusst geglättet) und
+        # curl_priority='mehr_volumen' (REQ-16b liefert moxie_mousse als Volumen-Booster
+        # für Locken statt Curl-Definition — Zeile 608-611 prüft das spezifisch).
+        if profile.get("curl_priority") not in ("glatt", "mehr_volumen"):
             curl_products = {"curl_creme", "curl_gelee", "curl_auffrischer"}
             if not (set(product_keys) & curl_products):
                 warnings.append("Locken-Profil ohne einziges Curl-Produkt")
