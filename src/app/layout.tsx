@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Fraunces } from "next/font/google";
 import { MotionConfig } from "framer-motion";
 import "./globals.css";
@@ -50,6 +50,21 @@ export const metadata: Metadata = {
       "Beantworte ein paar kurze Fragen und erhalte deine persönliche Haarpflege-Empfehlung.",
     images: ["/og-image.jpg"],
   },
+};
+
+// Viewport-Meta explizit setzen:
+// - width=device-width + initialScale=1  → korrekte Skalierung auf Mobile.
+// - viewportFit="cover"                   → nutzt Safe-Areas (iPhone-Notch,
+//   Android-Cutouts) statt weißer Randstreifen.
+// - Kein maximumScale/userScalable-Sperren → Barrierefreiheit (Nutzer:innen
+//   dürfen zoomen).
+// - themeColor greift für die iOS-/Android-Adressleiste im PWA-/Save-to-Home-
+//   Modus und für die "In-App-Browser"-Chrome-Farbe (WhatsApp, Insta etc.).
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#fbf5ee",
 };
 
 export default function RootLayout({

@@ -1,5 +1,5 @@
 // ===================================================================
-// myglowmatch – Datenmodell (Etappe 2)
+// mybeautykey – Datenmodell (Etappe 2)
 // Diese Datei beschreibt die "Baupläne": Wie darf eine Frage aussehen?
 // Hier stehen KEINE echten Fragen – die kommen in src/data/questions.ts.
 // ===================================================================

@@ -1,5 +1,5 @@
 // ===================================================================
-// myglowmatch – zentrale Animations-Einstellungen
+// mybeautykey – zentrale Animations-Einstellungen
 // Alle Animationen im Projekt greifen auf diese Werte zu, damit alles
 // einheitlich wirkt. Hier zentral anpassbar.
 // ===================================================================

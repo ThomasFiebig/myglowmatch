@@ -1,5 +1,5 @@
 // ===================================================================
-// myglowmatch – Validierung
+// mybeautykey – Validierung
 // Beantwortet: "Ist die aktuelle Frage gültig beantwortet?"
 // ===================================================================
 

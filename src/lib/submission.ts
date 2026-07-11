@@ -1,5 +1,5 @@
 // ===================================================================
-// myglowmatch – Absende-Daten zusammenbauen (Etappe 8)
+// mybeautykey – Absende-Daten zusammenbauen (Etappe 8)
 // Macht aus dem gesammelten "answers"-Objekt das finale JSON für n8n.
 // Format: siehe docs/fragenkatalog.md.
 // ===================================================================

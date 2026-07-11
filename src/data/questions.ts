@@ -1,5 +1,5 @@
 // ===================================================================
-// myglowmatch – Der vollständige Fragenkatalog als Daten (Etappe 2)
+// mybeautykey – Der vollständige Fragenkatalog als Daten (Etappe 2)
 // Quelle: docs/fragenkatalog.md
 //
 // Reihenfolge: 1 Intro-Bildschirm + 16 Fragen.

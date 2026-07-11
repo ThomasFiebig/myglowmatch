@@ -1,5 +1,5 @@
 // ===================================================================
-// myglowmatch – Conditional Logic (Etappe 6)
+// mybeautykey – Conditional Logic (Etappe 6)
 // Hier wird ausgewertet, OB ein Schritt angezeigt werden soll.
 // Die Bedingungen selbst stehen als Daten in src/data/questions.ts.
 // ===================================================================

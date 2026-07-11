@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------
-   myglowmatch – Design-Tokens
+   mybeautykey – Design-Tokens
    Premium-Beauty-Look: Rosé / Champagne / Soft Pink + Anthrazit
 --------------------------------------------------------------- */
 
@@ -37,4 +37,21 @@
 body {
   color: var(--color-ink);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Horizontales Scrollen unterbinden – ohne diesen Schutz können
+   absolut positionierte Deko-Elemente (FloatBlob mit negativen
+   left/right-Offsets) auf schmalen Viewports einen sichtbaren
+   Overflow erzeugen. Betrifft besonders iOS-Safari, wo overflow-x
+   am body allein nicht immer greift; deshalb doppelt am html. */
+html,
+body {
+  overflow-x: hidden;
+}
+
+/* iOS-Safari-Tap-Highlight (grauer Kasten beim Tap auf Link/Button)
+   sanft entschärfen. Ersetzt den nervigen Grauton durch eine dezente
+   Rosé-Note, konsistent zum Design. */
+html {
+  -webkit-tap-highlight-color: rgba(224, 177, 168, 0.2);
 }
