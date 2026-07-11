@@ -1,5 +1,5 @@
 // =====================================================================
-// Logo – die myglowmatch-Wortmarke als Inline-SVG.
+// Logo – die mybeautykey-Wortmarke als Inline-SVG.
 //
 // Anders als die Datei public/logo.svg (die als <img> meist auf
 // Georgia zurückfällt, weil Browser externe Font-Requests blockieren),

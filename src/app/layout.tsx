@@ -19,7 +19,7 @@ const fraunces = Fraunces({
 // openGraph + twitter sorgen für hübsche Vorschau-Karten, wenn der Link
 // auf Instagram, WhatsApp, Facebook, X, LinkedIn etc. geteilt wird.
 export const metadata: Metadata = {
-  metadataBase: new URL("https://myglowmatch.de"),
+  metadataBase: new URL("https://mybeautykey.de"),
   title: "MyBeautyKey – Deine persönliche Haaranalyse",
   description:
     "Beantworte ein paar kurze Fragen und erhalte deine persönliche Haarpflege-Empfehlung – abgestimmt auf dein Haar und deine Kopfhaut.",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "de_DE",
-    url: "https://myglowmatch.de",
+    url: "https://mybeautykey.de",
     siteName: "MyBeautyKey",
     title: "MyBeautyKey – Deine persönliche Haaranalyse",
     description:
