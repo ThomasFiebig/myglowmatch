@@ -4,7 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Produkt-Bibliothek · Konzept · myglowmatch</title>
+<title>Neues Produkt · Meine Bibliothek · myglowmatch</title>
+<!--
+  Live-UI-Preview (nicht Konzept-Mockup).
+  Diese Datei ist die Design-Referenz für die React-Component im Dashboard.
+  Konzept-Elemente (Hero, Erklär-Cards, Team-Callout, Footer) sind bewusst
+  entfernt — diese Ansicht ist eingebettet in das Dashboard-Chrome.
+-->
+
 <style>
   :root{
     --bg:#fbf6f0;
@@ -586,67 +593,46 @@
     .hero{padding:44px 20px 32px}
     h1.title{font-size:30px}
   }
+
+  /* Live-UI-Layout — überschreibt Konzept-Rahmen */
+  .live-wrap{
+    max-width:840px;
+    margin:0 auto;
+    padding:32px 24px 60px;
+  }
+  .live-header{
+    margin-bottom:20px;
+  }
+  .live-crumb{
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  .live-title{
+    font-family:Georgia,serif;
+    font-size:26px;
+    font-weight:500;
+    color:var(--ink);
+    line-height:1.25;
+  }
+  @media (max-width:820px){
+    .live-wrap{padding:24px 16px 48px}
+    .live-title{font-size:22px}
+  }
 </style>
 </head>
 <body>
 
-<div class="hero">
-  <div class="hero-inner">
-    <div class="hero-brand">
-      <div class="brand-dot"></div>
-      <div class="brand-name">myglowmatch</div>
-    </div>
-    <div class="eyebrow">Konzept · Produkt-Bibliothek für Pro-Beraterinnen</div>
-    <h1 class="title">So legst du ein Produkt an.</h1>
-    <div class="subtitle">
-      Herzstück des Pro-Tarifs: die Beraterin trägt einmalig ihr Sortiment ein.
-      <b>Strukturiert per Buttons — nicht per Freitext</b> — damit das
-      Matching auf die Kundinnen-Analyse sauber greift und jede Empfehlung
-      technisch zum Bedarfsprofil passt.
-    </div>
-  </div>
-</div>
-
-<div class="wrap">
-  <div class="info-grid">
-    <div class="info-card warn">
-      <h3>Warum Buttons statt Freitext</h3>
-      <p>
-        Die Beratungs-Engine matcht das Bedarfsprofil der Kundin (z. B. „braucht
-        Feuchtigkeit, glattes Haar, gefärbt") gegen die Produkte in der
-        Bibliothek. Diese Zuordnung funktioniert nur, wenn Produkt-Eigenschaften
-        aus einem <b>festen Vokabular</b> kommen — sonst könnten „gefärbt",
-        „koloriert" und „coloriert" nebeneinander stehen und die Regel würde
-        nur eines davon finden.
-      </p>
-    </div>
-    <div class="info-card">
-      <h3>Was die Beraterin frei formulieren darf</h3>
-      <p>
-        Nur zwei Felder sind Freitext: der <b>Produktname</b> und die
-        <b>Verkaufsbegründung</b> („Warum genau dieses Produkt"), die
-        später in der Kundinnen-Empfehlung erscheint.
-      </p>
-      <p>
-        Wichtig zum Produktnamen: die Plattform stellt <b>keine Vorschlagsliste
-        und kein Autocomplete mit Marken- oder Produktnamen</b> bereit. Die
-        Beraterin tippt selbst ein, was sie empfehlen möchte. So bleibt
-        myglowmatch reine Infrastruktur — keine Auswahl, kein Vorschlag,
-        keine Markennutzung durch die Plattform selbst.
-      </p>
-    </div>
-  </div>
-</div>
-
-<div class="mockup-wrap">
-  <div class="mockup-eyebrow">Vorschau · Anlegen eines neuen Produkts</div>
-  <div class="mockup-heading">Neues Produkt zur Bibliothek hinzufügen</div>
+<main class="live-wrap">
+  <header class="live-header">
+    <div class="live-crumb">Meine Bibliothek · Neues Produkt</div>
+    <h1 class="live-title">Neues Produkt hinzufügen</h1>
+  </header>
 
   <div class="mockup">
-    <div class="mockup-titlebar">
-      <div class="dot"></div><div class="dot mid"></div><div class="dot last"></div>
-      <div class="label">portal.mybeautykey.de · Meine Bibliothek · Neu</div>
-    </div>
     <div class="mockup-body">
 
       <!-- 1: Produktname (Freitext) -->
@@ -1062,75 +1048,7 @@
 
     </div>
   </div>
-</div>
-
-<div class="explain-wrap">
-  <div class="explain-grid">
-    <div class="explain-card">
-      <h3>Was ist Chip-Auswahl, was ist Freitext</h3>
-      <p><b>Chips / Radio-Buttons</b> für alles, was die Beratungs-Engine
-      auswerten muss:</p>
-      <ul>
-        <li><b>Produkt-Kategorie</b> — welcher Routine-Slot (8 Optionen), bei Shampoo zusätzlich 2-in-1-Kennzeichnung</li>
-        <li><b>Haupt-Nutzen</b> — als Tabelle, 27 Nutzen in 4 Gruppen, pro Zeile Haupt / Auch / — (Default „—")</li>
-        <li><b>Spezielle Sub-Serie</b> — Multi-Chip, ob das Produkt zu einer Bonding-/Repair- oder Smoothing-/Glättungs-Linie der Marke gehört</li>
-        <li><b>Haar &amp; Kopfhaut-Passung</b> — als Tabelle, 4 Kategorien aufklappbar</li>
-        <li><b>Zielgruppe des Produkts</b> — die in der Marken-Beschreibung genannten Kundinnen-Gruppen abhaken</li>
-        <li><b>Wirkstärke-Beschreibung</b> — Alltagspflege / vielseitig / Intensiv-Kur (Default „vielseitig")</li>
-        <li><b>Ausschlüsse</b> — wo das Produkt nicht empfohlen wird</li>
-      </ul>
-      <p style="margin-top:10px">Kein Feld verlangt von der Beraterin eine
-      System-Einschätzung. Jedes Feld ist entweder eine <b>direkte Übernahme
-      aus der Produkt-Beschreibung</b> (Datenblatt, Katalog, Webshop-Text)
-      oder eine offensichtliche Kategorisierung. Damit kann das System
-      korrekt matchen, ohne dass die Beraterin die interne Empfehlungslogik
-      verstehen muss.</p>
-      <p style="margin-top:10px"><b>Freitext</b> nur bei: Produktname und
-      „Warum genau dieses Produkt".</p>
-    </div>
-
-    <div class="explain-card">
-      <h3>Warum das der Beraterin das Leben leichter macht</h3>
-      <p>
-        Beim Anlegen dauert es minimal länger als reines Tippen — aber:
-        die Bibliothek muss <b>nur einmal aufgebaut</b> werden. Ab dem
-        Moment matcht das System bei jeder Kundin automatisch das richtige
-        Produkt aus dem eigenen Sortiment.
-      </p>
-      <p>
-        Ohne Struktur würden die Empfehlungen zufällig ausfallen. Mit
-        Struktur wird die Bibliothek zur <b>persönlichen Beratungs-Assistentin</b>,
-        die genau die Antworten kennt, die die Beraterin selbst hinterlegt hat.
-      </p>
-    </div>
-  </div>
-</div>
-
-<div class="team-callout">
-  <div class="team-inner">
-    <h3>Team-Sharing für Uplines</h3>
-    <p>
-      Wenn die Bibliothek einmal steht, kann Sina sie <b>per Team-Code an
-      ihre Downlines freigeben</b>. Neue Beraterinnen starten in 30 Sekunden
-      mit ihrem kompletten Sortiment statt 45 – 90 Minuten selbst
-      einzupflegen. Beim Übernehmen bestätigt die Downline aktiv „ich mache
-      dieses Sortiment zu meiner Empfehlung" — damit wandert die
-      Content-Verantwortung sauber weiter, VERADEX bleibt neutrale Plattform.
-    </p>
-  </div>
-</div>
-
-<div class="footer">
-  <div class="footer-cols">
-    <div>
-      Konzept-Mockup · nicht die spätere UI, sondern die Struktur. Reine
-      Vorschau, keine Interaktion.
-    </div>
-    <div>
-      <a href="/konzept">← Zurück zur Konzept-Übersicht</a>
-    </div>
-  </div>
-</div>
+</main>
 
 </body>
 </html>

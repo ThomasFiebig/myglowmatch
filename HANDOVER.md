@@ -747,6 +747,71 @@ Code-Node-Zugriffspattern wenn Loader zwischen Producer und Consumer liegt:
 - Sheet-Daten: `$items("<loader-name>")`
 - Produkt-/Profil-Daten vom Vorgänger: `$node["<name>"].json` oder `$items("<name>")` statt `$input.all()`
 
+## Bibliothek-UI („Neues Produkt hinzufügen") — Design fertig (2026-07-13)
+
+Das Bibliothek-Design-Gerüst ist finalisiert und bereit zur React-Portierung ins Dashboard. **Nicht neu diskutieren, Fakten unten sind Beschlussstand.**
+
+### Dateien
+
+| Pfad | Zweck |
+|---|---|
+| `demo/bibliothek.html` (~1136 Zeilen) | **Konzept-Mockup** — Sales-Material für Beraterinnen (Hero, Info-Grid, Explain-Cards, Team-Callout, Footer). Master-Version, wird nach `public/konzept/bibliothek.html` gesynct. |
+| `demo/bibliothek-live.html` (~1054 Zeilen) | **Design-Referenz für React-Component** im Dashboard. Nur das Formular (kein Konzept-Rahmen). Nicht öffentlich, dient als visuelle Referenz für die Implementierung. |
+| `public/konzept/bibliothek.html` | Live-URL für Sina-Preview (Sync-Kopie der Konzept-Version) |
+| `public/konzept/bibliothek-v1-original.html` | Deprecated Original (7. Juli, Sina-Version) mit Deprecation-Banner + Verweis auf aktuelle URL. Als Referenz behalten. |
+
+### 9 Felder (final)
+
+1. **Produktname** — Freitext, kein Autocomplete
+2. **Produkt-Kategorie** — Radio-Chip 8 Optionen; **conditional 2-in-1-Zusatz** nur bei Shampoo (visuell eingerückter Block mit ↳-Marker, Ja/Nein)
+3. **Haupt-Nutzen** — 27-Zeilen-Tabelle in 4 Gruppen, pro Zeile Haupt/Auch/—, Default „—" in allen Zeilen
+4. **Spezielle Sub-Serie** — Multi-Chip (Bonding-/Repair-Linie, Smoothing-/Glättungs-Linie), optional, skalierbar
+5. **Haar & Kopfhaut-Passung** — Tabelle mit 4 aufklappbaren Gruppen (Struktur, Stärke, Zustand, Kopfhaut)
+6. **Zielgruppe des Produkts** — Multi-Chip 3 Optionen (Alle Haartypen / Beanspruchtes / Stark geschädigtes Haar), Wortlaut markenneutral
+7. **Wirkstärke-Beschreibung** — Radio-Chip 3 Optionen (Alltagspflege / **Vielseitig (Default)** / Intensiv-Pflege)
+8. **Nicht empfehlen bei** — Multi-Chip Ausschlüsse
+9. **Warum genau dieses Produkt** — Freitext-Textarea
+
+**Explizit weggelassen**: Bezugsquelle-Link (produkt_url ungenutzt), Anwendung + Kombinationen (in Verkaufsbegründung integrierbar), explizites Pflegelevel + Intensität (abgeleitet aus Feld 6 + 7).
+
+### Ableitungs-Regeln für Backend (Sheets → Postgres)
+
+**Direkt aus Bibliothek-Feldern:** `produktname_de` (F1), `slot_typ` (F2), `hauptfunktion` (F3 „Haupt"), `nebenfunktionen` (F3 „Auch"), `haarstruktur`/`haarstaerke`/`haarzustand`/`kopfhaut` (F5), `ausschluss_bei` (F8), `ist_bonding_line` (F4 Chip 1), `ist_smoothing` (F4 Chip 2)
+
+**`pflegelevel` aus F6-Zielgruppen-Chips:** Chip 1 → +LOW, Chip 2 → +MID, Chip 3 → +HIGH (Multi-Wert, kommagetrennt)
+
+**`intensitaet` aus F7-Wirkstärke:** Alltagspflege → `leicht`, Vielseitig → `alle`, Intensiv-Pflege → `intensiv`
+
+**`ist_zwei_in_eins`** aus 2-in-1-Radio (nur wenn Slot=Shampoo)
+
+**Aus Nutzen-Tabelle (F3):**
+- `ist_hitzeschutz` = TRUE, wenn „Hitzeschutz" als Haupt oder Auch
+- `ist_hitzeschutz_solo` = TRUE, wenn „Hitzeschutz" der einzige Haupt-Nutzen
+- `ist_bonding` = TRUE, wenn „Bonding" als Haupt oder Auch
+- `ist_scalp_focus` = TRUE, wenn „Kopfhaut-Fokus" als Haupt oder Auch
+- `ist_haarwuchs` = TRUE, wenn „Haarwuchs" als Haupt oder Auch
+- `ist_peeling` = TRUE, wenn „Tiefen-Reinigung" oder „Peeling" als Haupt oder Auch
+- `ist_trockenshampoo` = TRUE, wenn „Wasch-Alternative" als Haupt oder Auch
+- `ist_oel` = TRUE, wenn Slot=„Serum / Öl"
+- `locken_geeignet` = TRUE, wenn Passung-Struktur ∈ {Wellig, Lockig, Kraus}
+- `ist_curl_volumen_booster` = TRUE, wenn Slot=Styling + Nutzen „Volumen" Haupt + Passung ∈ {Lockig, Kraus}
+
+**System-Konstante:** `aktiv=TRUE`, `produkt_key`=Slug aus Name, `routine_schritt`=feste Slot→Schritt-Tabelle, `produktlinie` wird nicht gesetzt (Multi-Tenant), `produkttyp`=abgeleitet aus Slot
+
+### UX-Prinzipien (nicht neu diskutieren)
+
+- Keine System-Einschätzung von Beraterin verlangt — nur Produktbeschreibungs-Übernahme
+- Markenneutraler Wortlaut („aus Datenblatt, Katalog oder Produktbeschreibung", kein „laut PDF")
+- Info-Toggles (`<details class="info-toggle">`) für alle Erklär-Texte, kompakt beim zweiten Anlegen
+- Conditional Fields mit klarem visuellen Marker (`.conditional-block` + ↳-Symbol)
+- Default-Werte bei allen optionalen Feldern
+- Sub-Serien als Multi-Chip → skalierbar ohne UI-Umbau
+
+### Offene Punkte
+
+- **React-Portierung** in Dashboard-Component (Live-Preview als visuelle Referenz)
+- **CSS-Aufräumen in `bibliothek-live.html`** — Konzept-Klassen noch drin (funktional egal, ~10 KB Overhead)
+
 ## Bewusste Lücken
 
 - `POOL-02` in `map_pool_filter` fehlt absichtlich (Gewicht-Regel war Bauchgefühl ohne Datenblatt-Beleg, bei Migration #5 entfernt)
