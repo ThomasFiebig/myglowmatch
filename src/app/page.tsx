@@ -1,8 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-1 items-center justify-center px-6 py-16">
+    <main className="relative flex min-h-screen flex-1 items-center justify-center px-6 py-16">
       <div className="relative mx-auto flex max-w-xl flex-col items-center text-center">
         {/* Sanft schwebende Farbwolken für dezente Tiefe */}
         <span
@@ -43,6 +44,13 @@ export default function Home() {
           />
         </div>
       </div>
+
+      <Link
+        href="/impressum"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs text-ink-soft/70 underline underline-offset-4 transition-colors hover:text-ink"
+      >
+        Impressum
+      </Link>
 
       <style>{`
         @keyframes fadeInUp {
